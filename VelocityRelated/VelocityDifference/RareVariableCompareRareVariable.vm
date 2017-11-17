@@ -1,0 +1,76 @@
+
+##set($undefinedString = "abc")
+##set($rightSideStringValue = "abc")
+Section 1: --------------------------------------------------
+	1-1-->1: Shorthand == Shorthand
+#if($undefinedString == $rightSideStringValue)
+	Go into if
+#elseif($undefinedString != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	1-1-->2: Slient Shorthand == Shorthand
+#if($!undefinedString == $rightSideStringValue)
+	Go into if
+#elseif($!undefinedString != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	1-1-->3: Formal Notation == Shorthand
+#if(${undefinedString} == $rightSideStringValue)
+	Go into if
+#elseif(${undefinedString} != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	1-1-->4: Slient Formal Notation == Shorthand
+#if($!{undefinedString} == $rightSideStringValue)
+	Go into if
+#elseif($!{undefinedString} != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Section 2: --------------------------------------------------
+	2-1-->1: Shorthand == Shorthand
+#if($undefinedString == $!rightSideStringValue)
+	Go into if
+#elseif($undefinedString != $!rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	2-1-->2: Slient Shorthand == Shorthand
+#if($!undefinedString == $!rightSideStringValue)
+	Go into if
+#elseif($!undefinedString != $!rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	2-1-->3: Formal Notation == Shorthand
+#if(${undefinedString} == $!rightSideStringValue)
+	Go into if
+#elseif(${undefinedString} != $!rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	2-1-->4: Slient Formal Notation == Shorthand
+#if($!{undefinedString} == $!rightSideStringValue)
+	Go into if
+#elseif($!{undefinedString} != $!rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end

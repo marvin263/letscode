@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+   
+   <h:head>
+      <title><ui:insert name="windowTitle"/></title>
+      <h:outputStylesheet library="css" name="styles.css"/>
+   </h:head>
+   
+   <h:body>   
+      <div id="heading">
+         <ui:insert name="heading">
+            <ui:include src="/sections/planetarium/header.xhtml"/>
+         </ui:insert>
+      </div>
+      
+      
+      <div id="sidebarLeft">
+         <ui:insert name="sidebarLeft">
+            <ui:include src="/sections/planetarium/sidebarLeft.xhtml"/>
+         </ui:insert>
+      </div>    
+      
+      <div id="content">
+         <ui:insert name="content"/>
+      </div>
+      <ui:debug/>
+   </h:body>
+</html>

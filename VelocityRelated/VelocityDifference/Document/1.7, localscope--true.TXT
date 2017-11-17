@@ -1,0 +1,18 @@
+Nov 11, 2011 2:13:03 PM org.apache.velocity.runtime.log.JdkLogChute log
+WARNING: The velocimacro.context.localscope feature is deprecated and will be removed in Velocity 2.0. Instead, please use the $macro scope to store references that must be local to your macros (e.g. #set( $macro.foo = 'bar' ) and $macro.foo).  This $macro namespace is automatically created and destroyed for you at the beginning and end of the macro rendering.
+Go into macro: firstArg = valueOfArg1, secondArg = $undefinedString, thirdArg = thirdConstantString, forthArg = forthArgValueInTemplate, macroLocal = $macroLocal
+Existing macro: firstArg = Set firstArg In macro, secondArg = Set secondArg In macro, thirdArg = Set thridArg In macro, forthArg = Set forthArg In macro, macroLocal = I'm macro local
+arg1 = valueOfArg1
+valueOfArg1 = $valueOfArg1
+
+undefinedString = $undefinedString
+thirdConstantString = $thirdConstantString
+
+forthArg = forthArgValueInTemplate
+forthArgValueInTemplate = $forthArgValueInTemplate
+
+firstArg = $firstArg
+secondArg = $secondArg
+thirdArg = $thirdArg
+forthArg = forthArgValueInTemplate
+macroLocal = $macroLocal

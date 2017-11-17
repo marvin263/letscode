@@ -1,0 +1,302 @@
+
+##set($undefinedString = "a")
+##set($rightSideStringValue = 'a')
+
+Section 1-1: --------------------------------------------------
+	1-1-->1: Convert to String, Shorthand == Shorthand
+#if("$undefinedString" == $rightSideStringValue)
+	Go into if
+#elseif("$undefinedString" != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	1-1-->2: Convert to String, Slient Shorthand == Shorthand
+#if("$!undefinedString" == $rightSideStringValue)
+	Go into if
+#elseif("$!undefinedString" != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	1-1-->3: Convert to String, Formal Notation == Shorthand
+#if("${undefinedString}" == $rightSideStringValue)
+	Go into if
+#elseif("${undefinedString}" != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	1-1-->4: Convert to String, Slient Formal Notation == Shorthand
+#if("$!{undefinedString}" == $rightSideStringValue)
+	Go into if
+#elseif("$!{undefinedString}" != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Section 1-2: --------------------------------------------------
+	1-2-->1: Convert to String, Shorthand == Shorthand
+#if("$undefinedString" == ${rightSideStringValue})
+	Go into if
+#elseif("$undefinedString" != ${rightSideStringValue})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	1-2-->2: Convert to String, Slient Shorthand == Shorthand
+#if("$!undefinedString" == ${rightSideStringValue})
+	Go into if
+#elseif("$!undefinedString" != ${rightSideStringValue})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	1-2-->3: Convert to String, Formal Notation == Shorthand
+#if("${undefinedString}" == ${rightSideStringValue})
+	Go into if
+#elseif("${undefinedString}" != ${rightSideStringValue})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	1-2-->4: Convert to String, Slient Formal Notation == Shorthand
+#if("$!{undefinedString}" == ${rightSideStringValue})
+	Go into if
+#elseif("$!{undefinedString}" != ${rightSideStringValue})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+
+Section 2-1: --------------------------------------------------
+	2-1-->1: Convert to String, Shorthand == Shorthand
+#if("$undefinedString" == $!rightSideStringValue)
+	Go into if
+#elseif("$undefinedString" != $!rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	2-1-->2: Convert to String, Slient Shorthand == Shorthand
+#if("$!undefinedString" == $!rightSideStringValue)
+	Go into if
+#elseif("$!undefinedString" != $!rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	2-1-->3: Convert to String, Formal Notation == Shorthand
+#if("${undefinedString}" == $!rightSideStringValue)
+	Go into if
+#elseif("${undefinedString}" != $!rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	2-1-->4: Convert to String, Slient Formal Notation == Shorthand
+#if("$!{undefinedString}" == $!rightSideStringValue)
+	Go into if
+#elseif("$!{undefinedString}" != $!rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Section 2-2: --------------------------------------------------
+	2-2-->1: Convert to String, Shorthand == Shorthand
+#if("$undefinedString" == $!{rightSideStringValue})
+	Go into if
+#elseif("$undefinedString" != $!{rightSideStringValue})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	2-2-->2: Convert to String, Slient Shorthand == Shorthand
+#if("$!undefinedString" == $!{rightSideStringValue})
+	Go into if
+#elseif("$!undefinedString" != $!{rightSideStringValue})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	2-2-->3: Convert to String, Formal Notation == Shorthand
+#if("${undefinedString}" == $!{rightSideStringValue})
+	Go into if
+#elseif("${undefinedString}" != $!{rightSideStringValue})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	2-2-->4: Convert to String, Slient Formal Notation == Shorthand
+#if("$!{undefinedString}" == $!{rightSideStringValue})
+	Go into if
+#elseif("$!{undefinedString}" != $!{rightSideStringValue})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+
+Section 3-1: --------------------------------------------------
+	3-1-->1: Both convert to String, left use shorthand notation, Shorthand == Shorthand
+#if("$undefinedString" == "$rightSideStringValue")
+	Go into if
+#elseif("$undefinedString" != "$rightSideStringValue")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	3-1-->2: Both convert to String, left use shorthand notation, Slient Shorthand == Shorthand
+#if("$!undefinedString" == "$rightSideStringValue")
+	Go into if
+#elseif("$!undefinedString" != "$rightSideStringValue")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	3-1-->3: Both convert to String, left use shorthand notation, Formal Notation == Shorthand
+#if("${undefinedString}" == "$rightSideStringValue")
+	Go into if
+#elseif("${undefinedString}" != "$rightSideStringValue")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	3-1-->4: Both convert to String, left use shorthand notation, Slient Formal Notation == Shorthand
+#if("$!{undefinedString}" == "$rightSideStringValue")
+	Go into if
+#elseif("$!{undefinedString}" != "$rightSideStringValue")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Section 3-2: --------------------------------------------------
+	3-2-->1: Both convert to String, left use shorthand notation, Shorthand == Shorthand
+#if("$undefinedString" == "${rightSideStringValue}")
+	Go into if
+#elseif("$undefinedString" != "${rightSideStringValue}")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	3-2-->2: Both convert to String, left use shorthand notation, Slient Shorthand == Shorthand
+#if("$!undefinedString" == "${rightSideStringValue}")
+	Go into if
+#elseif("$!undefinedString" != "${rightSideStringValue}")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	3-2-->3: Both convert to String, left use shorthand notation, Formal Notation == Shorthand
+#if("${undefinedString}" == "${rightSideStringValue}")
+	Go into if
+#elseif("${undefinedString}" != "${rightSideStringValue}")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	3-2-->4: Both convert to String, left use shorthand notation, Slient Formal Notation == Shorthand
+#if("$!{undefinedString}" == "${rightSideStringValue}")
+	Go into if
+#elseif("$!{undefinedString}" != "${rightSideStringValue}")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+
+Section 4-1: --------------------------------------------------
+	4-1-->1: Both convert to String, left use slient notation, Shorthand == Shorthand
+#if("$undefinedString" == "$!rightSideStringValue")
+	Go into if
+#elseif("$undefinedString" != "$!rightSideStringValue")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	4-1-->2: Both convert to String, left use slient notation, Slient Shorthand == Shorthand
+#if("$!undefinedString" == "$!rightSideStringValue")
+	Go into if
+#elseif("$!undefinedString" != "$!rightSideStringValue")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	4-1-->3: Both convert to String, left use slient notation, Formal Notation == Shorthand
+#if("${undefinedString}" == "$!rightSideStringValue")
+	Go into if
+#elseif("${undefinedString}" != "$!rightSideStringValue")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	4-1-->4: Both convert to String, left use slient notation, Slient Formal Notation == Shorthand
+#if("$!{undefinedString}" == "$!rightSideStringValue")
+	Go into if
+#elseif("$!{undefinedString}" != "$!rightSideStringValue")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Section 4-2: --------------------------------------------------
+	4-2-->1: Both convert to String, left use slient notation, Shorthand == Shorthand
+#if("$undefinedString" == "$!{rightSideStringValue}")
+	Go into if
+#elseif("$undefinedString" != "$!{rightSideStringValue}")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	4-2-->2: Both convert to String, left use slient notation, Slient Shorthand == Shorthand
+#if("$!undefinedString" == "$!{rightSideStringValue}")
+	Go into if
+#elseif("$!undefinedString" != "$!{rightSideStringValue}")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	4-2-->3: Both convert to String, left use slient notation, Formal Notation == Shorthand
+#if("${undefinedString}" == "$!{rightSideStringValue}")
+	Go into if
+#elseif("${undefinedString}" != "$!{rightSideStringValue}")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	4-2-->4: Both convert to String, left use slient notation, Slient Formal Notation == Shorthand
+#if("$!{undefinedString}" == "$!{rightSideStringValue}")
+	Go into if
+#elseif("$!{undefinedString}" != "$!{rightSideStringValue}")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end

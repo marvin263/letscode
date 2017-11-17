@@ -1,0 +1,9 @@
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.openjdk.jcstress/jcstress-core
+    compile group: 'org.openjdk.jcstress', name: 'jcstress-core', version: '0.3'
+
+    // https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-generator-annprocess
+    //compile group: 'org.openjdk.jmh', name: 'jmh-generator-annprocess', version: '1.17.1'
+
+}

@@ -1,0 +1,35 @@
+Sun Feb 19 14:51:45 CST 2012  [debug] AvalonLogSystem initialized using logfile 'log/1.3.1.log'
+Sun Feb 19 14:51:45 CST 2012   [info] ************************************************************** 
+Sun Feb 19 14:51:45 CST 2012   [info] Starting Jakarta Velocity v1.3.1
+Sun Feb 19 14:51:45 CST 2012   [info] RuntimeInstance initializing.
+Sun Feb 19 14:51:45 CST 2012   [info] Default Properties File: org\apache\velocity\runtime\defaults\velocity.properties
+Sun Feb 19 14:51:45 CST 2012   [info] Trying to use logger class org.apache.velocity.runtime.log.AvalonLogSystem
+Sun Feb 19 14:51:45 CST 2012   [info] Using logger class org.apache.velocity.runtime.log.AvalonLogSystem
+Sun Feb 19 14:51:45 CST 2012   [info] Default ResourceManager initializing. (class org.apache.velocity.runtime.resource.ResourceManagerImpl)
+Sun Feb 19 14:51:45 CST 2012   [info] Resource Loader Instantiated: org.apache.velocity.runtime.resource.loader.FileResourceLoader
+Sun Feb 19 14:51:45 CST 2012   [info] FileResourceLoader : initialization starting.
+Sun Feb 19 14:51:45 CST 2012   [info] FileResourceLoader : adding path '.'
+Sun Feb 19 14:51:45 CST 2012   [info] FileResourceLoader : initialization complete.
+Sun Feb 19 14:51:45 CST 2012   [info] ResourceCache : initialized. (class org.apache.velocity.runtime.resource.ResourceCacheImpl)
+Sun Feb 19 14:51:45 CST 2012   [info] Default ResourceManager initialization complete.
+Sun Feb 19 14:51:45 CST 2012   [info] Loaded System Directive: org.apache.velocity.runtime.directive.Literal
+Sun Feb 19 14:51:45 CST 2012   [info] Loaded System Directive: org.apache.velocity.runtime.directive.Macro
+Sun Feb 19 14:51:45 CST 2012   [info] Loaded System Directive: org.apache.velocity.runtime.directive.Parse
+Sun Feb 19 14:51:45 CST 2012   [info] Loaded System Directive: org.apache.velocity.runtime.directive.Include
+Sun Feb 19 14:51:45 CST 2012   [info] Loaded System Directive: org.apache.velocity.runtime.directive.Foreach
+Sun Feb 19 14:51:45 CST 2012   [info] Created: 20 parsers.
+Sun Feb 19 14:51:45 CST 2012   [info] Velocimacro : initialization starting.
+Sun Feb 19 14:51:45 CST 2012   [info] Velocimacro : adding VMs from VM library template : htmlfunctions.inc
+Sun Feb 19 14:51:45 CST 2012   [info] Velocimacro : added new VM : #plabel( locallabel default ) : source = htmlfunctions.inc
+Sun Feb 19 14:51:45 CST 2012   [info] Velocimacro : added new VM : #llabel( targetvar locallabel default ) : source = htmlfunctions.inc
+Sun Feb 19 14:51:45 CST 2012   [info] ResourceManager : found htmlfunctions.inc with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
+Sun Feb 19 14:51:45 CST 2012   [info] Velocimacro :  VM library template macro registration complete.
+Sun Feb 19 14:51:45 CST 2012   [info] Velocimacro : allowInline = true : VMs can be defined inline in templates
+Sun Feb 19 14:51:45 CST 2012   [info] Velocimacro : allowInlineToOverride = false : VMs defined inline may NOT replace previous VM definitions
+Sun Feb 19 14:51:45 CST 2012   [info] Velocimacro : allowInlineLocal = false : VMs defined inline will be  global in scope if allowed.
+Sun Feb 19 14:51:45 CST 2012   [info] Velocimacro : messages on  : VM system will output logging messages
+Sun Feb 19 14:51:45 CST 2012   [info] Velocimacro : autoload on  : VM system will automatically reload global library macros
+Sun Feb 19 14:51:45 CST 2012   [info] Velocimacro : initialization complete.
+Sun Feb 19 14:51:45 CST 2012   [info] Velocity successfully started.
+Sun Feb 19 14:51:45 CST 2012   [info] ResourceManager : found example.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
+Sun Feb 19 14:51:45 CST 2012   [info] ResourceManager : found equalityObjectProperties.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader

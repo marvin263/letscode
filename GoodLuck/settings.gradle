@@ -1,0 +1,4 @@
+rootProject.name = 'GoodLuck'
+
+include 'goodluck'
+

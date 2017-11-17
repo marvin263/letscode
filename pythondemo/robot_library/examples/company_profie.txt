@@ -1,0 +1,33 @@
+*** Settings ***
+
+Documentation   Test cases for verify company data sync is running ok.
+...             Checked actions are: creation, and permission update.
+Resource        resource.txt
+Test Setup      Setup Runtime Environment
+Test Teardown   Release Resources
+
+
+*** Variables ***
+${Company_Name}       DB Sync Auto Test Company
+${Company_Comment}    DB Sync Auto Test Company
+${Company_TSG_ID}     03153
+${Company_CTP_ID}     3153
+${cmpId}              DSATC-5
+@{permIds}            AccNA_AccEU   ACC_ACCESS_Invoices_Co    SWIFT_Co   
+
+*** Test Cases ***
+New company 6 should be synced to 7
+    ${cmpId}=       Create Company In Xroads6    ${Company_Name}   ${Company_Comment}    ${Company_TSG_ID}   ${Company_CTP_ID}
+    Log             Company created ${cmpId}      INFO
+    Company Should Be In Xroads7        ${cmpId}    ${Company_Name}   ${Company_Comment}    ${Company_TSG_ID}   ${Company_CTP_ID}
+    Pass ALM Test Instance    ALM integration test set      Test step update test   it's another test run.
+
+Company Permissions in Xroads6 Should be Synced to Xroads7
+    Pass Execution      Temparay exclude this test
+#NOTE: currently the permissions are identified by its id, if label is more conveient for testers, then we could enhance it
+    Add Permissions To Company In Xroads6             ${cmpId}      AccNA_AccEU   ACC_ACCESS_Invoices_Co    SWIFT_Co   
+    Company Should Have Permissions In Xroads7        ${cmpId}      AccNA_AccEU   ACC_ACCESS_Invoices_Co    SWIFT_Co 
+    Remove Permissions From Company In Xroads6        ${cmpId}      SWIFT_Co
+    Add Permissions To Company In Xroads6             ${cmpId}      ACC_Server-None
+    Company Should Have Permissions In Xroads7        ${cmpId}      ACC_ACCESS_Invoices_Co      ACC_Server-None
+    Company Should Not Have Permissions In Xroads7    ${cmpId}      AccNA_AccEU   SWIFT_Co

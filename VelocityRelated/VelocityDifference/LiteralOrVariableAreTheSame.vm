@@ -1,0 +1,5 @@
+Test String
+#parse("LiteralOrVariableAreTheSame_String.vm")
+
+Test Integer
+#parse("LiteralOrVariableAreTheSame_Integer.vm")

@@ -1,0 +1,78 @@
+Conclusion: 1.3.1 and 1.7 always behave exactly the same, no matter $definedOrUndefined is defined or not,
+or whatever type it is
+
+If a boolean, considered true if it has a true false; if not a boolean, considered true if not null
+##set($definedOrUndefined = "abc")
+##set($definedOrUndefined = 123)
+#set($definedOrUndefined = 'xyz')
+	Case 1: Shorthand Notation
+#if($definedOrUndefined)
+	Go into if
+#elseif(!$definedOrUndefined)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 2: Slient Shorthand Notation
+#if($!definedOrUndefined)
+	Go into if
+#elseif(!$!definedOrUndefined)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 3: Formal Notation
+#if(${definedOrUndefined})
+	Go into if
+#elseif(!${definedOrUndefined})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 4: Slient Formal Notation
+#if($!{definedOrUndefined})
+	Go into if
+#elseif(!$!{definedOrUndefined})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 5: Convert to String-->Shorthand Notation
+#if("$definedOrUndefined")
+	Go into if
+#elseif(!"$definedOrUndefined")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 6: Convert to String-->Slient Shorthand Notation
+#if("$!definedOrUndefined")
+	Go into if
+#elseif(!"$!definedOrUndefined")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 7: Convert to String-->Formal Notation
+#if("${definedOrUndefined}")
+	Go into if
+#elseif(!"${definedOrUndefined}")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 8: Convert to String-->Slient Formal Notation
+#if("$!{definedOrUndefined}")
+	Go into if
+#elseif(!"$!{definedOrUndefined}")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end

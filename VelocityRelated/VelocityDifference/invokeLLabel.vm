@@ -1,0 +1,38 @@
+LLABEL INVOCATION
+	LLABEL INVOCATION--1: dateTimeFormatExp, date_time_format_expression are all undefined
+	Before invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	Before invoke: dateTimeFormatExp=$dateTimeFormatExp, date_time_format_expression=$date_time_format_expression
+	
+#llabel($dateTimeFormatExp $date_time_format_expression "yyyy-MM-dd-HH.mm.ss")
+	
+	After invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	After invoke: dateTimeFormatExp=$dateTimeFormatExp, date_time_format_expression=$date_time_format_expression
+	
+	LLABEL INVOCATION--2: yearFormatExp is "MyYearFormat", year_format_expression is undefined
+	#set($yearFormatExp = "MyYearFormat")
+	Before invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	Before invoke: yearFormatExp=$yearFormatExp, year_format_expression=$year_format_expression
+	
+#llabel($yearFormatExp $year_format_expression "yyyy")
+	
+	After invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	After invoke: yearFormatExp=$yearFormatExp, year_format_expression=$year_format_expression
+	
+	LLABEL INVOCATION--3: monthFormatExp is "MyMonthFormat", month_format_expression is "My_Month_format_Expression"
+	#set($yearFormatExp = "MyYearFormat")
+	Before invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	Before invoke: monthFormatExp=$monthFormatExp, month_format_expression=$month_format_expression
+	
+#llabel($monthFormatExp $month_format_expression "MM/yyyy")
+	
+	After invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	After invoke: monthFormatExp=$monthFormatExp, month_format_expression=$month_format_expression
+	
+	LLABEL INVOCATION--4: firstArg and secondArg are all undefined
+	Before invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	Before invoke: firstArg=$firstArg, secondArg=$secondArg
+	
+#llabel($monthFormatExp $month_format_expression "MM/yyyy")
+	
+	After invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	After invoke: firstArg=$firstArg, secondArg=$secondArg

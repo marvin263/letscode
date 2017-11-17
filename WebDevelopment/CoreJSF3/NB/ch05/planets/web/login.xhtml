@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+   <head><title>IGNORED</title></head>
+   <body>
+      <ui:composition template="/templates/masterLayout.xhtml">
+         <ui:define name="windowTitle">
+            #{msgs.loginTitle}
+         </ui:define>
+
+         <ui:define name="heading">
+            <ui:include src="/sections/login/header.xhtml"/>
+         </ui:define>
+
+         <ui:define name="sidebarLeft">
+            <ui:include src="/sections/login/sidebarLeft.xhtml"/>
+         </ui:define>
+
+         <ui:define name="content">
+            <h:form>
+               <h:panelGrid columns="2">
+                  #{msgs.namePrompt}
+                  <h:inputText id="name" value="#{user.name}"/>
+                  #{msgs.passwordPrompt}
+                  <h:inputSecret id="password" value="#{user.password}"/>
+               </h:panelGrid>
+               <p>
+                  <h:commandButton value="#{msgs.loginButtonText}"
+                                   action="planetarium"/>
+               </p>
+            </h:form>
+         </ui:define>
+      </ui:composition>
+   </body>
+</html>

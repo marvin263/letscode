@@ -1,0 +1,109 @@
+
+	Object properties--13: Object using not-existed reference
+#if($WrapperInfo.strNot == $rightSideStringValue)
+	Go into if
+#elseif($WrapperInfo.strNot != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Object properties--14: Object using not-existed reference
+#if("$WrapperInfo.strNot" == $rightSideStringValue)
+	Go into if
+#elseif("$WrapperInfo.strNot" != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Object properties--15: quite Object using not-existed reference
+#if($!WrapperInfo.strNot == $rightSideStringValue)
+	Go into if
+#elseif($!WrapperInfo.strNot != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Object properties--16: quite Object using not-existed reference
+#if("$!WrapperInfo.strNot" == $rightSideStringValue)
+	Go into if
+#elseif("$!WrapperInfo.strNot" != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Object properties--17: quite Object with brace using not-existed reference
+#if($!{WrapperInfo.strNot} == $rightSideStringValue)
+	Go into if
+#elseif($!{WrapperInfo.strNot} != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Object properties--18: quite Object with brace using not-existed reference
+#if("$!{WrapperInfo.strNot}" == $rightSideStringValue)
+	Go into if
+#elseif("$!{WrapperInfo.strNot}" != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+WrapperInfo.str=$!WrapperInfo.str
+WrapperInfo.intValue=$!WrapperInfo.intValue
+	Object properties--19: Not-existed object
+#if($notExist.strNot == $rightSideStringValue)
+	Go into if
+#elseif($notExist.strNot != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Object properties--20: Not-existed object
+#if("$notExist.strNot" == $rightSideStringValue)
+	Go into if
+#elseif("$notExist.strNot" != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Object properties--21: Not-existed object
+#if($!notExist.strNot == $rightSideStringValue)
+	Go into if
+#elseif($!notExist.strNot != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Object properties--22: Not-existed object
+#if("$!notExist.strNot" == $rightSideStringValue)
+	Go into if
+#elseif("$!notExist.strNot" != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Object properties--23: Not-existed object with brace
+#if($!{notExist.strNot} == $rightSideStringValue)
+	Go into if
+#elseif($!{notExist.strNot} != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Object properties--24: Not-existed object with brace
+#if("$!{notExist.strNot}" == $rightSideStringValue)
+	Go into if
+#elseif("$!{notExist.strNot}" != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end

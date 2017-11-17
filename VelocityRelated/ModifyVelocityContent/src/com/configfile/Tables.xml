@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Tables>
+	<!-- 
+	<Table name="EI.MYTABLE">
+		<PrimaryKeys names="PRIMARY_COL1,PRIMARY_COL2,PRIMARY_COL3" />
+		<VelocityColumns names="TEMPLATE_COL1,TEMPLATE_COL2" />
+	</Table>
+	 -->
+	<Table name="EI.DESCRTEMPLATE">
+		<PrimaryKeys names="DT_NBR" />
+		<VelocityColumns names="DT_TEMPLATE" />
+	</Table>
+</Tables>

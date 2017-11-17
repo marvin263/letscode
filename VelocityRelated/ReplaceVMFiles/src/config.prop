@@ -1,0 +1,7 @@
+## The folder that will be scanned
+## The path separator must be slash(not backslash)
+ScanThisFolder=C:/Documents and Settings/mli2/Desktop/Test
+
+## exclude folder and files
+ExcludeFolder=.svn;abcFolder;
+ExcludeFile=.java;.class;.jar;.pdf;.gif;.png;.gif;.ppt;.doc;.cmd;.exe;.gpg;.swf;.zip;.rar;.7z;.xls;.war;.psd;.eps;.mov;.wmv;.mp3;.jpg;.jpeg;.bmp;.avi;.fla

@@ -1,0 +1,76 @@
+Compare with real string which is quoting by either double or single quotes
+
+#set($undefinedString = "abc")
+Section 1: --------------------------------------------------
+	String Comparison--1: Shorthand == Shorthand
+#if($undefinedString == "")
+	Go into if
+#elseif($undefinedString != "")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	String Comparison--2: Slient Shorthand == Shorthand
+#if($!undefinedString == "")
+	Go into if
+#elseif($!undefinedString != "")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	String Comparison--3: Formal Notation == Shorthand
+#if(${undefinedString} == "")
+	Go into if
+#elseif(${undefinedString} != "")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	String Comparison--4: Slient Formal Notation == Shorthand
+#if($!{undefinedString} == "")
+	Go into if
+#elseif($!{undefinedString} != "")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Section 2: --------------------------------------------------
+	String Comparison--5: Convert to String, Shorthand == Shorthand
+#if("$undefinedString" == "")
+	Go into if
+#elseif("$undefinedString" != "")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	String Comparison--6: Convert to String, Slient Shorthand == Shorthand
+#if("$!undefinedString" == "")
+	Go into if
+#elseif("$!undefinedString" != "")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	String Comparison--7: Convert to String, Formal Notation == Shorthand
+#if("${undefinedString}" == "")
+	Go into if
+#elseif("${undefinedString}" != "")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	String Comparison--8: Convert to String, Slient Formal Notation == Shorthand
+#if("$!{undefinedString}" == "")
+	Go into if
+#elseif("$!{undefinedString}" != "")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end

@@ -1,0 +1,76 @@
+#set($leftValueInteger = 99)
+#set($rightValueInteger = 33)
+
+Case 1
+#if($leftValueInteger == "33")
+	Go into if
+#elseif($leftValueInteger != "33")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Case 2
+#if($!leftValueInteger == "33")
+	Go into if
+#elseif($!leftValueInteger != "33")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Case 3
+#if("$leftValueInteger" == "33")
+	Go into if
+#elseif("$leftValueInteger" != "33")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Case 4
+#if("$!leftValueInteger" == "33")
+	Go into if
+#elseif("$!leftValueInteger" != "33")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+
+
+Case 5
+#if($leftValueInteger == "$rightValueInteger")
+	Go into if
+#elseif($leftValueInteger != "$rightValueInteger")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Case 6
+#if($!leftValueInteger == "$rightValueInteger")
+	Go into if
+#elseif($!leftValueInteger != "$rightValueInteger")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Case 7
+#if("$leftValueInteger" == "$rightValueInteger")
+	Go into if
+#elseif("$leftValueInteger" != "$rightValueInteger")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Case 8
+#if("$!leftValueInteger" == "$rightValueInteger")
+	Go into if
+#elseif("$!leftValueInteger" != "$rightValueInteger")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end

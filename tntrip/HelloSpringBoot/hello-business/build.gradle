@@ -1,0 +1,8 @@
+
+dependencies {
+    compile project(':hello-common')
+    compile("org.springframework.boot:spring-boot-starter:${springBootVersion}")
+    compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1')
+    compile group: 'com.alibaba', name: 'druid', version: '1.0.26'
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.20'
+   }

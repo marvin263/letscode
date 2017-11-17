@@ -1,0 +1,6 @@
+
+dependencies {
+    compile project(':hello-common')
+    compile("org.springframework.boot:spring-boot-starter:${springBootVersion}")
+    compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1')
+   }

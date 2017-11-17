@@ -1,0 +1,29 @@
+package tij4.innerclasses;
+
+//: innerclasses/Parcel5.java
+// Nesting a class within a method.
+
+public class Parcel5 {
+	public Destination destination(String s) {
+
+		// Marvin: 在方法的作用域内；而不是 在另一个类的作用域内
+		class PDestination implements Destination {
+			private String label;
+
+			private PDestination(String whereTo) {
+				label = whereTo;
+			}
+
+			public String readLabel() {
+				return label;
+			}
+		}
+
+		return new PDestination(s);
+	}
+
+	public static void main(String[] args) {
+		Parcel5 p = new Parcel5();
+		Destination d = p.destination("Tasmania");
+	}
+} // /:~

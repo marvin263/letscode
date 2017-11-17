@@ -1,0 +1,2 @@
+#set($param_folder = "img_fld_nbr")
+<a href="#${param_folder}_anchor">

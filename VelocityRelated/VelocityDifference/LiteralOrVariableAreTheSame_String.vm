@@ -1,0 +1,76 @@
+#set($leftValue = "HelloMarvin")
+#set($rightValue = "Susan")
+
+Case 1
+#if($leftValue == "Susan")
+	Go into if
+#elseif($leftValue != "Susan")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Case 2
+#if($!leftValue == "Susan")
+	Go into if
+#elseif($!leftValue != "Susan")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Case 3
+#if("$leftValue" == "Susan")
+	Go into if
+#elseif("$leftValue" != "Susan")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Case 4
+#if("$!leftValue" == "Susan")
+	Go into if
+#elseif("$!leftValue" != "Susan")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+
+
+Case 5
+#if($leftValue == "$rightValue")
+	Go into if
+#elseif($leftValue != "$rightValue")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Case 6
+#if($!leftValue == "$rightValue")
+	Go into if
+#elseif($!leftValue != "$rightValue")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Case 7
+#if("$leftValue" == "$rightValue")
+	Go into if
+#elseif("$leftValue" != "$rightValue")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Case 8
+#if("$!leftValue" == "$rightValue")
+	Go into if
+#elseif("$!leftValue" != "$rightValue")
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end

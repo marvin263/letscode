@@ -1,0 +1,28 @@
+*** Settings ***
+
+Documentation   Crossroads data sync test for company profile.
+Resource        resource.txt
+Suite Setup       Setup Runtime Environment
+Suite Teardown    Release Resources
+Test Teardown     Clean Up
+
+Default Tags     
+
+*** Variables ***
+${alm_test_set_name}      Yeling Test Set
+${alm_test_name}
+${company_id}               DSATC-9
+${assigned_or_removed_company_permission_1}          VisPro_GTPC
+${assigned_or_removed_company_permission_2}          SUBSCRIBER_PCS_Co
+
+
+*** Test Cases ***
+Company permissions modification in Xroads6 should be synced to Xroads7
+    Add Permissions To Company In Xroads6      ${company_id}    ${assigned_or_removed_company_permission_1}  ${assigned_or_removed_company_permission_2}
+    Company Should Have Permissions In Xroads7  ${company_id}    ${assigned_or_removed_company_permission_1}  ${assigned_or_removed_company_permission_2}
+    Company Should Have Permissions In Xroads7 Web Service  ${company_id}    ${assigned_or_removed_company_permission_1}  ${assigned_or_removed_company_permission_2}
+
+    Remove Permissions From Company In Xroads6  ${company_id}    ${assigned_or_removed_company_permission_1}  ${assigned_or_removed_company_permission_2}
+    Company Should Not Have Permissions In Xroads7  ${company_id}    ${assigned_or_removed_company_permission_1}  ${assigned_or_removed_company_permission_2}
+    Company Should Not Have Permissions In Xroads7 Web Service  ${company_id}    ${assigned_or_removed_company_permission_1}  ${assigned_or_removed_company_permission_2}
+

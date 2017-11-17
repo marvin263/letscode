@@ -1,0 +1,10 @@
+.emphasis {
+   font-style: italic;
+   font-size: 1.3em;
+}
+.disabled {
+   color: gray;
+}
+.selected {
+   font-weight: bold; 
+}

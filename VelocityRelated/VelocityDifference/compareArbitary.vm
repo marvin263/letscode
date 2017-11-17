@@ -1,0 +1,40 @@
+
+WrapperInfo=$WrapperInfo
+"WrapperInfo"="$WrapperInfo"
+
+#set($rightSideStringValue = "abc")
+
+	Arbitary--1: Shorthand == Shorthand
+#if($WrapperInfo == $rightSideStringValue)
+	Go into if
+#elseif($WrapperInfo != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Arbitary--2: Shorthand == Shorthand
+#if("$WrapperInfo" == $rightSideStringValue)
+	Go into if
+#elseif("$WrapperInfo" != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Arbitary--3: Shorthand == Shorthand
+#if($!WrapperInfo == $rightSideStringValue)
+	Go into if
+#elseif($!WrapperInfo != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+	Arbitary--4: Shorthand == Shorthand
+#if("$!WrapperInfo" == $rightSideStringValue)
+	Go into if
+#elseif("$!WrapperInfo" != $rightSideStringValue)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end

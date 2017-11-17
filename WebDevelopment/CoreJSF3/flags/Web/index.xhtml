@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+   <h:head>
+      <title>#{msgs.indexWindowTitle}</title>
+   </h:head>
+   <h:body>
+      <h:form>
+         <h:commandLink action="#{localeChanger.germanAction}">
+            <h:graphicImage library="images" name="de_flag.gif"
+                            style="border: 0px; margin-right: 1em;"/>
+         </h:commandLink>
+         <h:commandLink action="#{localeChanger.englishAction}">
+            <h:graphicImage library="images"
+                            name="en_flag.gif" style="border: 0px"/>
+         </h:commandLink>
+         <p><h:outputText value="#{msgs.indexPageTitle}"
+         style="font-style: italic; font-size: 1.3em"/></p>
+         <h:panelGrid columns="2">
+            #{msgs.namePrompt}
+            <h:inputText value="#{user.name}"/>         
+            #{msgs.passwordPrompt}
+            <h:inputSecret value="#{user.password}"/>         
+            #{msgs.tellUsPrompt}
+            <h:inputTextarea value="#{user.aboutYourself}" rows="5" cols="35"/>
+         </h:panelGrid>
+         <h:commandButton value="#{msgs.submitPrompt}" action="thankYou"/>
+      </h:form>
+   </h:body>
+</html>

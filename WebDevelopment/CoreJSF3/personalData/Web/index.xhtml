@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+   <h:head>
+      <title>#{msgs.indexWindowTitle}</title>
+   </h:head>
+   <h:body>
+      <h:outputText value="#{msgs.indexPageTitle}"
+                    style="font-style: italic; font-size: 1.5em"/>
+      <h:form>
+         <h:panelGrid columns="2">
+            #{msgs.namePrompt}
+            <h:inputText value="#{user.name}"/>
+            #{msgs.passwordPrompt}
+            <h:inputSecret value="#{user.password}"/>
+            #{msgs.tellUsPrompt}
+            <h:inputTextarea value="#{user.aboutYourself}" rows="5" cols="35"/>
+         </h:panelGrid>
+         <h:commandButton value="#{msgs.submitPrompt}" action="thankYou"/>
+      </h:form>
+   </h:body>
+</html>

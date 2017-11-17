@@ -1,0 +1,8 @@
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-core
+    compile group: 'org.openjdk.jmh', name: 'jmh-core', version: '1.17.1'
+    // https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-generator-annprocess
+    compile group: 'org.openjdk.jmh', name: 'jmh-generator-annprocess', version: '1.17.1'
+
+}

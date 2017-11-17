@@ -1,0 +1,8 @@
+Directive occupies linefeed or whitespace
+#set($counter = 0)
+#foreach($oneStr in ["Inspur", "ChinaSystem", "ZTE", "CDC Software"])			
+	#if($counter < 100)
+		My $counter company is $oneStr
+	#end
+	#set($counter = $counter + 1)
+#end

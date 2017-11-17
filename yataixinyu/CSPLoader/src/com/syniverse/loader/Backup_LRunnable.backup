@@ -1,0 +1,472 @@
+package com.syniverse.loader;
+
+import java.io.BufferedWriter;
+import java.sql.BatchUpdateException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.syniverse.db.DBManipulate;
+import com.syniverse.db.DBUtil;
+import com.syniverse.info.ActionType;
+import com.syniverse.info.DBColumnsInfo;
+import com.syniverse.info.EachRowInfo;
+import com.syniverse.info.SplitFileInfo;
+import com.syniverse.info.LResultInfo;
+import com.syniverse.info.PK;
+import com.syniverse.io.IOUtil;
+
+public class Backup_LRunnable implements Runnable {
+	private static final Log LOGGER = LogFactory.getLog(Backup_LRunnable.class);
+	public static final int COMMIT_THRESHOLD = 1000;
+	public static final int TOTAL_SWALLOW_SIZE = 3000;
+
+	private final BlockingQueue<EachRowInfo> queueFromValidatorToLoader;
+	private final SplitFileInfo spfInfo;
+	private final LResultInfo lr;
+	private final AtomicBoolean forceLoaderCommit;
+	private final AtomicBoolean loaderRequiredStop;
+
+	private Set<PK> setErrorHappenWhenExecuteDONNOTTrySuccessiveSameIMSI = new HashSet<PK>();
+
+	private Connection conn;
+	private PreparedStatement pstmtA = null;
+	private PreparedStatement pstmtU = null;
+	private PreparedStatement pstmtD = null;
+
+	private BufferedWriter bwError = null;
+	private BufferedWriter bwFailValidation = null;
+	private BufferedWriter bwDelButNotExist = null;
+
+	public Backup_LRunnable(BlockingQueue<EachRowInfo> queueFromValidatorToLoader,
+			SplitFileInfo spfInfo, LResultInfo lr,
+			AtomicBoolean forceLoaderCommit, AtomicBoolean loaderRequiredStop) {
+		this.queueFromValidatorToLoader = queueFromValidatorToLoader;
+		this.spfInfo = spfInfo;
+		this.lr = lr;
+		this.forceLoaderCommit = forceLoaderCommit;
+		this.loaderRequiredStop = loaderRequiredStop;
+		createConnPstmt();
+		createBufferedWriter();
+	}
+
+	private void createConnPstmt() {
+		try {
+			conn = DBUtil.getNewC();
+			conn.setAutoCommit(false);
+			pstmtA = conn.prepareStatement(DBColumnsInfo.SQL_A);
+			pstmtU = conn.prepareStatement(DBColumnsInfo.SQL_U);
+			pstmtD = conn.prepareStatement(DBColumnsInfo.SQL_D);
+		} catch (SQLException e) {
+			LOGGER.error("Error when createConnPstmt", e);
+		}
+	}
+
+	private void createBufferedWriter() {
+		bwError = IOUtil.createBufferedWriter(spfInfo.getSplitFullPath()
+				+ ".errors", null, true);
+		bwFailValidation = IOUtil.createBufferedWriter(
+				spfInfo.getSplitFullPath() + ".info", null, true);
+		bwDelButNotExist = IOUtil.createBufferedWriter(
+				spfInfo.getSplitFullPath() + ".delButNowExist", null,
+				true);
+	}
+
+	@Override
+	public void run() {
+		try {
+			loaderConsumeFileRow();
+		} catch (Exception e) {
+			LOGGER.error("Generic Error in LRunnable", e);
+		} finally {
+			loaderRequiredStop.set(true);
+			DBUtil.closeConnAndMultiPstmt(conn, new PreparedStatement[] {
+					pstmtA, pstmtU, pstmtD });
+			IOUtil.closeWriter(new BufferedWriter[] { bwError,
+					bwFailValidation, bwDelButNotExist });
+		}
+	}
+
+	public void loaderConsumeFileRow() {
+		BlockingQueue<EachRowInfo> communicateQueue = queueFromValidatorToLoader;
+		int passedValidationCount = 0;
+		int swallowCount = 0;
+		int commitThreshold = COMMIT_THRESHOLD;
+		int swallowThreshold = TOTAL_SWALLOW_SIZE;
+
+		List<EachRowInfo> failValidation = new ArrayList<EachRowInfo>();
+		List<EachRowInfo> passValidation = new ArrayList<EachRowInfo>(
+				commitThreshold);
+
+		while ( /*
+				 * response to interruption
+				 */
+		(Thread.currentThread().isInterrupted() == false)// response to
+				/*
+				 * when count of rows passing validation hits commitThreshold,
+				 * commit to DB
+				 */
+				&& passedValidationCount < commitThreshold
+				/*
+				 * prevent that we swallow so many rows that OutMemoryError
+				 * happens
+				 */
+				&& swallowCount < swallowThreshold
+				/*
+				 * consider forceLoaderCommit
+				 */
+				&& (
+				/*
+				 * validator is still producing file rows
+				 */
+				forceLoaderCommit.get() == false ||
+				/*
+				 * after validator has done producing file rows, we should
+				 * consume all of them
+				 */
+				(forceLoaderCommit.get() == true && communicateQueue.size() > 0))) {
+			EachRowInfo erInfo = null;
+			try {
+				erInfo = communicateQueue.poll(50, TimeUnit.MILLISECONDS);
+			} catch (Exception e) {
+				LOGGER.info(
+						"LRunnable.poll is interrupted. But continue to process the left element. now queueFromValidatorToLoader.size()="
+								+ queueFromValidatorToLoader.size(), e);
+				loaderRequiredStop.set(true);
+				forceLoaderCommit.set(true);
+				break;
+			}
+			if (erInfo == null) {
+				continue;
+			}
+
+			spfInfo.setLastRowProcessed(spfInfo.getLastRowProcessed() + 1);
+			swallowCount++;
+			if (erInfo.isPassed() == true) {
+				passedValidationCount++;
+				passValidation.add(erInfo);
+			}
+			// fail validation
+			else {
+				failValidation.add(erInfo);
+			}
+
+			// hit commitThreshold
+			if ((passedValidationCount == commitThreshold)
+					|| (swallowCount == swallowThreshold)) {
+				commitDBandWriteErrorFile(passValidation, failValidation);
+				passValidation.clear();
+				failValidation.clear();
+				// reset passedValidationCount, totalCount
+				passedValidationCount = 0;
+				swallowCount = 0;
+			}
+
+		}// end_while
+
+		LOGGER.info("Queue is drained. commit the data in passValidation&failValidation");
+		LOGGER.info("passValidation.size()=" + passValidation.size());
+		LOGGER.info("passedValidationCount=" + passedValidationCount);
+		LOGGER.info("failValidation.size()=" + failValidation.size());
+		LOGGER.info("swallowCount=" + swallowCount);
+		// even passedValidationCount is 0, we still need to execute this,
+		// because we have to write error file
+		commitDBandWriteErrorFile(passValidation, failValidation);
+		passValidation.clear();
+		failValidation.clear();
+		// reset passedValidationCount, totalCount
+		passedValidationCount = 0;
+		swallowCount = 0;
+		loaderRequiredStop.set(true);
+	}
+
+	private void commitDBandWriteErrorFile(List<EachRowInfo> passValidation,
+			List<EachRowInfo> failValidation) {
+		adjustActionFirst(passValidation);
+		Set<PK> setErrorHappen = this.setErrorHappenWhenExecuteDONNOTTrySuccessiveSameIMSI;
+		ActionEnum lastActioin = null;
+		List<List<EachRowInfo>> alreadySuccessBlock = new ArrayList<List<EachRowInfo>>();
+		List<EachRowInfo> listCurrentBlock = new ArrayList<EachRowInfo>();
+		// NOT include delete but not exist
+		List<EachRowInfo> listRetryLater = new ArrayList<EachRowInfo>();
+		List<EachRowInfo> listDelButNotExistDONNOTRETRY = new ArrayList<EachRowInfo>();
+		boolean batchExceptionHappened = false;
+		int totalConsumedCount = 0;
+		for (EachRowInfo erInfo : passValidation) {
+			totalConsumedCount++;
+			ActionEnum currentAction = erInfo.getAction();
+			if (currentAction == ActionEnum.DELETE_BUT_NOT_EXIST) {
+				listDelButNotExistDONNOTRETRY.add(erInfo);
+				continue;
+			}
+			if (setErrorHappen.contains(PK.create(erInfo))) {
+				// retry latter
+				listRetryLater.add(erInfo);
+				continue;
+			}
+
+			if (lastActioin == null || lastActioin == currentAction) {
+				addRow2BlockAndBatch(listCurrentBlock, erInfo);
+				lastActioin = currentAction;
+			}
+			// action has changed
+			else {
+				// commit the LAST block
+				boolean success = doExecuteBatch(assignPstmt(lastActioin));
+				if (success == true) {
+					LOGGER.info("nice commitToDB-->doExecuteBatch works so good");
+					alreadySuccessBlock.add(new ArrayList<EachRowInfo>(
+							listCurrentBlock));
+
+					listCurrentBlock.clear();
+					addRow2BlockAndBatch(listCurrentBlock, erInfo);
+					// action has changed
+					lastActioin = currentAction;
+
+				} else {
+					// listCurrentBlock commit error. and of course,
+					// <code>erInfo</code> HAS NOT been consumed yet
+					totalConsumedCount--;
+					LOGGER.info("commitToDB, doExecuteBatch encounters exception. rollback everying in this round");
+					rollbackEverthing();
+					LOGGER.info("commitToDB, doExecuteBatch encounters exception. Will reexecute rows in this batch as well as the following rows one by one");
+					batchExceptionHappened = true;
+					break;
+				}
+			}
+		}
+		// the tail block has never been executed. let's commit it here
+		if (listCurrentBlock.size() > 0 && batchExceptionHappened == false) {
+			batchExceptionHappened = doExecuteTailBlock(lastActioin,
+					alreadySuccessBlock, listCurrentBlock);
+		}
+
+		if (batchExceptionHappened == true) {
+			reExecuteAll_IfBatchFailed(passValidation, setErrorHappen,
+					alreadySuccessBlock, listCurrentBlock, listRetryLater,
+					listDelButNotExistDONNOTRETRY, totalConsumedCount);
+		}
+
+		DBUtil.commit(conn);
+		HandleErrorRow.writeFailedValidation(bwFailValidation, failValidation);
+		HandleErrorRow.writeError(bwError, listRetryLater);
+		HandleErrorRow.writeDelButNowExist(bwDelButNotExist,
+				listDelButNotExistDONNOTRETRY);
+	}
+
+	private boolean doExecuteTailBlock(ActionEnum lastActioin,
+			List<List<EachRowInfo>> alreadySuccessBlock,
+			List<EachRowInfo> listCurrentBlock) {
+		// all the elements in passValidation have been touched. Now, all the
+		// elements not be executed are all in listCurrentBlock, and they have
+		// the same action
+		boolean batchExceptionHappened = false;
+		// let's execute the TAIL block
+		boolean success = doExecuteBatch(assignPstmt(lastActioin));
+		if (success == true) {
+			LOGGER.info("nice commitToDB-->doExecuteTailBlock works so good");
+			alreadySuccessBlock
+					.add(new ArrayList<EachRowInfo>(listCurrentBlock));
+			listCurrentBlock.clear();
+		} else {
+			// all the left elements is in listCurrentBlock, and they have the
+			// same action
+			LOGGER.info("commitToDB-->doExecuteTailBlock encounters exception. rollback everying in this round");
+			rollbackEverthing();
+			LOGGER.info("commitToDB-->doExecuteTailBlock encounters exception. Will reexecute rows in this batch as well as the following rows one by one");
+			batchExceptionHappened = true;
+		}
+		return batchExceptionHappened;
+	}
+
+	private void addRow2BlockAndBatch(List<EachRowInfo> listCurrentBlock,
+			EachRowInfo erInfo) {
+		listCurrentBlock.add(erInfo);
+		DBManipulate.setValues(assignPstmt(erInfo.getAction()), erInfo);
+		DBUtil.addBatch(assignPstmt(erInfo.getAction()));
+	}
+
+	private void reExecuteAll_IfBatchFailed(List<EachRowInfo> passValidation,
+			Set<PK> setErrorHappen,
+			List<List<EachRowInfo>> alreadySuccessBlock,
+			List<EachRowInfo> listCurrentBlock,
+			List<EachRowInfo> listRetryLater,
+			List<EachRowInfo> listDelButNotExistDONNOTRETRY,
+			int totalConsumedCount) {
+		// We've rollbacked everthing, execute passValidation from the
+		// very beginning
+		// 1. execute all successful block
+		redoAllSuccessBlockAfterRollback(alreadySuccessBlock);
+		// 2. listCurrentBlock is not in the alreadySuccessBlock. Let's
+		// execute it
+		redoCurrentBlock(listCurrentBlock, 0, listCurrentBlock.size(),
+				setErrorHappen, listRetryLater, listDelButNotExistDONNOTRETRY);
+		// 3. execute the elements left in passValidation. these
+		// elements has never been touched
+		executeNeverTouched(passValidation, totalConsumedCount,
+				(passValidation.size() - totalConsumedCount), setErrorHappen,
+				listRetryLater, listDelButNotExistDONNOTRETRY);
+	}
+
+	private void rollbackEverthing() {
+		DBUtil.rollback(conn);
+	}
+
+	private void executeOneByOne(List<EachRowInfo> listToBeExecuted,
+			int fromIndex, int length, Set<PK> setErrorHappen,
+			List<EachRowInfo> listRetryLater,
+			List<EachRowInfo> listDelButNotExistDONNOTRETRY) {
+		for (int i = fromIndex; i < (fromIndex + length); i++) {
+			EachRowInfo erInfo = listToBeExecuted.get(i);
+			ActionEnum action = erInfo.getAction();
+			// want to delete. but not exist in DB
+			if (erInfo.getAction() == ActionEnum.DELETE_BUT_NOT_EXIST) {
+				listDelButNotExistDONNOTRETRY.add(erInfo);
+				continue;
+			}
+			if (setErrorHappen.contains(PK.create(erInfo))) {
+				// retry latter
+				listRetryLater.add(erInfo);
+				continue;
+			}
+
+			PreparedStatement pstmt = assignPstmt(action);
+			DBManipulate.setValues(pstmt, erInfo);
+
+			try {
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				LOGGER.error("IMSI/MIN " + PK.create(erInfo)
+						+ " error when executeOneByOne", e);
+				setErrorHappen.add(PK.create(erInfo));
+				listRetryLater.add(erInfo);
+			}
+		}
+	}
+
+	private void redoAllSuccessBlockAfterRollback(
+			List<List<EachRowInfo>> alreadySuccessBlock) {
+		int totalBlockCount = alreadySuccessBlock.size();
+		LOGGER.info("redoAllSuccessBlockAfterRollback, totalBlockCount="
+				+ totalBlockCount);
+		int processingIndex = 0;
+		for (List<EachRowInfo> listBlock : alreadySuccessBlock) {
+			PreparedStatement pstmt = assignPstmt(listBlock.get(0).getAction());
+
+			for (EachRowInfo erInfo : listBlock) {
+				DBManipulate.setValues(pstmt, erInfo);
+				DBUtil.addBatch(pstmt);
+			}
+			boolean success = doExecuteBatch(pstmt);
+			LOGGER.info("redoAllSuccessBlockAfterRollback, processing "
+					+ processingIndex + ", should always success. success="
+					+ success);
+		}
+	}
+
+	private void redoCurrentBlock(List<EachRowInfo> listCurrentBlock,
+			int fromIndex, int length, Set<PK> setErrorHappen,
+			List<EachRowInfo> listRetryLater,
+			List<EachRowInfo> listDelButNotExistDONNOTRETRY) {
+		executeOneByOne(listCurrentBlock, fromIndex, length, setErrorHappen,
+				listRetryLater, listDelButNotExistDONNOTRETRY);
+	}
+
+	private void executeNeverTouched(List<EachRowInfo> passValidation,
+			int totalConsumedCount, int length, Set<PK> setErrorHappen,
+			List<EachRowInfo> listRetryLater,
+			List<EachRowInfo> listDelButNotExistDONNOTRETRY) {
+
+		executeOneByOne(passValidation, totalConsumedCount, length,
+				setErrorHappen, listRetryLater, listDelButNotExistDONNOTRETRY);
+	}
+
+	private boolean doExecuteBatch(PreparedStatement lastPstmt) {
+		try {
+			int[] success = lastPstmt.executeBatch();
+			LOGGER.debug("nice, doExecuteBatch works so good");
+			return true;
+		} catch (BatchUpdateException e) {
+			LOGGER.error(
+					"BatchUpdateException when doExecuteBatch, will reexecute each row in this batch again",
+					e);
+			return false;
+		} catch (SQLException e) {
+			LOGGER.error(
+					"SQLException when doExecuteBatch, will reexecute each row in this batch again",
+					e);
+			return false;
+		} catch (Exception e) {
+			LOGGER.error(
+					"Exception when doExecuteBatch, will reexecute each row in this batch again",
+					e);
+			return false;
+		}
+	}
+
+	private PreparedStatement assignPstmt(ActionEnum action) {
+		switch (action) {
+		case DELETE:
+			return pstmtD;
+		case UPDATE:
+			return pstmtU;
+		case INSERT:
+			return pstmtA;
+		}
+		return null;
+	}
+
+	public List<EachRowInfo> adjustActionFirst(List<EachRowInfo> passValidation) {
+		Set<PK> setExistInDB = DBManipulate.put2SetIfExist(conn,
+				passValidation, spfInfo.orgnfInfo.getBillingID() + "");
+		for (int i = 0; i < passValidation.size(); i++) {
+			EachRowInfo eachRowInfo = passValidation.get(i);
+			adjustAction(eachRowInfo, setExistInDB);
+		}
+		return passValidation;
+	}
+
+	private void adjustAction(EachRowInfo eachRowInfo, Set<PK> setExistInDB) {
+		ActionEnum current = eachRowInfo.getAction();
+		PK pk = PK.create(eachRowInfo);
+
+		if (current == ActionEnum.DELETE) {
+			if (setExistInDB.contains(pk)) {
+				// since it's delete, we should remove it from set
+				setExistInDB.remove(pk);
+			} else {
+				// delete but not exist. bad situation
+				eachRowInfo.setAction(ActionEnum.DELETE_BUT_NOT_EXIST);
+			}
+			return;
+		}
+
+		if (current == ActionEnum.INSERT) {
+			if (setExistInDB.contains(pk)) {
+				eachRowInfo.setAction(ActionEnum.UPDATE);
+			} else {
+				setExistInDB.add(pk);
+			}
+			return;
+		}
+
+		if (current == ActionEnum.UPDATE) {
+			if (setExistInDB.contains(pk)) {
+			} else {
+				eachRowInfo.setAction(ActionEnum.INSERT);
+				setExistInDB.add(pk);
+			}
+			return;
+		}
+	}
+}

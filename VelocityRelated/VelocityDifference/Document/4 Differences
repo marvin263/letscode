@@ -1,0 +1,37 @@
+Difference 1: NOT regular expression
+#llabel
+
+Difference 2:
+#.*?\\("|').*?\\(\1)
+
+Difference 3:
+//Never used, used to search empty string
+(((#if)|(#elseif))(\s*)\(.*?\$(!)?[\w-]+\s*((==)|(!=))\s*"".*?\))|(((#if)|(#elseif))(\s*)\(.*?""\s*((==)|(!=))\s*\$(!)?[\w-]+.*?\))
+
+//Register in wiki
+(((#if)|(#elseif))(\s*)\(.*?\$(!)?(\{)?(?!(vm[Uu]til))[.\w-]+(\})?\s*((==)|(!=))\s*".*?".*?\))|(((#if)|(#elseif))(\s*)\(.*?".*?"\s*((==)|(!=))\s*\$(!)?(\{)?(?!(vm[Uu]til))[.\w-]+(\})?.*?\))
+
+// Used for my little java tool
+(((#if)|(#elseif))(\s*)\(.*?(\$(!)?(\{)?(?!(vm[Uu]til))[.\w-]+(\})?)\s*((==)|(!=))\s*".*?".*?\))|(((#if)|(#elseif))(\s*)\(.*?".*?"\s*((==)|(!=))\s*(\$(!)?(\{)?(?!(vm[Uu]til))[.\w-]+(\})?).*?\))
+
+//First kind
+#if($undefinedString == "")
+#if($undefinedString == "abc")
+#if("$undefinedString" == "")
+#if("$undefinedString" == "abc")
+
+#if($undefinedString == "$anotherVariable")
+#if($undefinedString == "$anotherVariable")
+#if("$undefinedString" == "$anotherVariable")
+#if("$undefinedString" == "$anotherVariable")
+
+//First kind
+#if("$undefinedString" == "")
+#if("$undefinedString" == "abc")
+#if("$undefinedString" == "")
+#if("$undefinedString" == "abc")
+
+#if("$undefinedString" == "$anotherVariable")
+#if("$undefinedString" == "$anotherVariable")
+#if("$undefinedString" == "$anotherVariable")
+#if("$undefinedString" == "$anotherVariable")

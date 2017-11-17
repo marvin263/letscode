@@ -1,0 +1,112 @@
+If a boolean, considered true if it has a true false; if not a boolean, considered true if not null
+
+Section 1: --------------------------------------------------
+	Case 1: WrapperInfo exists, str exists, Shorthand Notation
+#if($WrapperInfo.str)
+	Go into if
+#elseif(!$WrapperInfo.str)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 2: WrapperInfo exists, str exists, Slient Shorthand Notation
+#if($!WrapperInfo.str)
+	Go into if
+#elseif(!$!WrapperInfo.str)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 3: WrapperInfo exists, str exists, Formal Notation
+#if(${WrapperInfo.str})
+	Go into if
+#elseif(!${WrapperInfo.str})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 4: WrapperInfo exists, str exists, Slient Formal Notation
+#if($!{WrapperInfo.str})
+	Go into if
+#elseif(!$!{WrapperInfo.str})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Section 2: --------------------------------------------------
+	Case 1: WrapperInfo exists, strNotExist NOT exists, Shorthand Notation
+#if($WrapperInfo.strNotExist)
+	Go into if
+#elseif(!$WrapperInfo.strNotExist)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 2: WrapperInfo exists, strNotExist NOT exists, Slient Shorthand Notation
+#if($!WrapperInfo.strNotExist)
+	Go into if
+#elseif(!$!WrapperInfo.strNotExist)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 3: WrapperInfo exists, strNotExist NOT exists, Formal Notation
+#if(${WrapperInfo.strNotExist})
+	Go into if
+#elseif(!${WrapperInfo.strNotExist})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 4: WrapperInfo exists, strNotExist NOT exists, Slient Formal Notation
+#if($!{WrapperInfo.strNotExist})
+	Go into if
+#elseif(!$!{WrapperInfo.strNotExist})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+Section 3: --------------------------------------------------
+	Case 1: WhatAreYou NOT exists, Shorthand Notation
+#if($WhatAreYou.strNotExist)
+	Go into if
+#elseif(!$WhatAreYou.strNotExist)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 2: WhatAreYou NOT exists, Slient Shorthand Notation
+#if($!WhatAreYou.strNotExist)
+	Go into if
+#elseif(!$!WhatAreYou.strNotExist)
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 3: WhatAreYou NOT exists, Formal Notation
+#if(${WhatAreYou.strNotExist})
+	Go into if
+#elseif(!${WhatAreYou.strNotExist})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end
+
+	Case 4: WhatAreYou NOT exists, Slient Formal Notation
+#if($!{WhatAreYou.strNotExist})
+	Go into if
+#elseif(!$!{WhatAreYou.strNotExist})
+	ElseIf
+#else
+	Oh my god, nothing is adequate
+#end

@@ -1,0 +1,68 @@
+
+
+
+
+
+First: poundSign.vm
+
+Second: equalityBothStringAndInteger.vm
+
+Third: equalityObjectProperties.vm
+If a boolean, considered true if it has a true false; if not a boolean, considered true if not null
+
+Section 1: --------------------------------------------------
+	Case 1: WrapperInfo exists, str exists, Shorthand Notation
+	Go into if
+
+	Case 2: WrapperInfo exists, str exists, Slient Shorthand Notation
+	Go into if
+
+	Case 3: WrapperInfo exists, str exists, Formal Notation
+	Go into if
+
+	Case 4: WrapperInfo exists, str exists, Slient Formal Notation
+	Go into if
+
+Section 2: --------------------------------------------------
+	Case 1: WrapperInfo exists, strNotExist NOT exists, Shorthand Notation
+	ElseIf
+
+	Case 2: WrapperInfo exists, strNotExist NOT exists, Slient Shorthand Notation
+	ElseIf
+
+	Case 3: WrapperInfo exists, strNotExist NOT exists, Formal Notation
+	ElseIf
+
+	Case 4: WrapperInfo exists, strNotExist NOT exists, Slient Formal Notation
+	ElseIf
+
+Section 3: --------------------------------------------------
+	Case 1: WhatAreYou NOT exists, Shorthand Notation
+	ElseIf
+
+	Case 2: WhatAreYou NOT exists, Slient Shorthand Notation
+	ElseIf
+
+	Case 3: WhatAreYou NOT exists, Formal Notation
+	ElseIf
+
+	Case 4: WhatAreYou NOT exists, Slient Formal Notation
+	ElseIf
+
+Fourth: compareString.vm
+
+Fifth: compareArbitary.vm
+
+Sixth: LiteralOrVariableAreTheSame.vm
+
+Seven: RealLiteralString.vm
+
+Eight: OnlyCompareEmptyString.vm
+
+Nine: StringVariableCompareStringVariable.vm
+
+Ten: RareVariableCompareRareVariable.vm
+
+Eleven: compareObject.vm
+
+Twelve: compareInteger.vm

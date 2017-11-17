@@ -1,0 +1,52 @@
+
+##equal
+##set($myInteger = 99)
+##set($rightSideIntegerValue = 99)
+
+##Not equal
+##set($myInteger = 99)
+##set($rightSideIntegerValue = 22)
+
+##Empty
+##set($myInteger = 99)
+##set($rightSideIntegerValue = "")
+
+##Not defined
+##set($myInteger = 99)
+##set($rightSideIntegerValue = "")
+
+First: poundSign.vm
+##parse("poundSign.vm")
+
+Second: equalityBothStringAndInteger.vm
+##parse("equalityBothStringAndInteger.vm")
+
+Third: equalityObjectProperties.vm
+#parse("equalityObjectProperties.vm")
+
+Fourth: compareString.vm
+##parse("compareString.vm")
+
+Fifth: compareArbitary.vm
+##parse("compareArbitary.vm")
+
+Sixth: LiteralOrVariableAreTheSame.vm
+##parse("LiteralOrVariableAreTheSame.vm")
+
+Seven: RealLiteralString.vm
+##parse("RealLiteralString.vm")
+
+Eight: OnlyCompareEmptyString.vm
+##parse("OnlyCompareEmptyString.vm")
+
+Nine: StringVariableCompareStringVariable.vm
+##parse("StringVariableCompareStringVariable.vm")
+
+Ten: RareVariableCompareRareVariable.vm
+##parse("RareVariableCompareRareVariable.vm")
+
+Eleven: compareObject.vm
+##parse("compareObject.vm")
+
+Twelve: compareInteger.vm
+##parse("compareInteger.vm")

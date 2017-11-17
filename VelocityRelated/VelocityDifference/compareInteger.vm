@@ -1,0 +1,5 @@
+#set($undefinedString = 5)
+#set($rightSideStringValue = "5")
+
+Comparing integer
+#parse("compareString.vm")

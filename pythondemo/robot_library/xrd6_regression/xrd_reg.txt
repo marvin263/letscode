@@ -1,0 +1,188 @@
+*** Settings ***
+Library           Selenium2Library
+
+*** Variables ***
+${u_name}         P002820
+${u_passwd}       Syniverse1!
+${syniverse_u}    M000889
+${syniverse_pw}    Syniverse1!
+
+*** Keywords ***
+Login crossroads 6
+    [Arguments]    ${u_name}    ${u_passwd}
+    Open Browser    https://crossroads-test.syniverse.com    IE
+    Maximize Browser Window
+    Wait Until Page Contains Element    name=Submit
+    Input Text    id=username    ${u_name}
+    Input Password    id=password    ${u_passwd}
+    Comment    Click Button    name=Submit
+    Execute Javascript    return submitForm()
+    sleep    5s
+
+Open modify user perm page
+    sleep    5s
+    Wait Until Page Contains Element    name=NavFrame
+    Select Frame    name=NavFrame
+    Wait Until Page Contains Element    id=navcenterAdmin
+    Click Link    id=navcenterAdmin
+    select window    title=Admin
+    Wait Until Page Contains Element    name=MenuFrame
+    Wait Until Page Contains Element    name=ContentFrame
+    log    select left frame
+    Select Frame    name=MenuFrame
+    click element    id=_celllItem23
+    click element    id=_celllItem22
+    click element    id=_celllItem19
+    sleep    2s
+    select window    title=Admin
+    Select Frame    name=ContentFrame
+    Wait Until Page Contains Element    name=dnqualifier
+    Input Text    name=dnqualifier    P002820
+    Comment    Execute Javascript    submitForm()
+    click element    xpath=//input[@tabindex='24' and @value='Search']
+    select window    title=Admin
+    Select Frame    name=ContentFrame
+    Wait Until Page Contains Element    id=permButton
+    Wait Until Element is visible    id=permButton
+    Click element    id=permButton
+    Comment    Execute Javascript    submitPerms()
+    select window    title=Admin
+    Select Frame    name=ContentFrame
+    Select Frame    name=MiddleFrame
+    Wait Until Page Contains    Last Modified By
+
+Grant User Permissions
+    [Arguments]    ${perm_folder}    ${perm_name}
+    Wait Until page contains element    ${perm_folder}
+    Wait Until element is visible    ${perm_folder}
+    click element    ${perm_folder}
+    Wait Until page contains element    ${perm_name}
+    Wait Until element is visible    ${perm_name}
+    click element    ${perm_name}
+    sleep    3s
+    select window    title=Admin
+    Select Frame    name=ContentFrame
+    Select Frame    name=BottomFrame
+    Wait Until Page Contains Element    xpath=//input[@id='continue']
+    click element    xpath=//input[@id='continue']
+    select window    title=Admin
+    Select Frame    name=ContentFrame
+    Wait Until Page Contains    Permissions have been modified
+
+Check added products in tab menu
+    [Arguments]    ${tab_name}
+    close all browsers
+    Login crossroads 6    ${u_name}    ${u_passwd}
+    sleep    5s
+    Wait Until Page Contains Element    name=NavFrame
+    Select Frame    name=NavFrame
+    Wait Until Page Contains Element    id=navcenterHelp
+    ${para}    Catenate    SEPARATOR=    link=    ${tab_name}
+    Click Link    ${para}
+    ${title}    Catenate    SEPARATOR=    title=    ${tab_name}
+    select window    ${title}
+
+Check menu item in left
+    [Arguments]    ${page_title}    ${menu_name}
+    [Timeout]
+    ${title}    Catenate    SEPARATOR=    title=    ${page_title}
+    select window    ${title}
+    Wait Until Page Contains Element    name=MenuFrame
+    Wait Until Page Contains Element    name=ContentFrame
+    Select Frame    name=MenuFrame
+    ${para_1}    set variable    xpath=//span[text()='
+    ${para}    Catenate    SEPARATOR=    ${para_1}    ${menu_name}    ']
+    Wait Until Page Contains Element    ${para}
+    Wait Until Element is visible    ${para}
+    click element    ${para}
+
+Validate product is opened correctly
+    [Arguments]    ${title}    ${para}
+    ${title}    Catenate    SEPARATOR=    title=    ${title}
+    select window    ${title}
+    Wait Until Page Contains Element    name=MenuFrame
+    Wait Until Page Contains Element    name=ContentFrame
+    select frame    name=ContentFrame
+    sleep    5s
+    page should contain    ${para}
+
+Validate URL in left frame source code
+    [Arguments]    ${title}    ${url}
+    ${title}    Catenate    SEPARATOR=    title=    ${title}
+    select window    ${title}
+    Wait Until Page Contains Element    name=MenuFrame
+    select frame    name=MenuFrame
+    ${source}    get source
+    should contain    ${source}    ${url}
+
+Check menu item of OC SMS1 and SMS2
+    select window    Mobile Data
+    Wait Until Page Contains Element    name=MenuFrame
+    Wait Until Page Contains Element    name=ContentFrame
+    Select Frame    name=MenuFrame
+    click element    id=_celllItem2
+    click element    id=_celllItem1
+    click element    id=_celllItem0
+    Validate product is opened correctly    Mobile Data    FCH Invoice Generation Report
+    select window    Mobile Data
+    Wait Until Page Contains Element    name=MenuFrame
+    Wait Until Page Contains Element    name=ContentFrame
+    Select Frame    name=MenuFrame
+    click element    id=_celllItem5
+    click element    id=_celllItem4
+    click element    id=_celllItem3
+    Validate product is opened correctly    Mobile Data    FCH Invoice Generation Report
+
+Login crossroasds 6 as syniverse user
+    Open Browser    https://crossroads-test.syniverse.com    IE
+    Maximize Browser Window
+    Wait Until Page Contains Element    name=Submit
+    Input Text    id=username    ${syniverse_u}
+    Input Password    id=password    ${syniverse_pw}
+    Comment    Click Button    name=Submit
+    Execute Javascript    return submitForm()
+    sleep    5s
+
+Modify Company Permission
+    [Arguments]    ${perm_g}    ${perm_id}    ${company_name}=VZW W
+    Comment    Login crossroasds 6 as syniverse user
+    Comment    Open modify company perm page
+    select window    title=Admin
+    Select Frame    name=ContentFrame
+    wait until page contains element    xpath=//input[@name='searchStr']
+    wait until element is visible    xpath=//input[@name='searchStr']
+    input text    xpath=//input[@name='searchStr']    ${company_name}
+    sleep    3s
+    click button    id=submitPermBtn
+    wait until page contains    Last Modified By
+    Comment    select window    title=Admin
+    Comment    Select Frame    name=ContentFrame
+    Comment    Wait Until Page Contains    Permissions have been modified
+    wait until page contains element    ${perm_g}
+    click element    ${perm_g}
+    wait until page contains element    ${perm_id}
+    wait until element is visible    ${perm_id}
+    click element    ${perm_id}
+    Comment    click element    xpath=//input[@type='button and '@name='Continue'']
+    Execute Javascript    setPermissions()
+    sleep    2s
+    select window    title=Admin
+    Select Frame    name=ContentFrame
+    wait until page contains    Success!
+
+Open modify company perm page
+    sleep    3s
+    Wait Until Page Contains Element    name=NavFrame
+    Select Frame    name=NavFrame
+    Wait Until Page Contains Element    id=navcenterAdmin
+    Click Link    id=navcenterAdmin
+    select window    title=Admin
+    Wait Until Page Contains Element    name=MenuFrame
+    Wait Until Page Contains Element    name=ContentFrame
+    Select Frame    name=MenuFrame
+    wait until page contains    Administrative
+    click element    id=_celllItem17
+    wait until element is visible    id=_celllItem6
+    click element    id=_celllItem6
+    wait until element is visible    id=_celllItem3
+    click element    id=_celllItem3

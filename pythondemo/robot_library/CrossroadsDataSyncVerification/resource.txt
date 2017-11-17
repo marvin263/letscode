@@ -1,0 +1,300 @@
+*** Settings ***
+
+Documentation  Keywords definition that is specific to xroads and not yet implemented as library function.
+Library        XroadsPageDriver
+Library        Xroads7WS      
+
+*** Variables ***
+
+
+*** Keywords ***
+Setup Runtime Environment
+    Set Log Level               DEBUG
+    Set Selenium Speed          0.2 secs
+    Set Selenium Timeout        2 minutes
+    Set Default Browser         IE
+    Set Xroads6 Info            https://crossroads-dev.syniverse.com    M000221     Word1@dev6
+    Set Xroads7 Info            https://mysyniverse-dev.syniverse.com/mysyniverse/faces/tabnavigation   YS00003   Word1@dev7
+    Set Alm Credential          g706811   g706811@alm       SV        CROSSROADS
+    Set Xroads6 DB Info         rhrac1scan.syniverse.com:1521/XRDSD1    xroads_app    xroads
+    Init WS Client    http://vapp011-hw1.syniverse.com:7777/CrossroadsWS/CrossroadsWebServiceAppModuleService?wsdl  YS00003   Word1@dev7
+
+Clean Up
+# Close All Browsers
+    ${ALM_TEST_NAME_LEN}=       Get Length          ${ALM_TEST_NAME}
+    Run Keyword If Test Failed      Run Keyword If    ${ALM_TEST_NAME_LEN} > 0      Fail Alm Test Instance    ${ALM_TEST_SET_NAME}      ${ALM_TEST_NAME}
+    Run Keyword If Test Passed      Run Keyword If    ${ALM_TEST_NAME_LEN} > 0      Pass Alm Test Instance    ${ALM_TEST_SET_NAME}      ${ALM_TEST_NAME}
+
+
+## for Xroads 6
+Create Company In Xroads6     [Arguments]   ${name}     ${comment}     ${tsg_id}     ${ctp_id}
+    Login Xroads6
+    Open Xroads6 Company Add Page
+    ${company_id}=             Submit Company Details        ${name}     ${comment}     ${tsg_id}     ${ctp_id}
+    [Return]                  ${company_id}
+
+Open Xroads6 Company Add Page
+    Login Xroads6
+    Open Xroads6 Admin Page
+    Navigate With Xroads6 Left Menu     Company     Profile     Add
+    Select Frame    name=ContentFrame
+    Wait Until Page Contains Element    xpath=//button[contains(text(),"Add Company")]   1 minutes
+
+Xroads6 Should Have Company             [Arguments]   ${company_id}
+    Login Xroads6
+    Open Xroads6 Admin Page
+    Navigate With Xroads6 Left Menu     Company     Profile     View
+    Select Frame                        name=ContentFrame
+    Wait Until Page Contains Button     View Permissions
+    Select Company                      ${company_id}         Xroads6 should have company ${company_id}, but it doesn't.
+    
+
+Open Xroads6 Admin Page
+    ${admin_already_open}=              Is Currently On Xroads6 Admin Page
+    Run Keyword If                      ${admin_already_open}     Return From Keyword
+    Unselect Frame                    
+    Select Frame                        name=NavFrame
+    Wait Until Page Contains Element    xpath=//a[@name='navcenterAdmin']
+    Click Link                          name=navcenterHome
+    Sleep                               2 secs
+    Click Link                          name=navcenterAdmin
+    Sleep                               5 secs
+    Select Window                       Admin
+    Ensure Frames Loaded                   xpath=//*[@id='lItem0']   xpath=//frame[@name="MenuFrame"]
+ 
+# keyword for form interaction, maybe python method is more flexible since we could pass the form
+#Deprecated, use seperate input_company_profile keyword
+Submit Company Details      [Arguments]   ${name}     ${comment}     ${tsg_id}     ${ctp_id} 
+    Set Selenium Speed    0.1 secs
+    Input Text      name=carriername      ${name}
+    Input Text      name=comment          ${comment}
+    Input Text      name=tsgcarrierid     ${tsg_id}
+    Input Text      name=ctpcompanyid     ${ctp_id}
+    Click Button With Text                Add Company
+    Wait Until Page Contains              Success!    1 minutes   "Not able to create compay successfully within 1 minutes"
+    ${cid}=         Get Value             name=carrieruid
+    Unselect Frame
+    [Return]        ${cid}
+
+| Input Aocid Detail | [Arguments] | ${line} | ${aoid} | ${cid} | ${company_name} | ${state} | @{bsp} |
+| | Input Text | xpath=//table[@name='aotable']/tbody/tr[${line}]/td/input[@name='aocid'] | ${aoid} |
+| | Input Text | xpath=//table[@name='aotable']/tbody/tr[${line}]/td/input[@name='cid'] | ${cid} |
+| | Input Text | xpath=//table[@name='aotable']/tbody/tr[${line}]/td/input[@name='companyname'] | ${company_name} |
+| | Select From List By Label | xpath=//table[@name='aotable']/tbody/tr[${line}]/td/select[@name='state'] | ${state} |
+| | ${i}= | Set Variable | ${1} |
+| | :For  | ${bsp_id} | IN | @{bsp} |
+| |       | Input Text | xpath=//table[@name='aotable']/tbody/tr[${line}]/td[input[@name='bsp']][${i}]/input | ${bsp_id} |
+| |       | ${i}= | Set Variable | ${i+1} |
+
+Goto Xroads6 User Add Page
+    Login Xroads6
+    Open Xroads6 Admin Page
+    Navigate With Xroads6 Left Menu     User     Profile     Add
+    Select Frame                        name=ContentFrame
+    Wait Until Page Contains Button     Submit Form
+
+Goto Xroads6 User Modify Profile Page          [Arguments]     ${user_id}
+    Login Xroads6
+    Open Xroads6 Admin Page
+    Navigate With Xroads6 Left Menu     User     Profile      Modify
+    Select Frame                        name=ContentFrame
+    Wait Until Page Contains Button     Search
+    Input Text                          name=dnqualifier      ${user_id}
+    Click Button With Text              Search
+    Wait Until Page Contains Button     Update Roles
+# big hack 
+    Click Element                       xpath=//input[1]
+
+Goto Xroads6 User Modify Permission Page        [Arguments]     ${user_login_id}
+    Login Xroads6
+    Open Xroads6 Admin Page
+    Navigate With Xroads6 Left Menu     User     Profile     Modify
+    Select Frame                        name=ContentFrame
+    Wait Until Page Contains Button     Search
+    Input Text                          name=dnqualifier    ${user_login_id}
+    Click Button With Text              Search
+    Wait Until Page Contains Button     Update Roles
+    Sleep                               1 secs
+    Click Button With Text              Update Permissions
+    Ensure Frames Loaded                xpath=//*[contains(text(),"Note: Permissions")]
+    ...                                 xpath=//frame[@name="ContentFrame"]   xpath=//frame[@name="MiddleFrame"]   
+    Ensure Frames Loaded                xpath=//input[@type="submit" and @value="Continue"]
+    ...                                 xpath=//frame[@name="ContentFrame"]   xpath=//frame[@name="BottomFrame"]   
+
+Goto Xroads6 User Delete Page          [Arguments]     ${company_id}    ${user_id}
+    Login Xroads6
+    Open Xroads6 Admin Page
+    Navigate With Xroads6 Left Menu     User     Profile    Delete
+    Select Frame                        name=ContentFrame
+    Wait Until Page Contains Button     Search
+
+Add Permissions To Company In Xroads6   [Arguments]    ${company_id}      @{permIds}
+    Goto Xroads6 Company Modify Permission Page    ${company_id}
+    Assign Permissions                  ${permIds}
+    Click Button With Text              Continue
+    Wait Until Page Contains            Success!    2 minutes   Modify company permission not successful!
+    Unselect Frame
+
+Add Permissions To User In Xroads6      [Arguments]    ${user_id}      @{permIds}
+    Goto Xroads6 User Modify Permission Page    ${user_id}
+    Select Frame                        name=ContentFrame
+    Select Frame                        name=MiddleFrame
+    Assign Permissions                  ${permIds}
+    Unselect Frame
+    Select Frame                        name=ContentFrame
+    Select Frame                        name=BottomFrame
+    Click Button With Text              Continue
+    Unselect Frame
+    Select Frame                        name=ContentFrame
+    Wait Until Page Contains            Success!    2 minutes   Modify company permission not successful!
+    Unselect Frame
+
+Remove Permissions From Company In Xroads6   [Arguments]    ${company_id}      @{permIds}
+    Goto Xroads6 Company Modify Permission Page    ${company_id}
+    Remove Permissions                  ${permIds}
+    Click Button With Text              Continue
+    Wait Until Page Contains            Success!    1 minutes     Modify company permission not successful!
+    Unselect Frame
+
+Goto Xroads6 Company Modify Permission Page        [Arguments]     ${company_id}
+    Login Xroads6
+    Open Xroads6 Admin Page
+    Navigate With Xroads6 Left Menu     Company     Profile     Modify
+    Select Frame                        name=ContentFrame
+    Wait Until Page Contains Element    xpath=//button[@id="submitPermBtn"]
+#Select From List                    xpath=//select[@name="carrieruid"]     ${company_id}
+    Select Company                      ${company_id}
+    Click Button With Text              Update Permissions
+    Wait Until Page Contains Element    xpath=//input[@type="button" and @value="Continue"]
+
+Goto Xroads6 Company View Permission Page        [Arguments]     ${company_id}
+    Login Xroads6
+    Open Xroads6 Admin Page
+    Navigate With Xroads6 Left Menu     Company     Profile     View
+    Select Frame                        name=ContentFrame
+    Wait Until Page Contains Button     View Permissions
+    Select Company                      ${company_id}
+    Click Button With Text              View Permissions
+    Wait Until Page Contains            Last Modified Date
+
+Company Should Have Aocid In Xroads6 Db   [Arguments]   ${company_id}     ${aocid}
+    Company Should Have Resource In Xroads6 Db    ${company_id}     ${aocid}    5
+
+Xroads6 Should Have Permission            [Arguments]   ${permission_id}
+    Xroads6 Db Should Have Resource               ${permission_id}    2
+
+| Company Should Have Permissions In Xroads6 | [Arguments] | ${company_id} | @{permIds} |
+|                                            | Goto Xroads6 Company View Permission Page | ${company_id} |
+|                                            | :For  | ${permId} | IN | @{permIds} |
+|                                            |       | Permission Should Be Assigned | ${permId} |
+
+Get Xroads6 User Info Form Field Value            [Arguments]       ${field_label}
+    ${id_str}=        Get Text              xpath=//tr[td[contains(text(),'${field_label}')]]/td[2]
+    [Return]          ${id_str}
+
+## For Xroads 7
+Company Should Be In Xroads7     [Arguments]        ${id}    ${name}     ${comment}     ${tsg_id}     ${ctp_id} 
+    Goto Xroads7 Company Detail Page    ${id}       True
+    Verify Company Profiles      ${id}     ${name}     ${comment}     ${tsg_id}     ${ctp_id} 
+
+Company Should Exist In Xroads7     [Arguments]        ${id}
+    Goto Xroads7 Company Detail Page    ${id}       True
+
+Goto Xroads7 Company Detail Page    [Arguments]   ${company_id}     ${clearCache}
+    Login Xroads7
+    Open Xroads7 Admin Console
+    Run Keyword If                        ${clearCache} == True         Clear Xroads7 Cache
+    Open Xroads7 Company Admin Page
+    Open Xroads7 Company Detail Page              ${company_id}
+    
+Goto Xroads7 User Detail Page    [Arguments]   ${user_id}     ${clearCache}
+    Login Xroads7
+    Sleep       5 secs
+    Open Xroads7 Admin Console
+    Run Keyword If                        ${clearCache} == True         Clear Xroads7 Cache
+    Open Xroads7 User Admin Page
+    Open Xroads7 User Detail Page              ${user_id}
+
+Verify Company Profiles      [Arguments]   ${id}    ${name}     ${comment}     ${tsg_id}     ${ctp_id}
+    Page Should Contain Element     xpath=//tr/td[contains(text(), ${id})]
+    Page Should Contain Element     xpath=//tbody[tr[td[label[text() = "Company ID"]]]]/tr[2]/td[contains(text(),${id})]
+    ${val}=                         Get Value     xpath=//tbody[tr[td[label[text() = "Company Name"]]]]/tr[2]/td/input
+    Verify Company Profile          Company Name    ${name}
+#Comment is not synced?
+#Form Input Field Should Have Value    Comments    ${comment}     
+    Verify Company Profile    TSG Carrier ID    ${tsg_id}
+    Verify Company Profile    CTP Company ID    ${ctp_id}
+    
+Open Xroads7 Company Detail Page      [Arguments]      ${COMPANY_ID}
+    Wait Until Page Contains Element    xpath=//table[@summary="Company Search Results"]            1 minutes
+    Input Text                          xpath=//tr/th/span/input[@type="text"][1]     ${COMPANY_ID}
+    Press Key                           xpath=//tr/th/span/input[@type="text"][1]     \\10 
+    Wait For Adf Sync
+    Wait Until Page Contains Element    xpath=//table[@summary="Company Search Results"]/tbody/tr/td/span/a[contains(text(),${COMPANY_ID})]             1 minutes
+    Click Element                       xpath=//table[@summary="Company Search Results"]/tbody/tr/td/span/a[contains(text(),${COMPANY_ID})] 
+    Wait For Adf Sync
+    Wait Until Page Contains Element    xpath=//div[@title="Company Details"]/h1
+
+Open Xroads7 User Detail Page      [Arguments]      ${user_id}
+    Wait Until Page Contains Element    xpath=//table[@summary="Results"]       error="Could not find the user list table"
+    Input Text                          xpath=//table[contains(@summary,'column headers')]/tbody/tr[2]/th/span/input[@type="text"][1]     ${user_id}
+    Press Key                           xpath=//table[contains(@summary,'column headers')]/tbody/tr[2]/th/span/input[@type="text"][1]     \\10 
+    Sleep     3 secs
+    Wait For Adf Sync
+    Wait Until Page Contains Element    xpath=//table[@summary="Results"]/tbody/tr[1]/td/span/a[contains(text(),${user_id})]    error="Not able to find the user with specified id "
+    Click Element                       xpath=//table[@summary="Results"]/tbody/tr[1]/td/span/a[contains(text(),${user_id})] 
+    Wait For Adf Sync
+    Wait Until Page Contains Element    xpath=//div[@title="User Details"]/h1        1 mins
+    Open Xroads7 Admin Detail Tab       Additional Details
+
+Open Xroads7 Admin Console
+    Wait Until Page Contains Element    xpath=//a[text()="Administration"]  1 minutes
+    Wait For Adf Sync
+    Click Element         xpath=//div[contains(@id, "tabh")]
+    Navigate With Link    xpath=//a[text()="Administration"][1]   xpath=//a/span[text()="Administration"]   30 secs
+    Wait For Adf Sync
+
+Open Xroads7 Company Admin Page
+    Wait Until Page Contains Element    xpath=//tr/td/a[span[text()="Companies"]]   1 minutes
+    Click Element                       xpath=//tr/td/a[span[text()="Companies"]]
+    Wait For Adf Sync
+    Wait Until Page Contains Element    xpath=//div[@title="Companies"]/h1      1 minutes
+
+Open Xroads7 User Admin Page
+    Wait Until Page Contains Element    xpath=//tr/td/a[span[text()='Users']]   1 minutes
+    Focus                       xpath=//tr/td/a[span[text()='Users']]
+    Click Element                       xpath=//tr/td/a[span[text()='Users']]
+    Wait For Adf Sync
+    Wait Until Page Contains Element    xpath=//div[@title='Users']/h1      1 minutes
+
+Clear Xroads7 Cache
+    Wait Until Page Contains Element    xpath=//tr/td/a[span[text()='Administration']]   1 minutes
+    Navigate With Link          xpath=//tr/td/a[span[text()='Administration']]    xpath=//tr/td/a[span[contains(text(),"Cache Admin")]]   1 minutes
+    Wait For Adf Sync
+    Navigate With Link          xpath=//tr/td/a[span[contains(text(),"Cache Admin")]]   xpath=//button[span[text()="Reset All Cache"]]    1 minutes
+    Wait For Adf Sync
+    Click Element                       xpath=//button[span[text()="Reset All Cache"]]
+    Wait For Adf Sync
+
+| Company Should Have Permissions In Xroads7 | [Arguments] | ${company_id} | @{permIds} |
+|                                            | Goto Xroads7 Company Detail Page | ${company_id} | False |
+|                                            | Wait For Adf Sync |
+|                                            | Open Xroads7 Admin Detail Tab | Company Permissions |
+|                                            | :For  | ${permId} | IN | @{permIds} |
+|                                            |       | Permission Should Be Assigned | ${permId} |
+
+
+| Company Should Not Have Permissions In Xroads7  | [Arguments] | ${company_id} | @{permIds} |
+|                                                 | Goto Xroads7 Company Detail Page | ${company_id} | False |
+|                                                 | Wait For Adf Sync |
+|                                                 | Open Xroads7 Admin Detail Tab | Company Permissions |
+|                                                 | :For  | ${permId} | IN | @{permIds} |
+|                                                 |       | Permission Should Not Be Assigned | ${permId} |
+
+| User Should Have Permissions In Xroads7 | [Arguments] | ${user_id} | @{permIds} |
+|                                         | Goto Xroads7 User Detail Page | ${user_id} | False |
+|                                         | Wait For Adf Sync |
+|                                         | Open Xroads7 Admin Detail Tab | User Permissions |
+|                                         | :For  | ${permId} | IN | @{permIds} |
+|                                         |       | Permission Should Be Assigned | ${permId} |
+

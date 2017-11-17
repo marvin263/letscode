@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html">
+   <h:head>
+      <title>#{msgs.windowTitle}</title>
+      <h:outputStylesheet library="css" name="styles.css"/>
+   </h:head>
+   <h:body>
+      <h:form>
+         <h:outputText value="#{msgs.greeting}" styleClass="emphasis"/>
+         <br/>
+         <h:messages errorClass="errors" layout="table"/>
+         <h:panelGrid columns="3">
+            #{msgs.namePrompt}:
+            <h:inputText id="name" value="#{user.name}" required="true"
+                         label="#{msgs.namePrompt}"/>
+            <h:message for="name" errorClass="errors"/>
+            #{msgs.agePrompt}:
+            <h:inputText id="age" value="#{user.age}" required="true"
+                         size="3" label="#{msgs.agePrompt}"/>
+            <h:message for="age" errorClass="errors"/>
+         </h:panelGrid>
+         <h:commandButton value="#{msgs.submitPrompt}"/>
+      </h:form>
+   </h:body>
+</html>

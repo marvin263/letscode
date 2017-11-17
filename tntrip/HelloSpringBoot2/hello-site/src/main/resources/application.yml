@@ -1,0 +1,45 @@
+# The @activeProfile@ will be filtered by gradle build parameter: gradle clean war -Pprofiles=production
+# You must add the 'clean' build command, if you don't edit this yml file. Otherwise, the profiles change
+# will not work. If no profiles specified, the 'default' will be used.
+spring:
+  profiles:
+    active: dev
+
+tomcatinstance:
+  id: ti00001
+
+#logging:
+#  level:
+#    ROOT: INFO
+
+server:
+  contextPath: /hellospringboot
+  port: 8080
+
+# Database profile specific configuration
+# Database base configuration
+druid:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    mapperLocations: classpath*:com/tntrip/mob/chat/**/*Mapper.xml
+    url: jdbc:mysql://10.10.30.200:3306/d_hello?zeroDateTimeBehavior=convertToNull
+    username: mobtest
+    password: helloworld
+
+
+---
+spring:
+  profiles: dev
+
+
+---
+spring:
+  profiles: sit
+
+---
+spring:
+  profiles: production
+
+---
+spring:
+  profiles: pre

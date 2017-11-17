@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="db2jar/db2java.zip"/>
+	<classpathentry kind="lib" path="db2jar/db2jcc_license_cisuz.jar"/>
+	<classpathentry kind="lib" path="db2jar/db2jcc_license_cu.jar"/>
+	<classpathentry kind="lib" path="db2jar/db2jcc.jar"/>
+	<classpathentry kind="lib" path="db2jar/sqlj_orig.zip"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,20 @@
+/out
+### IDEA project files
+.idea
+*.iml
+*.ipr
+*.iws
+/.idea
+.idea/
+### Gradle template
+.gradle
+build/
+ServiceTreeInfo/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+

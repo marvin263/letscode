@@ -1,0 +1,50 @@
+*** Settings ***
+
+Documentation   Crossroads data sync test for company profile.
+Resource        resource.txt
+Suite Setup       Setup Runtime Environment
+Suite Teardown    Release Resources
+Test Teardown     Clean Up
+
+Default Tags     
+
+*** Variables ***
+${ALM_TEST_SET_NAME}      Yeling Test Set
+${ALM_TEST_NAME}
+${COMPANY_ID}             CFAST-1
+${USER_ID}                C000262
+
+*** Test Cases ***
+User Deleted In Xroads6 Should be Synced to Xroads7
+# Link this test case to ALM test case and Check pre-condition
+    Set Test Variable                          ${ALM_TEST_NAME}       User Profile 12 - Delete User
+    Goto Xroads6 User Delete Page              ${COMPANY_ID}      ${USER_ID}
+    Select Company                             ${company_id}
+    Click Button With Text                     Search
+    Wait Until Page Contains Button            submitButton
+    Log                                        looking for user ${user_id}!!!        WARN
+    Select User                                ${user_id}
+    Click Button With Text                     submitButton
+    Wait Until Page Contains Button            Delete User
+    Click Button With Text                     Delete User
+    Accept Alert
+#    Log                                         looking for user ${user_id} in Xroads7 !!!        WARN
+    Login Xroads7
+    Open Xroads7 Admin Console
+    Wait Until Page Contains Element            xpath=//tr/td/a[span[text()="Inactive/Deleted Users "]]   1 minutes
+
+    Click Element                               xpath=//tr/td/a[span[text()="Inactive/Deleted Users "]]
+    Wait For Adf Sync
+    Wait Until Page Contains Element            xpath=//table[contains(@summary, 'This table')]
+    Input Text                                  xpath=//table[contains(@summary,'This table')]//tr[2]/th//input[@type="text"][1]     ${user_id}
+    Press Key                                   xpath=//table[contains(@summary,'This table')]//tr[2]/th//input[@type="text"][1]     \\10
+    Wait For Adf Sync
+    Wait Until Page Contains Element            xpath=//table/tbody/tr[1]/td[1]/span/span/span[contains(text(), ${user_id})]    error=Not able to find user ${user_id}
+
+    Open Xroads7 User Admin Page
+    Wait Until Page Contains Element            xpath=//table[@summary="Results"]       error=Could not find the user list table
+    Input Text                                  xpath=//table[contains(@summary,'column headers')]//tr[2]/th//input[@type="text"][1]     ${user_id}
+    Press Key                                   xpath=//table[contains(@summary,'column headers')]//tr[2]/th//input[@type="text"][1]     \\10
+    Wait For Adf Sync
+    Wait Until Page Contains Element            xpath=//div[contains(text(), 'No data to display.')]    error=User ${user_id} should have been deleted!
+

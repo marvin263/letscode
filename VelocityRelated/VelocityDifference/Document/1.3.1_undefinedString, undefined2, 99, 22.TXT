@@ -1,0 +1,98 @@
+Velocity 1.7
+String Comparison
+	String Comparison--1: shorthand notation == another string
+	Oh my god, nothing is adequate
+
+	String Comparison--2: shorthand notation as an if condition
+	ElseIf
+
+	String Comparison--3: quite reference notation == another string
+	Oh my god, nothing is adequate
+
+	String Comparison--4: quite reference notation as an if condition
+	ElseIf
+
+	String Comparison--5: shorthand notation converts to a string == another string
+	Oh my god, nothing is adequate
+
+	String Comparison--6: shorthand notation onverts to an string, and be as an if condition
+	ElseIf
+
+	String Comparison--7: quite reference notation converts to a string == another string
+	Oh my god, nothing is adequate
+
+	String Comparison--8: quite reference notation converts to a string, and be as an if condition
+	ElseIf
+
+Integer Comparison
+	Integer Comparison--1: shorthand notation == another integer
+	ElseIf
+
+	Integer Comparison--2: shorthand notation as an if condition
+	Go into if
+
+	Integer Comparison--3: quite reference notation == another integer
+	ElseIf
+
+	Integer Comparison--4: quite reference notation as an if condition
+	Go into if
+
+	Integer Comparison--5: shorthand notation converts to an string == another integer
+	Oh my god, nothing is adequate
+
+	Integer Comparison--6: shorthand notation onverts to an string, and be as an if condition
+	ElseIf
+
+	Integer Comparison--7: quite reference notation converts to a string == another integer
+	Oh my god, nothing is adequate
+
+	Integer Comparison--8: quite reference notation converts to a string, and be as an if condition
+	ElseIf
+
+
+LLABEL INVOCATION
+	LLABEL INVOCATION--1: dateTimeFormatExp, date_time_format_expression are all undefined
+	Before invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	Before invoke: dateTimeFormatExp=$dateTimeFormatExp, date_time_format_expression=$date_time_format_expression
+	
+	In llable: targetvar=$dateTimeFormatExp, locallabel=$date_time_format_expression, default=yyyy-MM-dd-HH.mm.ss
+ 	Quitting llable: targetvar=yyyy-MM-dd-HH.mm.ss, locallabel=$date_time_format_expression, default=yyyy-MM-dd-HH.mm.ss
+	
+	After invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	After invoke: dateTimeFormatExp=yyyy-MM-dd-HH.mm.ss, date_time_format_expression=$date_time_format_expression
+	
+	LLABEL INVOCATION--2: yearFormatExp is "MyYearFormat", year_format_expression is undefined
+		Before invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	Before invoke: yearFormatExp=MyYearFormat, year_format_expression=$year_format_expression
+	
+	In llable: targetvar=MyYearFormat, locallabel=$year_format_expression, default=yyyy
+ 	Quitting llable: targetvar=yyyy, locallabel=$year_format_expression, default=yyyy
+	
+	After invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	After invoke: yearFormatExp=yyyy, year_format_expression=$year_format_expression
+	
+	LLABEL INVOCATION--3: monthFormatExp is "MyMonthFormat", month_format_expression is "My_Month_format_Expression"
+		Before invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	Before invoke: monthFormatExp=$monthFormatExp, month_format_expression=$month_format_expression
+	
+	In llable: targetvar=$monthFormatExp, locallabel=$month_format_expression, default=MM/yyyy
+ 	Quitting llable: targetvar=MM/yyyy, locallabel=$month_format_expression, default=MM/yyyy
+	
+	After invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	After invoke: monthFormatExp=MM/yyyy, month_format_expression=$month_format_expression
+	
+	LLABEL INVOCATION--4: firstArg and secondArg are all undefined
+	Before invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	Before invoke: firstArg=$firstArg, secondArg=$secondArg
+	
+	In llable: targetvar=MM/yyyy, locallabel=$month_format_expression, default=MM/yyyy
+ 	Quitting llable: targetvar=MM/yyyy, locallabel=$month_format_expression, default=MM/yyyy
+	
+	After invoke: targetvar=$targetvar, locallabel=$locallabel, default=$default
+	After invoke: firstArg=$firstArg, secondArg=$secondArg
+Directive occupies linefeed or whitespace
+			My 0 company is Inspur
+				My 1 company is ChinaSystem
+				My 2 company is ZTE
+				My 3 company is CDC Software
+	

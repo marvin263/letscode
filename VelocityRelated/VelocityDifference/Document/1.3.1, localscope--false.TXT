@@ -1,0 +1,16 @@
+Go into macro: firstArg = valueOfArg1, secondArg = $undefinedString, thirdArg = thirdConstantString, forthArg = forthArgValueInTemplate, macroLocal = $macroLocal
+Existing macro: firstArg = Set firstArg In macro, secondArg = Set secondArg In macro, thirdArg = Set thridArg In macro, forthArg = Set forthArg In macro, macroLocal = I'm macro local
+arg1 = Set firstArg In macro
+valueOfArg1 = $valueOfArg1
+
+undefinedString = Set secondArg In macro
+thirdConstantString = $thirdConstantString
+
+forthArg = Set forthArg In macro
+forthArgValueInTemplate = $forthArgValueInTemplate
+
+firstArg = $firstArg
+secondArg = $secondArg
+thirdArg = $thirdArg
+forthArg = Set forthArg In macro
+macroLocal = I'm macro local

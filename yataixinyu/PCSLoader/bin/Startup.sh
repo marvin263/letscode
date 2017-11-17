@@ -1,0 +1,1 @@
+nohup ./RunInForeground.sh &

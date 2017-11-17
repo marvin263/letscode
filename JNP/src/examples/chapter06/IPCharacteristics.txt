@@ -1,0 +1,25 @@
+[elharo@stallion 06]$ java  IPCharacteristics 127.0.0.1
+/127.0.0.1 is loopback address.
+/127.0.0.1 is a global address.
+/127.0.0.1 is a unicast address.
+[elharo@stallion 06]$ java  IPCharacteristics 192.168.254.32
+/192.168.254.32 is a site-local address.
+/192.168.254.32 is a unicast address.
+[elharo@stallion 06]$ java  IPCharacteristics www.oreilly.com
+www.oreilly.com/208.201.239.37 is a global address.
+www.oreilly.com/208.201.239.37 is a unicast address.
+[elharo@stallion 06]$ java  IPCharacteristics 224.0.2.1
+/224.0.2.1 is a global address.
+/224.0.2.1 is a global multicast address.
+[elharo@stallion 06]$ java  IPCharacteristics FF01:0:0:0:0:0:0:1
+/ff01:0:0:0:0:0:0:1 is a global address.
+/ff01:0:0:0:0:0:0:1 is an interface-local multicast address.
+[elharo@stallion 06]$ java  IPCharacteristics FF05:0:0:0:0:0:0:101
+/ff05:0:0:0:0:0:0:101 is a global address.
+/ff05:0:0:0:0:0:0:101 is a site wide multicast address.
+[elharo@stallion 06]$ java  IPCharacteristics 0:0:0:0
+Could not resolve 0:0:0:0
+[elharo@stallion 06]$ java  IPCharacteristics 0::1
+/0:0:0:0:0:0:0:1 is loopback address.
+/0:0:0:0:0:0:0:1 is a global address.
+/0:0:0:0:0:0:0:1 is a unicast address.

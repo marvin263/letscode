@@ -41,9 +41,9 @@ public class GenerateMappingByExcel {
 
     
     public static void main(String[] args) throws Exception {
-        String fullPath = "D:/fast/gitworkspace/mob-java-esservice/esservice-site/src/main/resources/es_mapping_schema/postinfo@community_post.xlsx";
-        String indexName = "community_post";
-        String mappingName = "postinfo";
+        String fullPath = "D:/fast/gitworkspace/mob-java-esservice/esservice-site/src/main/resources/es_mapping_schema/cntContentInfo@cnt_content.xlsx";
+        String indexName = "cnt_content";
+        String mappingName = "cntContentInfo";
         FileInputStream fis = new FileInputStream(fullPath);
         // Use an InputStream, needs more memory
         Workbook wb = new XSSFWorkbook(fis);
@@ -227,7 +227,7 @@ public class GenerateMappingByExcel {
         Map<String, Object> dateFieldValueMap = new LinkedHashMap<>();
         propertiesMap.put(numRowValue.fieldName, dateFieldValueMap);
         dateFieldValueMap.put("type", finalFieldType);
-        dateFieldValueMap.put("format", "epoch_millis");
+        dateFieldValueMap.put("format", "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis");
     }
 
 

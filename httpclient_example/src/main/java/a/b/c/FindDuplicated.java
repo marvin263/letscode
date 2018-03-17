@@ -21,8 +21,8 @@ import java.util.Map;
 public class FindDuplicated {
     public static final int DEEPEST_PAGE = 20;
     public static final CloseableHttpClient httpclient = HttpClients.createDefault();
-    // http://api.tuniu.com/discovery/newHome/getWaterfallFlow?c={"v":"9.33.0","cc":"40169"}&d={"resType":"recommend","imgH":0,"deviceNum":"f4fea0623d1037a20846255fb32cfdf12f13dfec","sessionId":"d","limit":10,"page":1,"locationPoiId":"40169","imgW":640}
-    public static final String URL_WITHOUT_QUERY_STRING = "http://api.tuniu.com/discovery/newHome/getWaterfallFlow";
+    // http://api.tntrip.com/discovery/newHome/getWaterfallFlow?c={"v":"9.33.0","cc":"40169"}&d={"resType":"recommend","imgH":0,"deviceNum":"f4fea0623d1037a20846255fb32cfdf12f13dfec","sessionId":"d","limit":10,"page":1,"locationPoiId":"40169","imgW":640}
+    public static final String URL_WITHOUT_QUERY_STRING = "http://api.tntrip.com/discovery/newHome/getWaterfallFlow";
     public static final String PARAM_C = "{\"v\":\"9.33.0\",\"cc\":\"40169\"}";
     public static final String PARAM_D = "{\"resType\":\"recommend\",\"imgH\":0,\"deviceNum\":\"f4fea0623d1037a20846255fb32cfdf12f13dfec\",\"sessionId\":\"d\",\"limit\":10,\"page\":$page,\"locationPoiId\":\"40169\",\"imgW\":640}";
 

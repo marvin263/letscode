@@ -431,8 +431,8 @@ public class TnStringUtils {
      * @param dftReturnUrlIfOrgnUrlEmpty
      * @return 返回url
      */
-    // http://m.tuniucdn.com/filebroker/cdn/prd/45/ec/45ec011e824c847ec6e0547daf9734f0.jpg -->
-    // http://m.tuniucdn.com/filebroker/cdn/prd/45/ec/45ec011e824c847ec6e0547daf9734f0_w70_h70_c1_t0.jpg
+    // http://m.tntripcdn.com/filebroker/cdn/prd/45/ec/45ec011e824c847ec6e0547daf9734f0.jpg -->
+    // http://m.tntripcdn.com/filebroker/cdn/prd/45/ec/45ec011e824c847ec6e0547daf9734f0_w70_h70_c1_t0.jpg
     public static String appendSubfixIfNecessary(String orgnUrl, String suffix, String dftReturnUrlIfOrgnUrlEmpty) {
         if (TnStringUtils.blankOrLiteralNull(orgnUrl)) {
             return dftReturnUrlIfOrgnUrlEmpty;

@@ -41,9 +41,9 @@ public class GenerateMappingByExcel {
 
     
     public static void main(String[] args) throws Exception {
-        String fullPath = "D:/fast/gitworkspace/mob-java-esservice/esservice-site/src/main/resources/es_mapping_schema/cntContentInfo@cnt_content.xlsx";
-        String indexName = "cnt_content";
-        String mappingName = "cntContentInfo";
+        String fullPath = "D:/fast/gitworkspace/mob-java-esservice/esservice-site/src/main/resources/es_mapping_schema/order_info@mall_order.xlsx";
+        String indexName = "mall_order";
+        String mappingName = "order_info";
         FileInputStream fis = new FileInputStream(fullPath);
         // Use an InputStream, needs more memory
         Workbook wb = new XSSFWorkbook(fis);

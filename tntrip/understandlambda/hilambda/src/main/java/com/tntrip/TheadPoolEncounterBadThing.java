@@ -1,9 +1,7 @@
 package com.tntrip;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -23,56 +21,34 @@ import java.util.concurrent.TimeUnit;
  */
 public class TheadPoolEncounterBadThing {
 
-    private List<byte[]> listArray = new ArrayList<>();
-    public static final int ARRAY_SIZE = 1024 * 1024;//1M
     public static String theInput = null;
+    public static int printInputTimes = 0;
 
     public static void main(String[] args) {
-        TheadPoolEncounterBadThing mmfhr = new TheadPoolEncounterBadThing();
-        ScheduledExecutorService sss = Executors.newSingleThreadScheduledExecutor();
-        sss.scheduleWithFixedDelay(TheadPoolEncounterBadThing::doSth, 500, 10000, TimeUnit.MILLISECONDS);
-        mmfhr.fdfd();
+        ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+        ses
+                .scheduleWithFixedDelay(TheadPoolEncounterBadThing::printTime, 500, 10000, TimeUnit.MILLISECONDS);
+        //ses.scheduleWithFixedDelay(TheadPoolEncounterBadThing::printTheInput, 100, 4000, TimeUnit.MILLISECONDS);
+        wait4YourInput();
     }
 
-    public static void doSth() {
-        if (!"exception".equals(theInput)) {
-            System.out.println(new SimpleDateFormat("yyyy-MM-DD hh:mm:ss").format(new Date()) + " -- " + theInput);
-        }else{
-            throw new RuntimeException("SSSSSS");
+    public static void printTime() {
+        if (!"e".equals(theInput)) {
+            System.out.println(new SimpleDateFormat("yyyy-MM-DD hh:mm:ss").format(new Date()));
+        } else {
+            throw new RuntimeException("scheduled task throws exception");
         }
     }
 
-    private static void fdfd() {
+    public static void printTheInput() {
+        System.out.println((printInputTimes++) + " : " + theInput);
+    }
+
+
+    private static void wait4YourInput() {
         Scanner scn = new Scanner(System.in);
         while (true) {
             theInput = scn.nextLine();
         }
     }
-
-    private void keepLeftmostArrays(int expectedCount) {
-        int orgnSize = listArray.size();
-        if (expectedCount == orgnSize) {
-            System.out.println("expectedCount == orgnSize == " + expectedCount + ", do nothing");
-            System.out.println();
-            return;
-        }
-        if (expectedCount > orgnSize) {
-            int addedCount = expectedCount - orgnSize;
-            for (int i = 0; i < addedCount; i++) {
-                listArray.add(new byte[ARRAY_SIZE]);
-            }
-            System.out.println(String.format("Created Objects, addedCount=%d, expectedCount=%d, orgnSize=%d", addedCount, expectedCount, orgnSize));
-            System.out.println();
-            return;
-        }
-        if (expectedCount < orgnSize) {
-            for (int i = orgnSize - 1; i >= expectedCount; i--) {
-                listArray.remove(i);
-            }
-            System.out.println(String.format("Remove Objects, removedCount=%d, expectedCount=%d, orgnSize=%d", (orgnSize - expectedCount), expectedCount, orgnSize));
-            System.out.println();
-            return;
-        }
-    }
-
 }

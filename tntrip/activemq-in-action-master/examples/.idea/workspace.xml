@@ -26,7 +26,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IdGenerator.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="IdGenerator.java" pinned="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-client/5.13.4/activemq-client-5.13.4-sources.jar!/org/apache/activemq/util/IdGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="302">
@@ -39,11 +39,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="483">
+              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="ActiveMQMessageProducer.java" pinned="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-client/5.13.4/activemq-client-5.13.4-sources.jar!/org/apache/activemq/ActiveMQMessageProducer.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="4263">
-              <caret line="242" column="26" lean-forward="true" selection-start-line="242" selection-start-column="26" selection-end-line="242" selection-end-column="26" />
+              <caret line="242" column="26" lean-forward="false" selection-start-line="242" selection-start-column="26" selection-end-line="242" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -66,7 +76,7 @@
         <entry file="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-client/5.13.4/activemq-client-5.13.4-sources.jar!/org/apache/activemq/command/ProducerId.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-5">
-              <caret line="24" column="44" lean-forward="true" selection-start-line="24" selection-start-column="44" selection-end-line="24" selection-end-column="44" />
+              <caret line="24" column="44" lean-forward="false" selection-start-line="24" selection-start-column="44" selection-end-line="24" selection-end-column="44" />
               <folding />
             </state>
           </provider>
@@ -76,7 +86,7 @@
         <entry file="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-client/5.13.4/activemq-client-5.13.4-sources.jar!/org/apache/activemq/command/ConnectionInfo.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="714">
-              <caret line="244" column="0" lean-forward="true" selection-start-line="244" selection-start-column="0" selection-end-line="244" selection-end-column="0" />
+              <caret line="244" column="0" lean-forward="false" selection-start-line="244" selection-start-column="0" selection-end-line="244" selection-end-column="0" />
               <folding>
                 <element signature="e#1622#1623#0" expanded="true" />
                 <element signature="e#1670#1671#0" expanded="true" />
@@ -115,21 +125,11 @@
         <entry file="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-client/5.13.4/activemq-client-5.13.4-sources.jar!/org/apache/activemq/ActiveMQConnectionFactory.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="184">
-              <caret line="1010" column="49" lean-forward="true" selection-start-line="1010" selection-start-column="49" selection-end-line="1010" selection-end-column="49" />
+              <caret line="1010" column="49" lean-forward="false" selection-start-line="1010" selection-start-column="49" selection-end-line="1010" selection-end-column="49" />
               <folding>
                 <element signature="e#2885#3261#0" expanded="true" />
                 <element signature="e#3260#3261#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TransportFactory.java" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-client/5.13.4/activemq-client-5.13.4-sources.jar!/org/apache/activemq/transport/TransportFactory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="325">
-              <caret line="68" column="23" lean-forward="false" selection-start-line="68" selection-start-column="23" selection-end-line="68" selection-end-column="23" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -255,6 +255,7 @@
         <option value="$PROJECT_DIR$/src/main/java/org/apache/activemq/book/ch13/JustProduceMessage.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/apache/activemq/book/ch13/SelectorProduceMessage.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/apache/activemq/book/ch13/SelectorConsumeMessage.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -583,16 +584,15 @@
       <workItem from="1528277270936" duration="4213000" />
       <workItem from="1528680797071" duration="600000" />
       <workItem from="1528681764049" duration="19000" />
-      <workItem from="1528695164989" duration="47357000" />
+      <workItem from="1528695164989" duration="47796000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52189000" />
+    <option name="totallyTimeSpent" value="52628000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1124" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5715768" sideWeight="0.40075108" order="7" side_tool="true" content_ui="tabs" />
@@ -615,7 +615,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33506224" sideWeight="0.49785408" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23175965" sideWeight="0.49634275" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23175965" sideWeight="0.49634275" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22717842" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18025751" sideWeight="0.5036573" order="7" side_tool="true" content_ui="tabs" />
@@ -732,14 +732,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-broker/5.13.4/activemq-broker-5.13.4-sources.jar!/org/apache/activemq/broker/region/Subscription.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="36" column="54" lean-forward="true" selection-start-line="36" selection-start-column="54" selection-end-line="36" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-client/5.13.4/activemq-client-5.13.4-sources.jar!/org/apache/activemq/command/ActiveMQDestination.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
@@ -1135,7 +1127,7 @@
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-client/5.13.4/activemq-client-5.13.4-sources.jar!/org/apache/activemq/command/ConnectionInfo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="714">
-          <caret line="244" column="0" lean-forward="true" selection-start-line="244" selection-start-column="0" selection-end-line="244" selection-end-column="0" />
+          <caret line="244" column="0" lean-forward="false" selection-start-line="244" selection-start-column="0" selection-end-line="244" selection-end-column="0" />
           <folding>
             <element signature="e#1622#1623#0" expanded="true" />
             <element signature="e#1670#1671#0" expanded="true" />
@@ -1146,7 +1138,7 @@
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-client/5.13.4/activemq-client-5.13.4-sources.jar!/org/apache/activemq/ActiveMQConnectionFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
-          <caret line="1010" column="49" lean-forward="true" selection-start-line="1010" selection-start-column="49" selection-end-line="1010" selection-end-column="49" />
+          <caret line="1010" column="49" lean-forward="false" selection-start-line="1010" selection-start-column="49" selection-end-line="1010" selection-end-column="49" />
           <folding>
             <element signature="e#2885#3261#0" expanded="true" />
             <element signature="e#3260#3261#0" expanded="true" />
@@ -1157,7 +1149,7 @@
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-client/5.13.4/activemq-client-5.13.4-sources.jar!/org/apache/activemq/command/ProducerId.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-5">
-          <caret line="24" column="44" lean-forward="true" selection-start-line="24" selection-start-column="44" selection-end-line="24" selection-end-column="44" />
+          <caret line="24" column="44" lean-forward="false" selection-start-line="24" selection-start-column="44" selection-end-line="24" selection-end-column="44" />
           <folding />
         </state>
       </provider>
@@ -1176,7 +1168,7 @@
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-client/5.13.4/activemq-client-5.13.4-sources.jar!/org/apache/activemq/ActiveMQMessageProducer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4263">
-          <caret line="242" column="26" lean-forward="true" selection-start-line="242" selection-start-column="26" selection-end-line="242" selection-end-column="26" />
+          <caret line="242" column="26" lean-forward="false" selection-start-line="242" selection-start-column="26" selection-end-line="242" selection-end-column="26" />
           <folding />
         </state>
       </provider>
@@ -1189,6 +1181,14 @@
             <element signature="e#4865#4866#0" expanded="true" />
             <element signature="e#4903#4904#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

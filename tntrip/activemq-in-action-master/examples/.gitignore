@@ -9,6 +9,7 @@
 /out
 /classes
 build/
+/target
 out/
 ServiceTreeInfo/
 ServiceTreeInfo/ServiceTreeInfo.txt

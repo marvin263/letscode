@@ -9,5 +9,5 @@ dependencies {
     compile group: 'org.apache.poi', name: 'poi', version: '3.15'
     // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.15'
-    compile ('org.apache.zookeeper:zookeeper:3.4.10')
+    compile ('org.apache.zookeeper:zookeeper:3.4.12')
 }

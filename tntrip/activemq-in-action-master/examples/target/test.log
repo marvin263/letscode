@@ -1,0 +1,16 @@
+16:03:21,779 | ERROR | main       | BrokerService            | .activemq.broker.BrokerService 1158 | Cannot create SystemUsage
+java.io.IOException: org.apache.activemq.store.kahadb.KahaDBPersistenceAdapter
+	at org.apache.activemq.util.IOExceptionSupport.create(IOExceptionSupport.java:39)
+	at org.apache.activemq.broker.BrokerService.createPersistenceAdapter(BrokerService.java:2461)
+	at org.apache.activemq.broker.BrokerService.getPersistenceAdapter(BrokerService.java:1236)
+	at org.apache.activemq.broker.BrokerService.getSystemUsage(BrokerService.java:1148)
+	at org.apache.activemq.broker.BrokerService.checkMemorySystemUsageLimits(BrokerService.java:2132)
+	at org.apache.activemq.broker.BrokerService.start(BrokerService.java:596)
+	at org.apache.activemq.book.ch6.broker.Broker.main(Broker.java:36)
+Caused by: java.lang.ClassNotFoundException: org.apache.activemq.store.kahadb.KahaDBPersistenceAdapter
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:331)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+	at org.apache.activemq.broker.BrokerService.createPersistenceAdapter(BrokerService.java:2456)
+	... 5 more

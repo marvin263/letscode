@@ -32,6 +32,8 @@ druid:
 ---
 spring:
   profiles: dev
+  activemq:
+    brokerUrl: failover://(tcp://10.30.66.177:61616)?randomize=false&jms.useAsyncSend=true
 
 
 ---

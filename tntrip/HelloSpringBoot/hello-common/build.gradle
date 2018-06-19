@@ -2,5 +2,13 @@
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter:${springBootVersion}")
+
+    compile("org.springframework:spring-jms:4.3.3.RELEASE")
+    
     compile fileTree(dir: 'libs', include: '*.jar')
+
+    compile "org.apache.activemq:activemq-client:5.13.4"
+    compile "org.apache.activemq:activemq-broker:5.13.4"
+    compile "org.apache.activemq:activemq-pool:5.13.4"
+    compile "org.apache.activemq:activemq-spring:5.13.4"
 }

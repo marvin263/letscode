@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * Created by nuc on 2017/6/29.
  */
-@Configuration
+//@Configuration
 public class HMC {
     @Bean
     public HttpMessageConverters fdf() {

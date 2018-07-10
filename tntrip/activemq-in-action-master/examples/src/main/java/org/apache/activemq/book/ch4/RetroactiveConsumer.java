@@ -20,5 +20,9 @@ public class RetroactiveConsumer {
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Topic topic = session.createTopic("TEST.TOPIC?consumer.retroactive=true");
         MessageConsumer consumer = session.createConsumer(topic);
+        
+        
+        
+        System.out.println(consumer);
     }
 }

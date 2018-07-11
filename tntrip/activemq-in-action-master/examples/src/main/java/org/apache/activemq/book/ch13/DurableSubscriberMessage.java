@@ -19,8 +19,8 @@ public class DurableSubscriberMessage extends ReadConsoleAndRun {
     private Session session;
 
     public DurableSubscriberMessage() throws Exception {
-        //String brokerURI = Const.BROKER_URL;
-        String brokerURI = "tcp://localhost:61616";
+        String brokerURI = Const.BROKER_URL;
+        //String brokerURI = "tcp://localhost:61616";
 
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerURI);
         Connection conn1 = connectionFactory.createConnection();

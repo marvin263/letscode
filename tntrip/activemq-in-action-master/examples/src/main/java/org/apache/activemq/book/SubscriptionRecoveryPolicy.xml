@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <broker brokerName="test-broker"
+            persistent="true"
+            useShutdownHook="false"
+            deleteAllMessagesOnStartup="true"
+            xmlns="http://activemq.apache.org/schema/core">
+        <transportConnectors>
+            <transportConnector uri="tcp://localhost:61635"/>
+        </transportConnectors>
+        <destinationPolicy>
+            <policyMap>
+                <policyEntries>
+                    
+                    <policyEntry topic="Topic.FixedSizedSubs.>">
+                        <subscriptionRecoveryPolicy>
+                            <fixedSizeSubscriptionRecoveryPolicy maximumSize="2000000" useSharedBuffer="false"/>
+                        </subscriptionRecoveryPolicy>
+                    </policyEntry>
+                    
+                    <policyEntry topic="Topic.LastImageSubs.>">
+                        <subscriptionRecoveryPolicy>
+                            <lastImageSubscriptionRecoveryPolicy/>
+                        </subscriptionRecoveryPolicy>
+                    </policyEntry>
+                    
+                    <policyEntry topic="Topic.NoSubs.>">
+                        <subscriptionRecoveryPolicy>
+                            <noSubscriptionRecoveryPolicy/>
+                        </subscriptionRecoveryPolicy>
+                    </policyEntry>
+                    
+                    <policyEntry topic="Topic.TimedSubs.>">
+                        <subscriptionRecoveryPolicy>
+                            <timedSubscriptionRecoveryPolicy recoverDuration="25000"/>
+                        </subscriptionRecoveryPolicy>
+                    </policyEntry>
+                    
+                </policyEntries>
+            </policyMap>
+        </destinationPolicy>
+    </broker>
+</beans>

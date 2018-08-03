@@ -10,20 +10,24 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.Queue;
 import javax.jms.Session;
+import javax.jms.Topic;
 
 public class JustConsumeMessage extends ReadConsoleAndRun {
     private MessageConsumer consumer;
     private Session session;
 
     public JustConsumeMessage() throws Exception {
-        String brokerURI = Const.BROKER_URL;
+        //String brokerURI = Const.BROKER_URL;
+        String brokerURI = "tcp://192.168.0.108:61618";
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerURI);
         Connection connection = connectionFactory.createConnection();
         connection.start();
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-        Queue queue = session.createQueue("Test.testQueue");
+        //Queue queue = session.createQueue("mybrokerqueue");
+        Topic queue = session.createTopic("foo.bar");
         consumer = session.createConsumer(queue);
+        System.out.println(brokerURI);
     }
 
     protected Object runWithConsoleInput(String line) {

@@ -24,35 +24,36 @@ public class EmbeddedService {
         broker.setBrokerName("service");
         broker.setPersistent(false);
         broker.addConnector("tcp://localhost:61616");
+        broker.setUseJmx(true);
         broker.start();
-        
-        ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory("vm://service");
-        Connection connection = cf.createConnection();
-        connection.start();
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        //we will need to respond to multiple destinations - so use null
-        //as the destination this producer is bound to
-        final MessageProducer producer = session.createProducer(null);
-        //create a Consumer to listen for requests to service
-        Queue queue = session.createQueue("service.queue");
-        MessageConsumer consumer = session.createConsumer(queue);
-        consumer.setMessageListener(new MessageListener() {
-            @Override
-            public void onMessage(Message msg) {
-                try {
-                    TextMessage textMsg = (TextMessage)msg;
-                    String payload = "REPLY: " + textMsg.getText();
-                    Destination replyTo;
-                    replyTo = msg.getJMSReplyTo();
-                    textMsg.clearBody();
-                    textMsg.setText(payload);
-                    producer.send(replyTo, textMsg);
-                } catch (JMSException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        });
+        System.out.println("broker already started");
+//        ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory("vm://service");
+//        Connection connection = cf.createConnection();
+//        connection.start();
+//        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+//        //we will need to respond to multiple destinations - so use null
+//        //as the destination this producer is bound to
+//        final MessageProducer producer = session.createProducer(null);
+//        //create a Consumer to listen for requests to service
+//        Queue queue = session.createQueue("service.queue");
+//        MessageConsumer consumer = session.createConsumer(queue);
+//        consumer.setMessageListener(new MessageListener() {
+//            @Override
+//            public void onMessage(Message msg) {
+//                try {
+//                    TextMessage textMsg = (TextMessage)msg;
+//                    String payload = "REPLY: " + textMsg.getText();
+//                    Destination replyTo;
+//                    replyTo = msg.getJMSReplyTo();
+//                    textMsg.clearBody();
+//                    textMsg.setText(payload);
+//                    producer.send(replyTo, textMsg);
+//                } catch (JMSException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
         
     }
     

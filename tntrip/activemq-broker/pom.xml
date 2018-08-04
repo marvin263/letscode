@@ -7,7 +7,7 @@
       <version>1.0-SNAPSHOT</version> </parent>
     -->
     <groupId>org.apache.activemq.book</groupId>
-    <artifactId>activemq-in-action-examples</artifactId>
+    <artifactId>activemq-broker</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>ActiveMQ in Action Examples</name>
     <description>ActiveMQ in Action Example Code</description>

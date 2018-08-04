@@ -6,35 +6,33 @@ import org.apache.activemq.book.Const;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
 import javax.jms.Queue;
 import javax.jms.Session;
-import javax.jms.Topic;
+import javax.jms.TextMessage;
 
-public class JustConsumeMessage extends ReadConsoleAndRun {
-    private MessageConsumer consumer;
+public class JustProduceMessage extends ReadConsoleAndRun {
+    private MessageProducer producer;
     private Session session;
 
-    public JustConsumeMessage() throws Exception {
-        String brokerURI = Const.BROKER_URL;
-//        String brokerURI = "tcp://192.168.0.108:61618";
+    public JustProduceMessage() throws Exception {
+//        String brokerURI = Const.BROKER_URL;
+        String brokerURI = "tcp://localhost:61616";
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerURI);
         Connection connection = connectionFactory.createConnection();
         connection.start();
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-        //Queue queue = session.createQueue("mybrokerqueue");
-        Topic queue = session.createTopic("foo.bar");
-        consumer = session.createConsumer(queue);
-        System.out.println(brokerURI);
+        Queue queue = session.createQueue("Test.testQueue?consumer.dispatchAsync=true");
+        producer = session.createProducer(queue);
     }
     
     @Override
     protected Object runWithConsoleInput(String line) {
         try {
-            Message msg = consumer.receive();
-            return msg;
+            TextMessage textMessage = session.createTextMessage(line);
+            producer.send(textMessage);
+            System.out.println("Already sent: " + textMessage);
         } catch (JMSException e) {
             e.printStackTrace();
         }
@@ -42,6 +40,6 @@ public class JustConsumeMessage extends ReadConsoleAndRun {
     }
 
     public static void main(String[] args) throws Exception {
-        ReadConsoleAndRun.startMain(new JustConsumeMessage());
+        ReadConsoleAndRun.startMain(new JustProduceMessage());
     }
 }

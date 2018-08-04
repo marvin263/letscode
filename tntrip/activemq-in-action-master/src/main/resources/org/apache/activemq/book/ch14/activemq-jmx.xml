@@ -1,0 +1,24 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:amq="http://activemq.org/schema/core"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://activemq.apache.org/schema/core http://activemq.apache.org/schema/activemq-core.xsd">
+
+  <!-- Allows us to use system properties as variables in this configuration file -->
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+  
+  <broker xmlns="http://activemq.apache.org/schema/core" useJmx="true" brokerName="localhost" dataDirectory="${activemq.base}/data">
+  
+    <managementContext>
+        <managementContext connectorPort="2011"/><!-- jmxDomainName="my-broker"/>-->
+    </managementContext>
+  
+  
+    <!-- The transport connectors ActiveMQ will listen to -->
+    <transportConnectors>
+       <transportConnector name="openwire" uri="tcp://10.30.66.177:61616" />
+    </transportConnectors>
+
+  </broker>
+  
+</beans>

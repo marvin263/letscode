@@ -2,7 +2,7 @@
 
 DELETE idx_phrase_suggester
 
-PUT idx_phrase_suggester
+PUT idx_phrase_suggester 
 {
    "settings": {
       "index": {

@@ -1,0 +1,119 @@
+// linux socket options
+http://man7.org/linux/man-pages/man7/socket.7.html
+
+http://elf8848.iteye.com/blog/1739598
+http://blog.csdn.net/jia281460530/article/details/41902717
+
+// various socket options
+https://notes.shichao.io/unp/ch7/
+
+// backlog means what
+http://www.jianshu.com/p/7fde92785056
+http://veithen.github.io/2014/01/01/how-tcp-backlog-works-in-linux.html
+
+SO_REUSEPORT, SO_REUSEADDR
+http://blog.csdn.net/chenlycly/article/details/52191407
+http://blog.csdn.net/fz835304205/article/details/16980163
+
+//epoll的 触发方式
+https://en.wikipedia.org/wiki/Epoll
+//epoll的linux文档
+https://linux.die.net/man/4/epoll
+
+//Blocking I/O, Nonblocking I/O, And Epoll
+https://eklitzke.org/blocking-io-nonblocking-io-and-epoll
+//edge trigger & level trigger
+https://en.wikipedia.org/wiki/Epoll
+https://www.quora.com/What-is-the-difference-between-the-edge-trigger-and-the-level-trigger-in-epoll
+
+
+Channel
+Channel相当于是一个 connection，连接到 remote peer上，只能 active/inactive 一次。不能重用
+
+
+Channel
+ChannelPipeline
+Channel 和 ChannelPipeline 是配套的，创建 Channel，则 自动创建 ChannelPipeline
+Each channel has its own pipeline, and pipeline is created automatically when a new channel is created!!!
+
+ChannelHandler
+ChannelHandlerContext
+ChannelHandler 加入到 ChannelPipeline时，就自动创建一个新的 ChannelHandlerContext
+而，ChannelHandler可以加入到 多个 ChannelPipeline，而，每加入一个 ChannelPipeline时，就创建一个 ctx，所以，对于一个特定的 ChannelHandler 会有多个 ChannelPipeline(and so 多个 ctx)
+
+
+
+ChannelHandler的作用：处理/截获 Channel的 这两类事情
+1. inbound的， 都是 IO event
+2. outbound的，都是 operation
+
+
+ChannelPipeline 是过滤器模式，用户可以很好的控制
+1. “一个 IO event 如何被处理”
+2. “ChannelHandler之间 是如何进行交互的”
+
+
+IO event 在 ChannelPipeline 中流淌
+IO event 就是 ChannelInboundHandler||ChannelOutboundHandler 所处理，然后，转交给下一个 ChannelHandler
+
+fireXXX()，就是：event propagation methods
+ctx.fireXXX()意思是：请调用 the next ChannelHandler 的 XXX()
+
+inbound handler
+Netty Internal IO threads 产生数据，然后，送与 第一个 Inbound Handler 去处理
+inbound data哪里来的？
+读过来了，从 remote peer 中读过来的。比如通过：SocketChannel.read(ByteBuffer)
+整体流：
+SocketChannel.read(ByteBuffer)从remote peer中读取到了数据 ----> 送给第一个 Inbound Handler---->...---->送与最后一个 Inbound Handler
+
+outbound handler
+outbound handler 一般就是 产生/传输 outbound流量
+什么是 outbound traffic？，比如：写请求（write request）
+一个 outbound event走到底，然后，在那根 Channel上关联的 IO thread中，执行 实际的 输出操作，比如：SocketChannel.write(ByteBuffer)
+
+整体流：
+第一个outbound handler---->第二个outbound handler---->...---->SocketChannel.write(ByteBuffer)
+
+
+IO event 是被每一个 ChannelHandler 所处理的，顺序是：
+Inbound event: beginning---->end
+
+
+Building a pipeline
+ChannelPipeline中有多个 ChannelHandler，用于
+1. 接受 IO event，比如 读
+2. 请求 IO operation，比如 写、close
+
+Decoder--->byte to java object
+
+Business Logic Handler - 数据库操作
+
+static final EventExecutorGroup group = new DefaultEventExecutorGroup(16);
+pipeline.addLast(group, "handlerDB", new MyBusinessLogicHandler());
+上面代码的意思：MyBusinessLogicHandler要访问数据库，不能直接在 IO thread中作，于是搞个 group
+
+
+ChannelPipeline 是 线程安全的。所以，at any time你都能 add/remove/replace 其上的 ChannelHandler
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

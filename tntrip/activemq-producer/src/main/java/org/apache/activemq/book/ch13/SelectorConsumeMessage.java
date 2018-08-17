@@ -6,33 +6,30 @@ import org.apache.activemq.book.Const;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
-import javax.jms.MessageProducer;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
 import javax.jms.Queue;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 
-public class JustProduceMessage extends ReadConsoleAndRun {
-    private MessageProducer producer;
+public class SelectorConsumeMessage extends ReadConsoleAndRun {
+    private MessageConsumer consumer;
     private Session session;
 
-    public JustProduceMessage() throws Exception {
-//        String brokerURI = Const.BROKER_URL;
-        String brokerURI = "tcp://localhost:61616";
+    public SelectorConsumeMessage() throws Exception {
+        String brokerURI = Const.BROKER_URL;
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerURI);
         Connection connection = connectionFactory.createConnection();
         connection.start();
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-        Queue queue = session.createQueue("Test.testQueue");
-        producer = session.createProducer(queue);
+        Queue queue = session.createQueue("Selector.MessageInOrder");
+        consumer = session.createConsumer(queue, "car='1'");
     }
 
-    @Override
     protected Object runWithConsoleInput(String line) {
         try {
-            TextMessage textMessage = session.createTextMessage(line);
-            producer.send(textMessage);
-            System.out.println("Already sent: " + textMessage);
+            Message msg = consumer.receive();
+            return msg;
         } catch (JMSException e) {
             e.printStackTrace();
         }
@@ -40,6 +37,6 @@ public class JustProduceMessage extends ReadConsoleAndRun {
     }
 
     public static void main(String[] args) throws Exception {
-        ReadConsoleAndRun.startMain(new JustProduceMessage());
+        ReadConsoleAndRun.startMain(new SelectorConsumeMessage());
     }
 }

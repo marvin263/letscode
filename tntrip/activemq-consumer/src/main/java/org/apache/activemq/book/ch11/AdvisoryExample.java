@@ -54,26 +54,26 @@ public class AdvisoryExample {
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(brokerURI);
         Connection connection = connectionFactory.createConnection();
         connection.start();
-        // Lets first create a Consumer to listen too
+        // Lets first create a TestMyMessageListener to listen too
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        // Lets first create a Consumer to listen too
+        // Lets first create a TestMyMessageListener to listen too
         Queue queue = session.createQueue("test.Queue");
         MessageConsumer testConsumer = session.createConsumer(queue);
-        // so lets listen for the Consumer starting/stoping
+        // so lets listen for the TestMyMessageListener starting/stoping
         Topic advisoryTopic = org.apache.activemq.advisory.AdvisorySupport.getConsumerAdvisoryTopic(queue);
         MessageConsumer consumer = session.createConsumer(advisoryTopic);
         consumer.setMessageListener(new MessageListener() {
             public void onMessage(Message m) {
                 ActiveMQMessage message = (ActiveMQMessage) m;
                 try {
-                    System.out.println("Consumer Count = " + m.getStringProperty("consumerCount"));
+                    System.out.println("TestMyMessageListener Count = " + m.getStringProperty("consumerCount"));
                     DataStructure data = (DataStructure) message.getDataStructure();
                     if (data.getDataStructureType() == ConsumerInfo.DATA_STRUCTURE_TYPE) {
                         ConsumerInfo consumerInfo = (ConsumerInfo) data;
-                        System.out.println("Consumer started: " + consumerInfo);
+                        System.out.println("TestMyMessageListener started: " + consumerInfo);
                     } else if (data.getDataStructureType() == RemoveInfo.DATA_STRUCTURE_TYPE) {
                         RemoveInfo removeInfo = (RemoveInfo) data;
-                        System.out.println("Consumer stopped: " + removeInfo.getObjectId());
+                        System.out.println("TestMyMessageListener stopped: " + removeInfo.getObjectId());
                     } else {
                         System.err.println("Unknown message " + data);
                     }

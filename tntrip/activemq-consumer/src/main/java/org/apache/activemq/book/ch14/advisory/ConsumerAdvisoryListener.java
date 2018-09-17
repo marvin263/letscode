@@ -19,7 +19,7 @@ public class ConsumerAdvisoryListener implements MessageListener {
 			switch (ds.getDataStructureType()) {
 			case CommandTypes.CONSUMER_INFO:
 				ConsumerInfo consumerInfo = (ConsumerInfo) ds;
-				System.out.println("Consumer '" + consumerInfo.getConsumerId()
+				System.out.println("TestMyMessageListener '" + consumerInfo.getConsumerId()
 						+ "' subscribed to '" + consumerInfo.getDestination()
 						+ "'");
 				break;
@@ -27,7 +27,7 @@ public class ConsumerAdvisoryListener implements MessageListener {
 				RemoveInfo removeInfo = (RemoveInfo) ds;
 				ConsumerId consumerId = ((ConsumerId) removeInfo.getObjectId());
 				System.out
-						.println("Consumer '" + consumerId + "' unsubscribed");
+						.println("TestMyMessageListener '" + consumerId + "' unsubscribed");
 				break;
 			default:
 				System.out.println("Unkown data structure type");

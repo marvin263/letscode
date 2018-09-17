@@ -1,14 +1,15 @@
-package org.apache.activemq.book.ch3.jobs;
+package org.apache.activemq.book.ch13;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import javax.jms.TextMessage;
 
-public class Listener implements MessageListener {
+public class MyMessageListener implements MessageListener {
 
 	private String job;
 	
-	public Listener(String job) {
+	public MyMessageListener(String job) {
 		this.job = job;
 	}
 
@@ -16,7 +17,7 @@ public class Listener implements MessageListener {
 	public void onMessage(Message message) {
 		try {
 			//do something here
-			System.out.println(job + " id:" + ((ObjectMessage)message).getObject());
+			System.out.println(job + " id:" + ((TextMessage)message).getText());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

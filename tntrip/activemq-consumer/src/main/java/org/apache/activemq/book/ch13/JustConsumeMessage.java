@@ -24,7 +24,7 @@ public class JustConsumeMessage extends ReadConsoleAndRun {
         connection.start();
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-        Queue queue = session.createQueue("Test.testQueue?consumer.dispatchAsync=true");
+        Queue queue = session.createQueue("Test.testQueue?consumer.dispatchAsync=false");
 //        Topic queue = session.createTopic("Test.testQueue");
         consumer = session.createConsumer(queue);
         System.out.println(brokerURI);

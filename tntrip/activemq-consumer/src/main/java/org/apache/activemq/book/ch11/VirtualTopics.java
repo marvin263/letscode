@@ -41,11 +41,11 @@ public class VirtualTopics {
         consumerConnection.start();
         
         Session consumerSessionA = consumerConnection.createSession(false,Session.AUTO_ACKNOWLEDGE);
-        Queue consumerAQueue = consumerSessionA.createQueue("Consumer.A.VirtualTopic.orders");
+        Queue consumerAQueue = consumerSessionA.createQueue("TestMyMessageListener.A.VirtualTopic.orders");
         MessageConsumer consumerA = consumerSessionA.createConsumer(consumerAQueue);
         
         Session consumerSessionB = consumerConnection.createSession(false,Session.AUTO_ACKNOWLEDGE);
-        Queue consumerBQueue = consumerSessionB.createQueue("Consumer.B.VirtualTopic.orders");
+        Queue consumerBQueue = consumerSessionB.createQueue("TestMyMessageListener.B.VirtualTopic.orders");
         MessageConsumer consumerB = consumerSessionB.createConsumer(consumerAQueue);
         
         //setup the sender

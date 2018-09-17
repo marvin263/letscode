@@ -23,7 +23,7 @@ public class JustProduceMessage extends ReadConsoleAndRun {
         connection.start();
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-        Queue queue = session.createQueue("Test.testQueue");
+        Queue queue = session.createQueue("JOBS.marvin.messagelistener");
         producer = session.createProducer(queue);
     }
 

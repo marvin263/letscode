@@ -1,4 +1,4 @@
---where中，威力越到，越放到最后面
+--where中，威力越大，越放到最后面
 -- (低效,执行时间156.3秒) 
 SELECT … FROM EMP E WHERE
 	SAL > 50000

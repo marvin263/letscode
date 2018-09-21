@@ -50,7 +50,7 @@ public class FindInteger {
         }).toArray();
 
         int[] nonExisted = Arrays.stream(existed).map(e -> e + 1).toArray();
-        
+        //int[] nonExisted = rdm.ints(valueCount, 0, Integer.MAX_VALUE).toArray();
         for (int value : existed) {
             setBit(value);
         }

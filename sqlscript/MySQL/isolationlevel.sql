@@ -1,13 +1,15 @@
 
 -- varchar 保留末尾空格；char删除末尾空格
-DROP TABLE IF EXISTS `test_isolation_level`;
-CREATE TABLE `test_isolation_level` (
+DROP TABLE IF EXISTS `isl`;
+CREATE TABLE `isl` (
 `a` int(11) NOT NULL,
 `b` varchar(10) NOT NULL,
 `c` char(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-insert into test_isolation_level() values (1, 'bike1','car1'),(2, 'bike2','car2'),(3, 'bike3','car3');
+insert into isl() values (1, 'bike1','car1'),(2, 'bike2','car2'),(3, 'bike3','car3');
+
+update isl set b='bike11' where a=1;
 
 
 -- 1.查看 当前 会话隔离级别

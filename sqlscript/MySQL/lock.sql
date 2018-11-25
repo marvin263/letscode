@@ -38,3 +38,14 @@ insert into t_nokey_2 values(1, 2), (11,22), (111,222);
 drop table if exists t_uk_2;
 create table t_uk_2(a int, b int, index idx_a(a), unique iux_b(b)) engine = InnoDB;
 insert into t_uk_2 values(1, 2), (11,22), (111,222), (1111,2222), (11111,22222), (111111,222222);
+
+
+
+
+drop table if exists z;
+create table z(a int, b int, PRIMARY KEY(a), key(b)) engine = InnoDB;
+insert into z values(1,1), (3,1), (5,3),(7,6), (10,8);
+
+
+
+

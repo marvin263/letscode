@@ -1,4 +1,14 @@
 
+
+drop table if exists t;
+create table t(c1 varchar(10), c2 int, PRIMARY KEY(c1), key(c2)) engine = InnoDB;
+insert into t values ('a', 5);
+insert into t values ('b', 11);
+insert into t values ('c', 18);
+
+select * from t;
+
+
 -- 列上有或者没有索引时，看锁是什么样的
 drop table if exists t_pk;
 create table t_pk(a int, b int, primary key (b)) engine = InnoDB;
@@ -46,6 +56,19 @@ drop table if exists z;
 create table z(a int, b int, PRIMARY KEY(a), key(b)) engine = InnoDB;
 insert into z values(1,1), (3,1), (5,3),(7,6), (10,8);
 
+drop table if exists ii;
+create table ii(a int auto_increment, b int, PRIMARY KEY(a), key(b)) engine = InnoDB;
+insert into ii(b) values (4);
+insert into ii(b) values (7);
 
-
+SELECT 
+    ENGINE_LOCK_ID as LOCK_ID,
+    ENGINE_TRANSACTION_ID as TRX_ID,
+    INDEX_NAME,
+    LOCK_TYPE,
+    LOCK_MODE,
+    LOCK_STATUS,
+    LOCK_DATA
+FROM
+    performance_schema.data_locks;
 

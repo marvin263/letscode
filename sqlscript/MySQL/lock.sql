@@ -1,4 +1,23 @@
 
+drop table if exists g;
+create table g(name varchar(10), i int, primary key (name), index idx_i(i)) engine = InnoDB;
+insert into g values('a', 5), ('b', 10), ('c', 10), ('d', 15), ('e', 25);
+
+
+
+drop table if exists t_pk_uk;
+create table t_pk_uk(a varchar(10), b int, c int, d varchar(10), primary key(a), unique iux_b(b), index idx_c(c)) engine = InnoDB;
+insert into t_pk_uk values('a',11,22,'dataa'),('b',111,222,'datab'),('c',1111,2222,'datac'),('d',11111,22222,'datad'),('e',111111,222222,'datae');
+
+
+
+
+drop table if exists t2;
+create table t2(c1 varchar(10), c2 int, PRIMARY KEY(c1), key(c2)) engine = InnoDB;
+insert into t2 values ('a', 2);
+
+
+
 
 drop table if exists t;
 create table t(c1 varchar(10), c2 int, PRIMARY KEY(c1), key(c2)) engine = InnoDB;
@@ -46,8 +65,8 @@ create table t_nokey_2(a int, b int, index idx_a(a)) engine = InnoDB;
 insert into t_nokey_2 values(1, 2), (11,22), (111,222);
 
 drop table if exists t_uk_2;
-create table t_uk_2(a int, b int, index idx_a(a), unique iux_b(b)) engine = InnoDB;
-insert into t_uk_2 values(1, 2), (11,22), (111,222), (1111,2222), (11111,22222), (111111,222222);
+create table t_uk_2(a int, b int, c int, d varchar(10), index idx_a(a), unique iux_b_c(b, c)) engine = InnoDB;
+insert into t_uk_2 values(1, 2,3,'a'), (11,22,33,'b'), (111,222,333,'c'), (1111,2222,3333,'d'), (11111,22222,33333,'e'), (111111,222222,333333,'f');
 
 
 
@@ -72,3 +91,7 @@ SELECT
 FROM
     performance_schema.data_locks;
 
+
+drop table if exists dl;
+CREATE TABLE dl (i INT) ENGINE = InnoDB;
+INSERT INTO dl (i) VALUES(1);

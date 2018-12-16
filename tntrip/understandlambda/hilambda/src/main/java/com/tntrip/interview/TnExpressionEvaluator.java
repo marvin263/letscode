@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
-public class qqq {
+public class TnExpressionEvaluator {
     private static class Token {
         int start;
         String str;

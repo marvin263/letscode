@@ -3,235 +3,97 @@ package com.tntrip.interview;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public enum OperatorEnum {
-    ADD("+") {
-        @Override
-        public int operandCount() {
-            return 2;
-        }
 
-        @Override
-        public int priority() {
-            return 1;
-        }
-
+    ADD("+", Const.OPERAND_COUNT_2, Const.PRIORITY_1) {
         @Override
         public double compute(double[] args) {
             return args[0] + args[1];
         }
     },
-    SUBTRACT("-") {
-        @Override
-        public int operandCount() {
-            return 2;
-        }
-
-        @Override
-
-        public int priority() {
-            return 1;
-        }
-
+    SUBTRACT("-", Const.OPERAND_COUNT_2, Const.PRIORITY_1) {
         @Override
         public double compute(double[] args) {
             return args[0] - args[1];
         }
     },
-    MULTIPLY("*") {
-        @Override
-        public int operandCount() {
-            return 2;
-        }
-
-        @Override
-        public int priority() {
-            return 1;
-        }
-
+    MULTIPLY("*", Const.OPERAND_COUNT_2, Const.PRIORITY_1) {
         @Override
         public double compute(double[] args) {
             return args[0] * args[1];
         }
     },
-    DIVIDE("/") {
-        @Override
-        public int operandCount() {
-            return 2;
-        }
-
-        @Override
-        public int priority() {
-            return 1;
-        }
-
+    DIVIDE("/", Const.OPERAND_COUNT_2, Const.PRIORITY_1) {
         @Override
         public double compute(double[] args) {
             return args[0] / args[1];
         }
     },
-    POW("^") {
-        @Override
-        public int operandCount() {
-            return 2;
-        }
-
-        @Override
-        public int priority() {
-            return 3;
-        }
-
+    POW("^", Const.OPERAND_COUNT_2, Const.PRIORITY_3) {
         @Override
         public double compute(double[] args) {
             return Math.pow(args[0], args[1]);
         }
     },
-    YROOT("~") {
-        @Override
-        public int operandCount() {
-            return 2;
-        }
-
-
-        @Override
-        public int priority() {
-            return 3;
-        }
-
+    YROOT("~", Const.OPERAND_COUNT_2, Const.PRIORITY_3) {
         @Override
         public double compute(double[] args) {
             return Math.pow(args[0], 1.0d / args[1]);
         }
 
     },
-    LOG("log") {
+    LOG("log", Const.OPERAND_COUNT_1, Const.PRIORITY_3) {
         @Override
         public double compute(double[] args) {
             return Math.log10(args[0]);
         }
-
-        @Override
-        public int operandCount() {
-            return 1;
-        }
-
-        @Override
-        public int priority() {
-            return 3;
-        }
     },
-    LOG1P("log1p") {
+    LOG1P("log1p", Const.OPERAND_COUNT_1, Const.PRIORITY_3) {
         @Override
         public double compute(double[] args) {
             return Math.log10(1 + args[0]);
         }
-
-        @Override
-        public int operandCount() {
-            return 1;
-        }
-
-        @Override
-        public int priority() {
-            return 3;
-        }
     },
-    LOG2P("log2p") {
+    LOG2P("log2p", Const.OPERAND_COUNT_1, Const.PRIORITY_3) {
         @Override
         public double compute(double[] args) {
             return Math.log10(2 + args[0]);
         }
-
-        @Override
-        public int operandCount() {
-            return 1;
-        }
-
-        @Override
-        public int priority() {
-            return 3;
-        }
     },
-    LN("ln") {
+    LN("ln", Const.OPERAND_COUNT_1, Const.PRIORITY_3) {
         @Override
         public double compute(double[] args) {
             return Math.log(args[0]);
         }
-
-        @Override
-        public int operandCount() {
-            return 1;
-        }
-
-        @Override
-        public int priority() {
-            return 3;
-        }
     },
-    LN1P("ln1p") {
+    LN1P("ln1p", Const.OPERAND_COUNT_1, Const.PRIORITY_3) {
         @Override
         public double compute(double[] args) {
             return Math.log(1 + args[0]);
         }
-
-        @Override
-        public int operandCount() {
-            return 1;
-        }
-
-        @Override
-        public int priority() {
-            return 3;
-        }
     },
-    LN2P("ln2p") {
+    LN2P("ln2p", Const.OPERAND_COUNT_1, Const.PRIORITY_3) {
         @Override
         public double compute(double[] args) {
             return Math.log(2 + args[0]);
         }
-
-        @Override
-        public int operandCount() {
-            return 1;
-        }
-
-        @Override
-        public int priority() {
-            return 3;
-        }
     },
-    SQUARE("square") {
+    SQUARE("square", Const.OPERAND_COUNT_1, Const.PRIORITY_3) {
         @Override
         public double compute(double[] args) {
             return args[0] * args[0];
         }
-
-        @Override
-        public int operandCount() {
-            return 1;
-        }
-
-        @Override
-        public int priority() {
-            return 3;
-        }
     },
-    SQRT("sqrt") {
+    SQRT("sqrt", Const.OPERAND_COUNT_1, Const.PRIORITY_3) {
         @Override
         public double compute(double[] args) {
             return Math.sqrt(args[0]);
         }
-
-        @Override
-        public int operandCount() {
-            return 1;
-        }
-
-        @Override
-        public int priority() {
-            return 3;
-        }
     };
     private final String alias;
+    private final int operandCount;
+    private final int priority;
     private static final Map<String, OperatorEnum> mapOperators = initializeMap();
 
     private static Map<String, OperatorEnum> initializeMap() {
@@ -251,13 +113,19 @@ public enum OperatorEnum {
         throw new RuntimeException("No OperatorEnum for string=" + str);
     }
 
-    OperatorEnum(final String alias) {
+    OperatorEnum(final String alias, final int operandCount, final int priority) {
+        this.priority = priority;
         this.alias = alias;
+        this.operandCount = operandCount;
     }
 
-    public abstract int operandCount();
+    public int operandCount() {
+        return operandCount;
+    }
 
-    public abstract int priority();
+    public int priority() {
+        return priority;
+    }
 
     public abstract double compute(double[] args);
 
@@ -270,4 +138,13 @@ public enum OperatorEnum {
     public boolean higherPriority(OperatorEnum other) {
         return this.priority() - other.priority() > 0;
     }
+}
+
+class Const {
+    static final int PRIORITY_1 = 1;
+    static final int PRIORITY_2 = 2;
+    static final int PRIORITY_3 = 3;
+
+    static final int OPERAND_COUNT_1 = 1;
+    static final int OPERAND_COUNT_2 = 2;
 }

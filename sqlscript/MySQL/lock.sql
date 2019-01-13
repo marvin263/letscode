@@ -1,7 +1,7 @@
 
 drop table if exists g;
 create table g(name varchar(10), i int, primary key (name), index idx_i(i)) engine = InnoDB;
-insert into g values('a', 5), ('b', 10), ('c', 10), ('d', 15), ('e', 25);
+insert into g values('a', 5), ('b', 8), ('c', 10), ('d', 10), ('e', 11), ('f', 15);
 
 
 
@@ -56,8 +56,8 @@ insert into t_pk_2 values(1, 2), (11,22), (111,222);
 
 
 drop table if exists t_idx_2;
-create table t_idx_2(id int, a int, b int, index idx_a(a), index idx_b(b), primary key (id)) engine = InnoDB;
-insert into t_idx_2 values(1, 1, 2), (11, 11,22), (111, 111,222), (1111, 1111,2222), (11111, 11111,22222), (111111, 111111,222222);
+create table t_idx_2(k varchar(10), a int, b int, index idx_a(a), index idx_b(b), primary key (k)) engine = InnoDB;
+insert into t_idx_2 values('a', 1, 2), ('b', 11,22), ('c', 111,222), ('d', 1111,2222), ('e', 11111,22222), ('f', 111111,222222);
 
 
 drop table if exists t_nokey_2;
@@ -79,6 +79,11 @@ drop table if exists ii;
 create table ii(a int auto_increment, b int, PRIMARY KEY(a), key(b)) engine = InnoDB;
 insert into ii(b) values (4);
 insert into ii(b) values (7);
+
+drop table if exists ti;
+create table ti(i int, index idx_i(i)) engine = InnoDB;
+insert into ti values (4);
+insert into ti values (7);
 
 SELECT 
     ENGINE_LOCK_ID as LOCK_ID,

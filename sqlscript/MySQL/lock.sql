@@ -45,8 +45,8 @@ create table t_nokey(a int, b int) engine = InnoDB;
 insert into t_nokey values(1, 2), (11,22), (111,222);
 
 drop table if exists t_uk;
-create table t_uk(a int, b int, unique iux_b(b)) engine = InnoDB;
-insert into t_uk values(1, 2), (11,22), (111,222), (1111,2222), (11111,22222), (111111,222222);
+create table t_uk(k varchar(10), a int, b int, primary key (k), index idx_a(a), unique iux_b(b)) engine = InnoDB;
+insert into t_uk values('a', 1, 6), ('b',7, '14'), ('c',13, '22'), ('d',19, '32'), ('e',23, '46');
 
 
 drop table if exists t_pk_2;
@@ -68,7 +68,8 @@ drop table if exists t_uk_2;
 create table t_uk_2(a int, b int, c int, d varchar(10), index idx_a(a), unique iux_b_c(b, c)) engine = InnoDB;
 insert into t_uk_2 values(1, 2,3,'a'), (11,22,33,'b'), (111,222,333,'c'), (1111,2222,3333,'d'), (11111,22222,33333,'e'), (111111,222222,333333,'f');
 
-
+drop table if exists t1;
+create table t1 (i int, primary key (i)) engine = InnoDB;
 
 
 drop table if exists z;
@@ -95,6 +96,12 @@ SELECT
     LOCK_DATA
 FROM
     performance_schema.data_locks;
+
+
+
+drop table if exists dl_test;
+CREATE TABLE dl_test(k varchar(10), i tinyint(4), PRIMARY KEY(k), index idx_k(k)) ENGINE = InnoDB;
+INSERT INTO dl_test VALUES('a', 0);
 
 
 drop table if exists dl;

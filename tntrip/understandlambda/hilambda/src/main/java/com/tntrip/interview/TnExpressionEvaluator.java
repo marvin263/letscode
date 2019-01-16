@@ -14,7 +14,7 @@ public class TnExpressionEvaluator {
         int start;
         String str;
         TokenType type;
-        OperatorEnum _operator;
+        TnOperatorEnum _operator;
 
         private enum TokenType {
             VARIABLE, OPERATOR, LEFT_PARENTHESIS, RIGHT_PARENTHESIS
@@ -24,12 +24,12 @@ public class TnExpressionEvaluator {
 
         }
 
-        OperatorEnum operator() {
+        TnOperatorEnum operator() {
             if (type != TokenType.OPERATOR) {
                 throw new RuntimeException("Cannot get operator. token=" + this);
             }
             if (_operator == null) {
-                _operator = OperatorEnum.fromString(str);
+                _operator = TnOperatorEnum.fromString(str);
             }
             return _operator;
         }
@@ -321,7 +321,7 @@ public class TnExpressionEvaluator {
 
     private static double doEvaluate(List<Token> tokens, int start, int end, Map<String, Double> variables, Map<Integer, Integer> matchingParenthesis) {
         Stack<Double> operandStack = new Stack<>();
-        Stack<OperatorEnum> operatorStack = new Stack<>();
+        Stack<TnOperatorEnum> operatorStack = new Stack<>();
 
         int pos = start;
         while (pos <= end) {
@@ -332,7 +332,7 @@ public class TnExpressionEvaluator {
                     pos++;
                     break;
                 case OPERATOR:
-                    OperatorEnum curOpr = t.operator();
+                    TnOperatorEnum curOpr = t.operator();
                     computeIfNeeded(operandStack, operatorStack, curOpr);
                     operatorStack.push(curOpr);
                     pos++;
@@ -366,8 +366,8 @@ public class TnExpressionEvaluator {
         return concat(tokens.subList(start, end + 1).stream().map(e -> e.str).collect(Collectors.toList()), "", "");
     }
 
-    private static void computeIfNeeded(Stack<Double> operandStack, Stack<OperatorEnum> operatorStack, OperatorEnum curOpr) {
-        OperatorEnum topOpr = null;
+    private static void computeIfNeeded(Stack<Double> operandStack, Stack<TnOperatorEnum> operatorStack, TnOperatorEnum curOpr) {
+        TnOperatorEnum topOpr = null;
         while (operatorStack.size() >= 1) {
             // 只是peek下，computeWithOperatorOperand会pop出来
             topOpr = operatorStack.peek();
@@ -382,12 +382,12 @@ public class TnExpressionEvaluator {
         }
     }
 
-    private static void computeWithTopOperator(Stack<Double> operandStack, Stack<OperatorEnum> operatorStack) {
+    private static void computeWithTopOperator(Stack<Double> operandStack, Stack<TnOperatorEnum> operatorStack) {
         if (operatorStack.size() <= 0) {
             throw new RuntimeException("operatorStack.size()==0, lack operator");
         }
         // 弹出一个操作符
-        OperatorEnum opr = operatorStack.pop();
+        TnOperatorEnum opr = operatorStack.pop();
         int operandCount = opr.operandCount();
         if (operandStack.size() < operandCount) {
             throw new RuntimeException(format("Lack operand. operator={0}, expectOperandCount={1}, actualOperandCount={2}", opr, operandCount, operandStack.size()));

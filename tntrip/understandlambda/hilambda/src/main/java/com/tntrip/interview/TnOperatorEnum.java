@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public enum OperatorEnum {
+public enum TnOperatorEnum {
 
     ADD("+", Const.OPERAND_COUNT_2, Const.PRIORITY_1) {
         @Override
@@ -94,26 +94,26 @@ public enum OperatorEnum {
     private final String alias;
     private final int operandCount;
     private final int priority;
-    private static final Map<String, OperatorEnum> mapOperators = initializeMap();
+    private static final Map<String, TnOperatorEnum> mapOperators = initializeMap();
 
-    private static Map<String, OperatorEnum> initializeMap() {
-        OperatorEnum[] values = OperatorEnum.values();
-        Map<String, OperatorEnum> mapOperators = new HashMap<>();
-        for (OperatorEnum opr : values) {
+    private static Map<String, TnOperatorEnum> initializeMap() {
+        TnOperatorEnum[] values = TnOperatorEnum.values();
+        Map<String, TnOperatorEnum> mapOperators = new HashMap<>();
+        for (TnOperatorEnum opr : values) {
             mapOperators.put(opr.alias, opr);
             mapOperators.put(opr.name().toLowerCase(), opr);
         }
         return mapOperators;
     }
 
-    public static OperatorEnum fromString(String str) {
+    public static TnOperatorEnum fromString(String str) {
         if (mapOperators.containsKey(str.toLowerCase())) {
             return mapOperators.get(str.toLowerCase());
         }
-        throw new RuntimeException("No OperatorEnum for string=" + str);
+        throw new RuntimeException("No TnOperatorEnum for string=" + str);
     }
 
-    OperatorEnum(final String alias, final int operandCount, final int priority) {
+    TnOperatorEnum(final String alias, final int operandCount, final int priority) {
         this.priority = priority;
         this.alias = alias;
         this.operandCount = operandCount;
@@ -135,7 +135,7 @@ public enum OperatorEnum {
      * @param other
      * @return
      */
-    public boolean higherPriority(OperatorEnum other) {
+    public boolean higherPriority(TnOperatorEnum other) {
         return this.priority() - other.priority() > 0;
     }
 }

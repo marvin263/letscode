@@ -41,4 +41,7 @@
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/classes" />
   </component>
+  <component name="ThriftCompiler">
+    <compilers />
+  </component>
 </project>

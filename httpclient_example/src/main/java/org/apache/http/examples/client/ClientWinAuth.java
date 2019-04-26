@@ -24,56 +24,36 @@
  * <http://www.apache.org/>.
  *
  */
+
 package org.apache.http.examples.client;
 
-import java.io.File;
-import java.io.FileInputStream;
-
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.WinHttpClients;
 import org.apache.http.util.EntityUtils;
 
 /**
- * This example shows how to stream out a request entity using chunk encoding.
- * 
- * Example how to use unbuffered chunk-encoded POST request.
- * 
- * 牛逼啊，用来发送二进制内容的
+ * This example demonstrates how to create HttpClient pre-configured
+ * with support for integrated Windows authentication.
  */
-public class ClientChunkEncodedPost {
+public class ClientWinAuth {
 
-    public static void main(String[] args) throws Exception {
-        if (args.length != 1) {
-            System.out.println("File path not given");
-            System.exit(1);
+    public final static void main(String[] args) throws Exception {
+
+        if (!WinHttpClients.isWinAuthAvailable()) {
+            System.out.println("Integrated Win auth is not supported!!!");
         }
-        CloseableHttpClient httpclient = HttpClients.createDefault();
+
+        CloseableHttpClient httpclient = WinHttpClients.createDefault();
+        // There is no need to provide user credentials
+        // HttpClient will attempt to access current user security context through
+        // Windows platform specific methods via JNI.
         try {
-            HttpPost httppost = new HttpPost("http://localhost/");
+            HttpGet httpget = new HttpGet("http://winhost/");
 
-            File file = new File(args[0]);
-
-            InputStreamEntity reqEntity = new InputStreamEntity(
-                    new FileInputStream(file), -1,
-                    ContentType.APPLICATION_OCTET_STREAM);
-            reqEntity.setChunked(true);
-            // It may be more appropriate to use FileEntity class in this
-            // particular
-            // instance but we are using a more generic InputStreamEntity to
-            // demonstrate
-            // the capability to stream out data from any arbitrary source
-            //
-            // FileEntity entity = new FileEntity(file, "binary/octet-stream");
-
-            httppost.setEntity(reqEntity);
-
-            System.out.println("Executing request: "
-                    + httppost.getRequestLine());
-            CloseableHttpResponse response = httpclient.execute(httppost);
+            System.out.println("Executing request " + httpget.getRequestLine());
+            CloseableHttpResponse response = httpclient.execute(httpget);
             try {
                 System.out.println("----------------------------------------");
                 System.out.println(response.getStatusLine());
@@ -87,3 +67,4 @@ public class ClientChunkEncodedPost {
     }
 
 }
+

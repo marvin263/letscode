@@ -24,53 +24,49 @@
  * <http://www.apache.org/>.
  *
  */
+package org.apache.http.examples.async;
 
-package org.apache.http.examples.client;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Future;
 
 import org.apache.http.HttpHost;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import org.apache.http.impl.nio.client.CloseableHttpPipeliningClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
 
 /**
- * This example demonstrates how to send an HTTP request via a proxy.
- * 
- * 
- * How to send a request via proxy.
- * 
- * @since 4.0
+ * This example demonstrates a pipelinfed execution of multiple HTTP request / response exchanges
+ * Response content is buffered in memory for simplicity.
  */
-public class ClientExecuteProxy {
+public class AsyncClientPipelined {
 
-    public static void main(String[] args) throws Exception {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
+    public static void main(final String[] args) throws Exception {
+        CloseableHttpPipeliningClient httpclient = HttpAsyncClients.createPipelining();
         try {
-            HttpHost target = new HttpHost("localhost", 443, "https");
-            HttpHost proxy = new HttpHost("127.0.0.1", 8080, "http");
+            httpclient.start();
 
-            RequestConfig config = RequestConfig.custom().setProxy(proxy)
-                    .build();
-            HttpGet request = new HttpGet("/");
-            request.setConfig(config);
+            HttpHost targetHost = new HttpHost("httpbin.org", 80);
+            HttpGet[] resquests = {
+                    new HttpGet("/"),
+                    new HttpGet("/ip"),
+                    new HttpGet("/headers"),
+                    new HttpGet("/get")
+            };
 
-            System.out.println("Executing request " + request.getRequestLine()
-                    + " to " + target + " via " + proxy);
-
-            CloseableHttpResponse response = httpclient
-                    .execute(target, request);
-            try {
-                System.out.println("----------------------------------------");
+            Future<List<HttpResponse>> future = httpclient.execute(targetHost,
+                    Arrays.<HttpRequest>asList(resquests), null);
+            List<HttpResponse> responses = future.get();
+            for (HttpResponse response: responses) {
                 System.out.println(response.getStatusLine());
-                EntityUtils.consume(response.getEntity());
-            } finally {
-                response.close();
             }
+            System.out.println("Shutting down");
         } finally {
             httpclient.close();
         }
+        System.out.println("Done");
     }
 
 }

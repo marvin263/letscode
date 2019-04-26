@@ -24,7 +24,9 @@
  * <http://www.apache.org/>.
  *
  */
-package rg.apache.http.examples.async;
+package org.apache.http.examples.async;
+
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -32,8 +34,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
-
-import java.util.concurrent.CountDownLatch;
 
 /**
  * This example demonstrates a fully asynchronous execution of multiple HTTP exchanges
@@ -43,21 +43,20 @@ public class AsyncClientHttpExchangeFutureCallback {
 
     public static void main(final String[] args) throws Exception {
         RequestConfig requestConfig = RequestConfig.custom()
-                .setSocketTimeout(3000)
-                .setConnectTimeout(3000).build();
+            .setSocketTimeout(3000)
+            .setConnectTimeout(3000).build();
         CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom()
-                .setDefaultRequestConfig(requestConfig)
-                .setThreadFactory(new NamedThreadFactory("dddddddd"))
-                .build();
+            .setDefaultRequestConfig(requestConfig)
+            .build();
         try {
             httpclient.start();
-            final HttpGet[] requests = new HttpGet[]{
+            final HttpGet[] requests = new HttpGet[] {
                     new HttpGet("http://httpbin.org/ip"),
                     new HttpGet("https://httpbin.org/ip"),
                     new HttpGet("http://httpbin.org/headers")
             };
             final CountDownLatch latch = new CountDownLatch(requests.length);
-            for (final HttpGet request : requests) {
+            for (final HttpGet request: requests) {
                 httpclient.execute(request, new FutureCallback<HttpResponse>() {
 
                     @Override

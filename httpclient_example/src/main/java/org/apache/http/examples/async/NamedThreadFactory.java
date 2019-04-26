@@ -1,4 +1,4 @@
-package rg.apache.http.examples.async;
+package org.apache.http.examples.async;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;

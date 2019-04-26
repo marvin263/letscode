@@ -27,13 +27,6 @@
 
 package org.apache.http.examples.client;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.charset.CodingErrorAction;
-import java.util.Arrays;
-
-import javax.net.ssl.SSLContext;
-
 import org.apache.http.Consts;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -82,12 +75,17 @@ import org.apache.http.message.LineParser;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.CharArrayBuffer;
 
+import javax.net.ssl.SSLContext;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.charset.CodingErrorAction;
+import java.util.Arrays;
+
 /**
- * 
  * This example demonstrates how to customize and configure the most common
  * aspects of HTTP request execution and connection management.
- * 
- * 
+ * <p>
+ * <p>
  * This example demonstrates how to customize and configure the most common
  * aspects of HTTP request execution and connection management.
  */
@@ -119,7 +117,7 @@ public class ClientConfiguration {
 
                     @Override
                     protected boolean reject(final CharArrayBuffer line,
-                            int count) {
+                                             int count) {
                         // try to ignore all garbage preceding a status line
                         // infinitely
                         return false;
@@ -153,7 +151,7 @@ public class ClientConfiguration {
         // Create a registry of custom connection socket factories for supported
         // protocol schemes.
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder
-                .<ConnectionSocketFactory> create()
+                .<ConnectionSocketFactory>create()
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
                 .register("https", new SSLConnectionSocketFactory(sslcontext))
                 .build();
@@ -165,8 +163,8 @@ public class ClientConfiguration {
             public InetAddress[] resolve(final String host)
                     throws UnknownHostException {
                 if (host.equalsIgnoreCase("myhost")) {
-                    return new InetAddress[] { InetAddress
-                            .getByAddress(new byte[] { 127, 0, 0, 1 }) };
+                    return new InetAddress[]{InetAddress
+                            .getByAddress(new byte[]{127, 0, 0, 1})};
                 } else {
                     return super.resolve(host);
                 }
@@ -231,7 +229,7 @@ public class ClientConfiguration {
                 .setConnectionManager(connManager)
                 .setDefaultCookieStore(cookieStore)
                 .setDefaultCredentialsProvider(credentialsProvider)
-                .setProxy(new HttpHost("myproxy", 8080))
+                //.setProxy(new HttpHost("myproxy", 8080))
                 .setDefaultRequestConfig(defaultRequestConfig).build();
 
         try {
@@ -241,7 +239,8 @@ public class ClientConfiguration {
             RequestConfig requestConfig = RequestConfig
                     .copy(defaultRequestConfig).setSocketTimeout(5000)
                     .setConnectTimeout(5000).setConnectionRequestTimeout(5000)
-                    .setProxy(new HttpHost("myotherproxy", 8080)).build();
+                    //.setProxy(new HttpHost("127.0.0.1", 1080))
+                    .build();
             httpget.setConfig(requestConfig);
 
             // Execution context can be customized locally.

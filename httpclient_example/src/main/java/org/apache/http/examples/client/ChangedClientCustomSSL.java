@@ -27,18 +27,6 @@ package org.apache.http.examples.client;
  */
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.SSLContext;
-
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
@@ -53,92 +41,103 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 
+import javax.net.ssl.SSLContext;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+
 /**
  * This example demonstrates how to create secure connections with a custom SSL
- * 
+ * <p>
  * http://stackoverflow.com/questions/19517538/ignoring-ssl-certificate-in-
  * apache-httpclient-4-3
- * 
- * 
+ * <p>
+ * <p>
  * context.
  */
 public class ChangedClientCustomSSL {
 
-	public final static void main(String[] args) throws Exception {
-		sss();
-		// original();
-	}
+    public final static void main(String[] args) throws Exception {
+        sss();
+        // original();
+    }
 
-	private static void sss() throws Exception {
-		SSLContextBuilder builder = new SSLContextBuilder();
-		builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
-		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-				builder.build());
-		CloseableHttpClient httpclient = HttpClients.custom()
-				.setSSLSocketFactory(sslsf).build();
+    private static void sss() throws Exception {
+        SSLContextBuilder builder = new SSLContextBuilder();
+        builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                builder.build());
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setSSLSocketFactory(sslsf).build();
 
-		HttpGet httpGet = new HttpGet("https://passport.jd.com/new/login.aspx");
-		httpGet.addHeader(new BasicHeader("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:37.0) Gecko/20100101 Firefox/37.0"));
-		CloseableHttpResponse response = httpclient.execute(httpGet);
-		try {
-			System.out.println(response.getStatusLine());
-			System.out.println(EntityUtils.toString(response.getEntity()));
-			HttpEntity entity = response.getEntity();
-			EntityUtils.consume(entity);
-			for (Header hd : response.getAllHeaders()) {
-				System.out.println(hd);
-			}
-		} finally {
-			response.close();
-		}
-	}
+        HttpGet httpGet = new HttpGet("https://passport.jd.com/new/login.aspx");
+        httpGet.addHeader(new BasicHeader("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:37.0) Gecko/20100101 Firefox/37.0"));
+        CloseableHttpResponse response = httpclient.execute(httpGet);
+        try {
+            System.out.println(response.getStatusLine());
+            System.out.println(EntityUtils.toString(response.getEntity()));
+            HttpEntity entity = response.getEntity();
+            EntityUtils.consume(entity);
+            for (Header hd : response.getAllHeaders()) {
+                System.out.println(hd);
+            }
+        } finally {
+            response.close();
+        }
+    }
 
-	private static void original() throws KeyStoreException,
-			FileNotFoundException, IOException, NoSuchAlgorithmException,
-			CertificateException, KeyManagementException,
-			ClientProtocolException {
-		KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-		FileInputStream instream = new FileInputStream(new File(
-				"D:/Fast/Viator/sso.tntrip.org.crt"));
-		try {
-			trustStore.load(instream, "Susan263".toCharArray());
-		} finally {
-			instream.close();
-		}
+    private static void original() throws KeyStoreException,
+            FileNotFoundException, IOException, NoSuchAlgorithmException,
+            CertificateException, KeyManagementException,
+            ClientProtocolException {
+        KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        FileInputStream instream = new FileInputStream(new File(
+                "D:/Fast/Viator/sso.tntrip.org.crt"));
+        try {
+            trustStore.load(instream, "Susan263".toCharArray());
+        } finally {
+            instream.close();
+        }
 
-		// Trust own CA and all self-signed certs
-		SSLContext sslcontext = SSLContexts.custom()
-				.loadTrustMaterial(trustStore, new TrustSelfSignedStrategy())
-				.build();
-		// Allow TLSv1 protocol only
-		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-				sslcontext, new String[] { "TLS" }, null,
-				SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
-		CloseableHttpClient httpclient = HttpClients.custom()
-				.setSSLSocketFactory(sslsf).build();
-		try {
+        // Trust own CA and all self-signed certs
+        SSLContext sslcontext = SSLContexts.custom()
+                .loadTrustMaterial(trustStore, new TrustSelfSignedStrategy())
+                .build();
+        // Allow TLSv1 protocol only
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                sslcontext, new String[]{"TLS"}, null,
+                SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setSSLSocketFactory(sslsf).build();
+        try {
 
-			HttpGet httpget = new HttpGet(
-					"http://crm.tntrip.com/main.php?do=new_crm_main");
+            HttpGet httpget = new HttpGet(
+                    "http://crm.tntrip.com/main.php?do=new_crm_main");
 
-			System.out.println("executing request" + httpget.getRequestLine());
+            System.out.println("executing request" + httpget.getRequestLine());
 
-			CloseableHttpResponse response = httpclient.execute(httpget);
-			try {
-				HttpEntity entity = response.getEntity();
+            CloseableHttpResponse response = httpclient.execute(httpget);
+            try {
+                HttpEntity entity = response.getEntity();
 
-				System.out.println("----------------------------------------");
-				System.out.println(response.getStatusLine());
-				if (entity != null) {
-					System.out.println("Response content length: "
-							+ entity.getContentLength());
-				}
-				EntityUtils.consume(entity);
-			} finally {
-				response.close();
-			}
-		} finally {
-			httpclient.close();
-		}
-	}
+                System.out.println("----------------------------------------");
+                System.out.println(response.getStatusLine());
+                if (entity != null) {
+                    System.out.println("Response content length: "
+                            + entity.getContentLength());
+                }
+                EntityUtils.consume(entity);
+            } finally {
+                response.close();
+            }
+        } finally {
+            httpclient.close();
+        }
+    }
 }

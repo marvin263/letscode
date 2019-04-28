@@ -26,12 +26,12 @@
  */
 package org.apache.http.examples.async;
 
-import java.util.concurrent.Future;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
+
+import java.util.concurrent.Future;
 
 /**
  * This example demonstrates a basic asynchronous HTTP request / response exchange.
@@ -42,6 +42,7 @@ public class AsyncClientHttpExchange {
     public static void main(final String[] args) throws Exception {
         CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
         try {
+            // 异步的总是有个start
             httpclient.start();
             HttpGet request = new HttpGet("http://httpbin.org/get");
             Future<HttpResponse> future = httpclient.execute(request, null);

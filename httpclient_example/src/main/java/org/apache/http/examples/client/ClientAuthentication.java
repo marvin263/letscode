@@ -45,26 +45,26 @@ import org.apache.http.util.EntityUtils;
  */
 public class ClientAuthentication {
 
-	public static void main(String[] args) throws Exception {
-		CredentialsProvider credsProvider = new BasicCredentialsProvider();
-		credsProvider.setCredentials(new AuthScope("localhost", 443),
-				new UsernamePasswordCredentials("username", "password"));
-		CloseableHttpClient httpclient = HttpClients.custom()
-				.setDefaultCredentialsProvider(credsProvider).build();
-		try {
-			HttpGet httpget = new HttpGet("http://localhost/");
+    public static void main(String[] args) throws Exception {
+        CredentialsProvider credsProvider = new BasicCredentialsProvider();
+        credsProvider.setCredentials(new AuthScope("localhost", 443),
+                new UsernamePasswordCredentials("username", "password"));
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setDefaultCredentialsProvider(credsProvider).build();
+        try {
+            HttpGet httpget = new HttpGet("http://localhost/");
 
-			System.out.println("Executing request " + httpget.getRequestLine());
-			CloseableHttpResponse response = httpclient.execute(httpget);
-			try {
-				System.out.println("----------------------------------------");
-				System.out.println(response.getStatusLine());
-				EntityUtils.consume(response.getEntity());
-			} finally {
-				response.close();
-			}
-		} finally {
-			httpclient.close();
-		}
-	}
+            System.out.println("Executing request " + httpget.getRequestLine());
+            CloseableHttpResponse response = httpclient.execute(httpget);
+            try {
+                System.out.println("----------------------------------------");
+                System.out.println(response.getStatusLine());
+                EntityUtils.consume(response.getEntity());
+            } finally {
+                response.close();
+            }
+        } finally {
+            httpclient.close();
+        }
+    }
 }

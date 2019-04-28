@@ -49,6 +49,7 @@ public class AsyncClientCustomContext {
     public final static void main(String[] args) throws Exception {
         CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
         try {
+            // 异步的总是有个start
             httpclient.start();
 
             // Create a local instance of cookie store

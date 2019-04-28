@@ -26,10 +26,6 @@
  */
 package org.apache.http.examples.async;
 
-import java.io.IOException;
-import java.nio.CharBuffer;
-import java.util.concurrent.Future;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
@@ -37,6 +33,10 @@ import org.apache.http.nio.IOControl;
 import org.apache.http.nio.client.methods.AsyncCharConsumer;
 import org.apache.http.nio.client.methods.HttpAsyncMethods;
 import org.apache.http.protocol.HttpContext;
+
+import java.io.IOException;
+import java.nio.CharBuffer;
+import java.util.concurrent.Future;
 
 /**
  * This example demonstrates an asynchronous HTTP request / response exchange with
@@ -47,6 +47,7 @@ public class AsyncClientHttpExchangeStreaming {
     public static void main(final String[] args) throws Exception {
         CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
         try {
+            // 异步的总是有个start
             httpclient.start();
             Future<Boolean> future = httpclient.execute(
                     HttpAsyncMethods.createGet("http://httpbin.org/"),

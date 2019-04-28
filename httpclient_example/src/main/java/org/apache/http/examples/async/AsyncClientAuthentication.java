@@ -52,6 +52,7 @@ public class AsyncClientAuthentication {
                 .setDefaultCredentialsProvider(credsProvider)
                 .build();
         try {
+            // 异步的总是有个start
             httpclient.start();
             HttpGet httpget = new HttpGet("http://httpbin.org/basic-auth/user/passwd");
 
@@ -59,6 +60,7 @@ public class AsyncClientAuthentication {
             Future<HttpResponse> future = httpclient.execute(httpget, null);
             HttpResponse response = future.get();
             System.out.println("Response: " + response.getStatusLine());
+            
             System.out.println("Shutting down");
         } finally {
             httpclient.close();

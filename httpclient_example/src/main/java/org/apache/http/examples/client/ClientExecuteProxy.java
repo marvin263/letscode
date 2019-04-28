@@ -59,8 +59,7 @@ public class ClientExecuteProxy {
             System.out.println("Executing request " + request.getRequestLine()
                     + " to " + target + " via " + proxy);
 
-            CloseableHttpResponse response = httpclient
-                    .execute(target, request);
+            CloseableHttpResponse response = httpclient.execute(target, request);
             try {
                 System.out.println("----------------------------------------");
                 System.out.println(response.getStatusLine());

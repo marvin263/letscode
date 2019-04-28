@@ -59,7 +59,9 @@ public class AsyncClientCustomSSL {
                 .setSSLStrategy(sslSessionStrategy)
                 .build();
         try {
+            // 异步的总是有个start
             httpclient.start();
+            
             HttpGet httpget = new HttpGet("https://httpbin.org/");
             Future<HttpResponse> future = httpclient.execute(httpget, null);
             HttpResponse response = future.get();

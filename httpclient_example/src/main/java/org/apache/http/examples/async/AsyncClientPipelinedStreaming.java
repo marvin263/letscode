@@ -26,12 +26,6 @@
  */
 package org.apache.http.examples.async;
 
-import java.io.IOException;
-import java.nio.CharBuffer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Future;
-
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -43,6 +37,12 @@ import org.apache.http.nio.client.methods.AsyncCharConsumer;
 import org.apache.http.nio.protocol.BasicAsyncRequestProducer;
 import org.apache.http.protocol.HttpContext;
 
+import java.io.IOException;
+import java.nio.CharBuffer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Future;
+
 /**
  * This example demonstrates a pipelinfed execution of multiple HTTP request / response exchanges
  * with a full content streaming.
@@ -52,6 +52,7 @@ public class AsyncClientPipelinedStreaming {
     public static void main(final String[] args) throws Exception {
         CloseableHttpPipeliningClient httpclient = HttpAsyncClients.createPipelining();
         try {
+            // 异步的总是有个start
             httpclient.start();
 
             HttpHost targetHost = new HttpHost("httpbin.org", 80);
@@ -64,7 +65,7 @@ public class AsyncClientPipelinedStreaming {
 
             List<MyRequestProducer> requestProducers = new ArrayList<MyRequestProducer>();
             List<MyResponseConsumer> responseConsumers = new ArrayList<MyResponseConsumer>();
-            for (HttpGet request: resquests) {
+            for (HttpGet request : resquests) {
                 requestProducers.add(new MyRequestProducer(targetHost, request));
                 responseConsumers.add(new MyResponseConsumer(request));
             }

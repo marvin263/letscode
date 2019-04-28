@@ -27,8 +27,6 @@
 
 package org.apache.http.examples.async;
 
-import java.util.concurrent.Future;
-
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -36,15 +34,18 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 
+import java.util.concurrent.Future;
+
 /**
  * This example demonstrates a basic asynchronous HTTP request / response exchange
  * via an HTTP proxy.
  */
 public class AsyncClientExecuteProxy {
 
-    public static void main(String[] args)throws Exception {
+    public static void main(String[] args) throws Exception {
         CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
         try {
+            // 异步的总是有个start
             httpclient.start();
             HttpHost proxy = new HttpHost("localhost", 8888);
             RequestConfig config = RequestConfig.custom()

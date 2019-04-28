@@ -63,8 +63,7 @@ public class ClientCustomContext {
             System.out.println("Executing request " + httpget.getRequestLine());
 
             // Pass local context as a parameter
-            CloseableHttpResponse response = httpclient.execute(httpget,
-                    localContext);
+            CloseableHttpResponse response = httpclient.execute(httpget, localContext);
             try {
                 System.out.println("----------------------------------------");
                 System.out.println(response.getStatusLine());

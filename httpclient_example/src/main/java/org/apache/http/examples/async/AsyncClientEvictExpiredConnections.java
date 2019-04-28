@@ -53,6 +53,7 @@ public class AsyncClientEvictExpiredConnections {
                 .setConnectionManager(cm)
                 .build();
         try {
+            // 异步的总是有个start
             httpclient.start();
 
             // create an array of URIs to perform GETs on

@@ -30,6 +30,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.impl.nio.client.IOReactorUtils;
+import org.apache.http.impl.nio.reactor.IOReactorConfig;
 
 import java.util.concurrent.Future;
 
@@ -37,17 +39,33 @@ import java.util.concurrent.Future;
  * This example demonstrates a basic asynchronous HTTP request / response exchange.
  * Response content is buffered in memory for simplicity.
  */
-public class AsyncClientHttpExchange {
+public class AsyncClientCustomeIOReactor {
 
     public static void main(final String[] args) throws Exception {
-        CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();
+        IOReactorConfig iorcfg = IOReactorConfig.custom()
+                .setIoThreadCount(50)
+                .setBacklogSize(1000)
+                .setSelectInterval(1000 * 50L).build();
+        CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom()
+                .setDefaultIOReactorConfig(iorcfg)
+                .setThreadFactory(new NamedThreadFactory("marvin"))
+                .build();
         try {
             // 异步的总是有个start
             httpclient.start();
-            HttpGet request = new HttpGet("http://httpbin.org/get");
-            Future<HttpResponse> future = httpclient.execute(request, null);
-            HttpResponse response = future.get();
-            System.out.println("Response: " + response.getStatusLine());
+            
+            HttpGet[] requests = new HttpGet[]{
+                    new HttpGet("http://httpbin.org/get"),
+                    new HttpGet("http://www.baidu.com"),
+                    new HttpGet("http://www.163.com"),
+                    new HttpGet("http://www.qq.com"),
+            };
+            
+            for (HttpGet r : requests) {
+                Future<HttpResponse> future = httpclient.execute(r, null);
+                HttpResponse response = future.get();
+                System.out.println("Response: " + response.getStatusLine());
+            }
             System.out.println("Shutting down");
         } finally {
             //httpclient.close();

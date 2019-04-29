@@ -30,7 +30,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
-import org.apache.http.impl.nio.client.IOReactorUtils;
 import org.apache.http.impl.nio.reactor.IOReactorConfig;
 
 import java.util.concurrent.Future;

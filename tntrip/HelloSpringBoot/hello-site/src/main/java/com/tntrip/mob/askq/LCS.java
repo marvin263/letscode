@@ -53,11 +53,11 @@ public class LCS {
         }
     }
 
-    public static void madin(String[] args) {
-        char[] x = {' ', 'a', 'b', 'c', 'x', 'y', 'z', '1', '2', '3'};
-        char[] y = {' ', '1', '2', '3', 'x', 'y', 'z', 'a', 'b', 'c'};
-        IfIncrOneCharUseWho[][] b = new IfIncrOneCharUseWho[x.length][y.length];
-        int[][] c = lcsLength(x, y, b);
-        lcs(x.length-1, x.length-1, x, b);
-    }
+//    public static void madin(String[] args) {
+//        char[] x = {' ', 'a', 'b', 'c', 'x', 'y', 'z', '1', '2', '3'};
+//        char[] y = {' ', '1', '2', '3', 'x', 'y', 'z', 'a', 'b', 'c'};
+//        IfIncrOneCharUseWho[][] b = new IfIncrOneCharUseWho[x.length][y.length];
+//        int[][] c = lcsLength(x, y, b);
+//        lcs(x.length-1, x.length-1, x, b);
+//    }
 }

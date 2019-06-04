@@ -26,11 +26,13 @@
  */
 package org.apache.http.examples.async;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.impl.nio.reactor.IOReactorConfig;
+import org.apache.http.util.EntityUtils;
 
 import java.util.concurrent.Future;
 
@@ -47,22 +49,24 @@ public class AsyncClientCustomeIOReactor {
                 .setSelectInterval(1000 * 50L).build();
         CloseableHttpAsyncClient httpclient = HttpAsyncClients.custom()
                 .setDefaultIOReactorConfig(iorcfg)
-                .setThreadFactory(new NamedThreadFactory("marvin"))
+                //.setThreadFactory(new NamedThreadFactory("marvin"))
                 .build();
         try {
             // 异步的总是有个start
             httpclient.start();
             
             HttpGet[] requests = new HttpGet[]{
-                    new HttpGet("http://httpbin.org/get"),
-                    new HttpGet("http://www.baidu.com"),
-                    new HttpGet("http://www.163.com"),
+//                    new HttpGet("http://httpbin.org/get"),
+//                    new HttpGet("http://www.baidu.com"),
+//                    new HttpGet("https://www.163.com"),
                     new HttpGet("http://www.qq.com"),
             };
             
             for (HttpGet r : requests) {
                 Future<HttpResponse> future = httpclient.execute(r, null);
                 HttpResponse response = future.get();
+                HttpEntity entity = response.getEntity();
+                System.out.println(EntityUtils.toString(entity, "utf-8"));
                 System.out.println("Response: " + response.getStatusLine());
             }
             System.out.println("Shutting down");

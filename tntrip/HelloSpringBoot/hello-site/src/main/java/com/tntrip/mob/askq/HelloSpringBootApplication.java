@@ -14,10 +14,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = {
-        MybatisAutoConfiguration.class,
-        //DataSourceAutoConfiguration.class
-})
+//@EnableAutoConfiguration(exclude = {
+//        MybatisAutoConfiguration.class,
+//        //DataSourceAutoConfiguration.class
+//})
 public class HelloSpringBootApplication extends WebMvcConfigurerAdapter {
     public static void main(String[] args) {
         SpringApplication.run(HelloSpringBootApplication.class, args);

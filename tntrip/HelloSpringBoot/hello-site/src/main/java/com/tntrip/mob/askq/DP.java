@@ -37,9 +37,9 @@ public class DP {
         return result;
     }
 
-    public static void mdain(String[] args) {
-        String[] strs = {"10", "0001", "111001", "1", "0"};
-        int ddd = findMaxForm(strs, 5, 3);
-        System.out.println(ddd);
-    }
+//    public static void mdain(String[] args) {
+//        String[] strs = {"10", "0001", "111001", "1", "0"};
+//        int ddd = findMaxForm(strs, 5, 3);
+//        System.out.println(ddd);
+//    }
 }

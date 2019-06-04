@@ -48,7 +48,7 @@ public class HiMarvin {
         }
     }
 
-    public static void main(String[] args) {
-        new A2();
-    }
+//    public static void main(String[] args) {
+//        new A2();
+//    }
 }

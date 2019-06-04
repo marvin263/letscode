@@ -37,16 +37,16 @@ public class LongestCommonSubSequence {
     }
 
     // Driver Program to test above function
-    public static void main(String[] args) {
-        String X = "abcXY";
-        String Y = "abcXY";
-
-        int m = X.length();
-        int n = Y.length();
-
-        System.out.println("Length of Longest Common Substring is "
-                + LCSubStr(X.toCharArray(), Y.toCharArray(), m, n));
-    }
+//    public static void main(String[] args) {
+//        String X = "abcXY";
+//        String Y = "abcXY";
+//
+//        int m = X.length();
+//        int n = Y.length();
+//
+//        System.out.println("Length of Longest Common Substring is "
+//                + LCSubStr(X.toCharArray(), Y.toCharArray(), m, n));
+//    }
 }
 
 // This code is contributed by Sumit Ghosh

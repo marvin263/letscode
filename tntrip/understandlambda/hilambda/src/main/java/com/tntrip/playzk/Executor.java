@@ -21,17 +21,16 @@ import java.io.OutputStream;
 
 public class Executor
         implements Watcher, Runnable, DataMonitor.DataMonitorListener {
-    String znode;
+    
+    private DataMonitor dm;
 
-    DataMonitor dm;
+    private ZooKeeper zk;
 
-    ZooKeeper zk;
+    private String filename;
 
-    String filename;
+    private String exec[];
 
-    String exec[];
-
-    Process child;
+    private Process child;
 
     public Executor(String hostPort, String znode, String filename,
                     String exec[]) throws KeeperException, IOException {

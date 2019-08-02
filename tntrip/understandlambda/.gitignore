@@ -3,6 +3,8 @@
 *.iml
 *.ipr
 *.iws
+*.log
+*.log.*
 
 ### Gradle template
 .gradle

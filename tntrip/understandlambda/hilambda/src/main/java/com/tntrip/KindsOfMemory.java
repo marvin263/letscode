@@ -8,6 +8,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 /**
@@ -23,17 +24,36 @@ import java.util.function.Supplier;
  * </pre>
  */
 public class KindsOfMemory extends MinMaxFreeHeapRatio {
+    public static final int M = 1024 * 1024;//1M
     private List<byte[]> heapMemory = new ArrayList<>();
     private List<ByteBuffer> directMemory = new ArrayList<>();
     private List<Class<?>> metaspaceMemory = new ArrayList<>();
     private List<MappedByteBuffer> mmapMemory = new ArrayList<>();
-    public static final int M = 1024 * 1024;//1M
+    private List<String> internedString = new ArrayList<>();
 
+    public class AllocateInternedStringCase implements EachCase {
+        @Override
+        public void doOnLine(String line) {
+            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
+            keepLeftmostArrays(internedString, expectedCount, () -> {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < 1024; i++) {
+                    sb.append(UUID.randomUUID().toString());
+                }
+                return sb.toString().intern();
+            });
+        }
+
+        @Override
+        public String[] prefix() {
+            return new String[]{"str", "Intern String"};
+        }
+    }
 
     public class AllocateMmapCase implements EachCase {
         @Override
         public void doOnLine(String line) {
-            int expectedCount = Integer.valueOf(line.substring(prefix().length()));
+            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
             keepLeftmostArrays(mmapMemory, expectedCount, () -> {
                 File f = new File("C:\\Users\\libin\\Downloads\\VMware-workstation-full-14.1.3-9474260.exe");
                 long length = f.length();
@@ -52,8 +72,8 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
         }
 
         @Override
-        public String prefix() {
-            return "mm";
+        public String[] prefix() {
+            return new String[]{"mm", "Allocate mmapped memory"};
         }
     }
 
@@ -61,7 +81,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
     public class AllocateMetaspaceCase implements EachCase {
         @Override
         public void doOnLine(String line) {
-            int expectedCount = Integer.valueOf(line.substring(prefix().length()));
+            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
             keepLeftmostArrays(metaspaceMemory, expectedCount, () -> {
                 MyClassLoader m = new MyClassLoader("D:\\eden\\gitworkspace\\letscode\\tntrip\\understandlambda\\hilambda\\build\\classes\\main\\");
                 Class c = m.findClass("com.tntrip.HelloWorld");
@@ -70,38 +90,37 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
         }
 
         @Override
-        public String prefix() {
-            return "mt";
+        public String[] prefix() {
+            return new String[]{"mt", "Allocate metaspace"};
         }
     }
 
     public class AllocateHeapCase implements EachCase {
         @Override
         public void doOnLine(String line) {
-            int expectedCount = Integer.valueOf(line.substring(prefix().length()));
+            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
             keepLeftmostArrays(heapMemory, expectedCount, () -> new byte[M]);
         }
 
         @Override
-        public String prefix() {
-            return "h";
+        public String[] prefix() {
+            return new String[]{"h", "Allocate heap space"};
         }
     }
 
     public class AllocateDirectMemoryCase implements EachCase {
         @Override
         public void doOnLine(String line) {
-            int expectedCount = Integer.valueOf(line.substring(prefix().length()));
+            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
             keepLeftmostArrays(directMemory, expectedCount, () -> ByteBuffer.allocateDirect(M));
         }
 
         @Override
-        public String prefix() {
-            return "dm";
+        public String[] prefix() {
+            return new String[]{"dm", "Allocate direct memory"};
         }
     }
-
-
+    
     private <T> void keepLeftmostArrays(List<T> list, int expectedCount, Supplier<T> supplier) {
         int orgnSize = list.size();
         if (expectedCount == orgnSize) {

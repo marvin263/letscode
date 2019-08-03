@@ -25,7 +25,7 @@ public class MinMaxFreeHeapRatio extends AbstractDoCases {
     public class AllocateMemoryCase implements EachCase {
         @Override
         public void doOnLine(String line) {
-            int expectedCount = Integer.valueOf(line.substring(prefix().length()));
+            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
             keepLeftmostArrays(expectedCount);
         }
 
@@ -55,8 +55,8 @@ public class MinMaxFreeHeapRatio extends AbstractDoCases {
         }
 
         @Override
-        public String prefix() {
-            return "a";
+        public String[] prefix() {
+            return new String[]{"a", "Just a test"};
         }
     }
 

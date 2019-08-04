@@ -30,6 +30,36 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
     private List<Class<?>> metaspaceMemory = new ArrayList<>();
     private List<MappedByteBuffer> mmapMemory = new ArrayList<>();
     private List<String> internedString = new ArrayList<>();
+    private List<Thread> createdThreads = new ArrayList<>();
+
+
+    public class CreateThreadCase implements EachCase {
+        @Override
+        public void doOnLine(String line) {
+            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
+            keepLeftmostArrays(createdThreads, expectedCount, () -> {
+                Thread t = new Thread() {
+                    @Override
+                    public void run() {
+                        while (true) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                };
+                t.start();
+                return t;
+            });
+        }
+
+        @Override
+        public String[] prefix() {
+            return new String[]{"t", "Creat Threads"};
+        }
+    }
 
     public class AllocateInternedStringCase implements EachCase {
         @Override
@@ -120,7 +150,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
             return new String[]{"dm", "Allocate direct memory"};
         }
     }
-    
+
     private <T> void keepLeftmostArrays(List<T> list, int expectedCount, Supplier<T> supplier) {
         int orgnSize = list.size();
         if (expectedCount == orgnSize) {

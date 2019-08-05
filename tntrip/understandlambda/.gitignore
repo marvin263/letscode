@@ -4,6 +4,7 @@
 *.ipr
 *.iws
 *.log
+*.class
 *.log.*
 
 ### Gradle template

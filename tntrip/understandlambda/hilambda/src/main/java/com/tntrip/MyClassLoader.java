@@ -4,19 +4,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class MyClassLoader extends ClassLoader {
+    private static final AtomicInteger IDX = new AtomicInteger(0);
 
-    private String path;   //类的加载路径
-
-    public MyClassLoader(String path) {
-        this.path = path;
+    public MyClassLoader() {
+        System.out.println("Creating ClassLoader: " + IDX.getAndIncrement());
     }
-
 
     //用于寻找类文件
     @Override
@@ -27,37 +25,41 @@ public class MyClassLoader extends ClassLoader {
 
     //用于加载类文件
     private byte[] loadClassData(String name) {
-
-        String fullPath = path + "\\" + name.replaceAll("\\.", "\\\\") + ".class";
-        //使用输入流读取类文件
-        InputStream in = null;
-        //使用byteArrayOutputStream保存类文件。然后转化为byte数组
-        ByteArrayOutputStream out = null;
+        //包名转成文件路径
+        String path = pathForClassName(name);
+        FileInputStream fis = null;
         try {
-            in = new FileInputStream(new File(fullPath));
-            out = new ByteArrayOutputStream();
-            int i = 0;
-            while ((i = in.read()) != -1) {
-                out.write(i);
+            fis = new FileInputStream(path);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            int len = 0;
+            byte[] buffer = new byte[1024];
+            while ((len = fis.read(buffer)) != -1) {
+                bos.write(buffer, 0, len);
             }
-
+            bos.flush();
+            return bos.toByteArray();
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
-            try {
-                out.close();
-                in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-
         }
-        return out.toByteArray();
+        return null;
+    }
+
+    private String pathForClassName(String name) {
+        return Thread.currentThread().getContextClassLoader().getResource("").getPath() + name.replace(".", File.separator) + ".class";
     }
 
     public static void main(String[] args) {
         List<Class> d = new ArrayList<>();
         while (true) {
-            MyClassLoader m = new MyClassLoader("D:\\eden\\gitworkspace\\letscode\\tntrip\\understandlambda\\hilambda\\build\\classes\\main\\");
+            MyClassLoader m = new MyClassLoader();
             Class c = m.findClass("com.tntrip.HelloWorld");
             d.add(c);
             System.out.println(c.getClassLoader());

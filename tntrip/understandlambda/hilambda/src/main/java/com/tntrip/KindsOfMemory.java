@@ -81,11 +81,14 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
     }
 
     public class AllocateMmapCase implements EachCase {
+        public static final String MM_FILE_NAME = "bigfile.data";
+
         @Override
         public void doOnLine(String line) {
+            String mmFile = Thread.currentThread().getContextClassLoader().getResource("").getPath() + MM_FILE_NAME;
             int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
             keepLeftmostArrays(mmapMemory, expectedCount, () -> {
-                File f = new File("C:\\Users\\libin\\Downloads\\VMware-workstation-full-14.1.3-9474260.exe");
+                File f = new File(mmFile);
                 long length = f.length();
                 try {
                     RandomAccessFile raf = new RandomAccessFile(f, "rw");
@@ -112,11 +115,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
         @Override
         public void doOnLine(String line) {
             int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
-            keepLeftmostArrays(metaspaceMemory, expectedCount, () -> {
-                MyClassLoader m = new MyClassLoader("D:\\eden\\gitworkspace\\letscode\\tntrip\\understandlambda\\hilambda\\build\\classes\\main\\");
-                Class c = m.findClass("com.tntrip.HelloWorld");
-                return c;
-            });
+            keepLeftmostArrays(metaspaceMemory, expectedCount, () -> new MyClassLoader().findClass("com.tntrip.HelloWorld"));
         }
 
         @Override

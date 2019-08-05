@@ -13,7 +13,7 @@
 build/
 out/
 ServiceTreeInfo/
-
+hilambda/src/main/java/bigfile.data
 # Ignore Gradle GUI config
 gradle-app.setting
 

@@ -45,7 +45,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                break;
                             }
                         }
                     }
@@ -67,7 +67,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
             int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
             keepLeftmostArrays(internedString, expectedCount, () -> {
                 StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < 1024; i++) {
+                while (sb.length() < (M / 2)) {
                     sb.append(UUID.randomUUID().toString());
                 }
                 return sb.toString().intern();
@@ -168,7 +168,10 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
         }
         if (expectedCount < orgnSize) {
             for (int i = orgnSize - 1; i >= expectedCount; i--) {
-                list.remove(i);
+                T rm = list.remove(i);
+                if (rm instanceof Thread) {
+                    ((Thread) rm).interrupt();
+                }
             }
             System.out.println(String.format("Remove Objects, removedCount=%d, expectedCount=%d, orgnSize=%d", (orgnSize - expectedCount), expectedCount, orgnSize));
             System.out.println();

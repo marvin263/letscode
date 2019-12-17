@@ -40,6 +40,7 @@ configure(javaProjects) {
     sourceCompatibility = vJavaLang
 
     repositories {
+        maven { url 'http://nexus.tuniu.org/nexus/content/groups/public/' }
         mavenCentral()
         maven { url 'http://code.alibabatech.com/mvn/releases/' }
 

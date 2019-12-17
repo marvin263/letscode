@@ -1,0 +1,17 @@
+
+group 'ocr'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'war'
+
+repositories {
+    maven{url 'http://nexus.tuniu.org/nexus/content/groups/public/'}
+}
+
+dependencies {
+//    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.7.RELEASE'
+    compile 'org.bytedeco.javacpp-presets:tesseract-platform:3.05.01-1.4'
+    compile 'net.sourceforge.tess4j:tess4j:3.4.0'
+    compile group: 'org.bytedeco.javacpp-presets', name: 'leptonica-platform', version: '1.74.4-1.4'
+}

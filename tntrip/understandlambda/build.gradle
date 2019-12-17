@@ -1,4 +1,4 @@
-def vJavaLang = '1.8'
+def vJavaLang = '1.7'
 
 def javaProjects = [
         project(':hilambda'),
@@ -36,8 +36,8 @@ configure(javaProjects) {
         options.encoding = 'UTF-8'
     }
 
-    targetCompatibility = vJavaLang
-    sourceCompatibility = vJavaLang
+    targetCompatibility = 1.7
+    sourceCompatibility = 1.8
 
     repositories {
         mavenCentral()

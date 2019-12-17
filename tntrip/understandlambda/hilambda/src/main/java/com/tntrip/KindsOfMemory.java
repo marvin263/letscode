@@ -2,6 +2,8 @@ package com.tntrip;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -32,6 +34,20 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
     private List<String> internedString = new ArrayList<>();
     private List<Thread> createdThreads = new ArrayList<>();
 
+
+    public class GetPidCase implements EachCase {
+        @Override
+        public void doOnLine(String line) {
+            RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+            System.out.println(runtimeMXBean.getName().split("@")[0]);
+            System.out.println();
+        }
+
+        @Override
+        public String[] prefix() {
+            return new String[]{"p", "Get pid"};
+        }
+    }
 
     public class CreateThreadCase implements EachCase {
         @Override
@@ -93,9 +109,12 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
                 try {
                     RandomAccessFile raf = new RandomAccessFile(f, "rw");
                     FileChannel channel = raf.getChannel();
+                    int size = new Random().nextInt((int) (length - (length * 0.05)));
                     MappedByteBuffer buf = channel.map(FileChannel.MapMode.READ_WRITE,
                             new Random().nextInt((int) length / 100),
-                            new Random().nextInt((int) (length - (length * 0.05))));
+                            size);
+                    char aChar = buf.getChar();
+                    System.out.println(aChar);
                     return buf;
                 } catch (Exception e) {
                     e.printStackTrace();

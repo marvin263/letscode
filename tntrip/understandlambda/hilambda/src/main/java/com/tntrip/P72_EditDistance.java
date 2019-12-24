@@ -12,7 +12,7 @@ public class P72_EditDistance {
                 return new int[]{curPos[0] - 1, curPos[1] - 1};
             }
         },
-        DELETE {
+        REMOVE {
             @Override
             public int[] prevPosition(int[] curPos, StringBuilder curSb, String target) {
                 showProgress("Before: ", curPos, curSb, target);

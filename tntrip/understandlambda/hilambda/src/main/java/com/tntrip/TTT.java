@@ -1,13 +1,16 @@
 package com.tntrip;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Semaphore;
 import java.util.function.Function;
 
 /**
  * Created by gejinfeng on 2017/12/2.
- sos
+ * sos
+ *
  * @author gejinfeng
  * @date 2017/12/2
  */
@@ -16,15 +19,9 @@ public class TTT {
     private Map<Integer, Integer> cache = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
-        Semaphore s = new Semaphore(10);
-        while (true){
-        try {
-            s.acquire();
-            System.out.println(s.availablePermits());
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }}
+        String s = "{\"a\":\"av\", \"b\":\"bv\"}";
+        System.out.println(s);
+        System.out.println();
 
     }
 

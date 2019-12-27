@@ -2,7 +2,10 @@ package com.tntrip;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 public class BBB {
     public List<String> letterCasePermutation(String S) {
@@ -55,5 +58,12 @@ public class BBB {
         System.out.println(b.switchCase('Q'));
 
         System.out.println(b.letterCasePermutation("a1b"));
+
+        TreeMap<String, String> d1 = new TreeMap<>();
+        HashMap<String, String> d2 = new HashMap<>();
+        LinkedHashMap<String, String> d3 = new LinkedHashMap<>();
+        System.out.println(d2.get(null));
+        System.out.println(d3.get(null));
+        System.out.println(d1.get(null));
     }
 }

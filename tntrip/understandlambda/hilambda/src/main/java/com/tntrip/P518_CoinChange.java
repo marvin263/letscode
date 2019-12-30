@@ -6,6 +6,10 @@ public class P518_CoinChange {
     public static final int NOT_EXIST = -1;
 
     public int change(int amount, int[] coins) {
+        // 要得到金额0，不用任何硬币，也算是一种方式
+        if(amount == 0){
+            return 1;
+        }
         // 金额为i时，硬币组合方式 的数量
         int[] dp = new int[amount + 1];
         // 金额为0时，硬币组合方式 是 NOT_EXIST
@@ -46,7 +50,13 @@ public class P518_CoinChange {
 
 
     public int cddhange(int amount, int[] coins) {
-        // 前i个币，金额j，硬币组合的 个数
+        // 要得到金额0，不用任何硬币，也算是一种方式
+        if(amount == 0){
+            return 1;
+        }
+        // 前i个币
+        // 金额j
+        // 硬币组合的 个数
         int[][] dp = new int[coins.length + 1][amount + 1];
         for (int i = 0; i < dp.length; i++) {
             Arrays.fill(dp[i], NOT_EXIST);
@@ -59,38 +69,40 @@ public class P518_CoinChange {
                 // 金额 和 该硬币c 相等
                 if (j - c == 0) {
                     if (dp[i][j] == NOT_EXIST) {
-                        dp[i][j] = 1;
+                        dp[i][j] = 1 + dpValue(dp, i, j - c) + dpValue(dp, i - 1, j);
                     }
                     // 使用前i个硬币，在使用硬币c前，已经可以得到总金额j啦，所以，而，这次硬币c也能得到，所以，需要加1
                     else {
-                        dp[i][j] += (dp[i][j] == NOT_EXIST) ? 0 : dp[i][j];
+                        dp[i][j] = aaa(dpValue(dp, i, j - c) + dpValue(dp, i - 1, j));
                     }
                 }
                 // 不使用 该硬币c 时，即 (j-c)
                 else if (j - c > 0) {
                     if (dp[i][j] == NOT_EXIST) {
-                        dp[i][j] = (dp[i][j - c] == NOT_EXIST && dp[i][j] == NOT_EXIST)
-                                ? NOT_EXIST :
-                                (
-                                        (dp[i][j - c] == NOT_EXIST ? 0 : dp[i][j - c]) +
-                                                (dp[i][j] == NOT_EXIST ? 0 : dp[i][j])
-                                );
+                        dp[i][j] = aaa(dpValue(dp, i, j - c) + dpValue(dp, i - 1, j));
                     } else {
-                        dp[i][j] = (dp[i][j - c] == NOT_EXIST && dp[i][j] == NOT_EXIST)
-                                ? NOT_EXIST :
-                                (
-                                        (dp[i][j - c] == NOT_EXIST ? 0 : dp[i][j - c]) +
-                                                (dp[i][j] == NOT_EXIST ? 0 : dp[i][j])
-                                );
+                        dp[i][j] = aaa(dpValue(dp, i, j - c) + dpValue(dp, i - 1, j));
                     }
                 }
                 // do nothing
                 else {
-                    dp[i][j] = dp[i][j];
+                    dp[i][j] = dp[i - 1][j];
                 }
             }
         }
         return Math.max(dp[coins.length][amount], 0);
+    }
+
+    private int dpValue(int[][] dp, int i, int j) {
+        if (dp[i][j] == NOT_EXIST) {
+            return 0;
+        }
+        return dp[i][j];
+    }
+
+    private int aaa(int val) {
+        if (val <= 0) return NOT_EXIST;
+        return val;
     }
 
 

@@ -46,12 +46,14 @@ public class P518_CoinChange {
 
 
     public int cddhange(int amount, int[] coins) {
+        // 前i个币，金额j，硬币组合的 个数
         int[][] dp = new int[coins.length + 1][amount + 1];
         for (int i = 0; i < dp.length; i++) {
             Arrays.fill(dp[i], NOT_EXIST);
         }
 
         for (int i = 1; i <= coins.length; i++) {
+            // 每一个硬币
             int c = coins[i - 1];
             for (int j = 1; j <= amount; j++) {
                 // 金额 和 该硬币c 相等
@@ -61,26 +63,30 @@ public class P518_CoinChange {
                     }
                     // 使用前i个硬币，在使用硬币c前，已经可以得到总金额j啦，所以，而，这次硬币c也能得到，所以，需要加1
                     else {
-                        dp[i][j] = (dp[i - 1][j - c] == NOT_EXIST && dp[i - 1][j] == NOT_EXIST) ? NOT_EXIST :
-                                (((dp[i - 1][j - c] == NOT_EXIST ? 0 : dp[i - 1][j - c]) +
-                                        (dp[i - 1][j] == NOT_EXIST ? 0 : dp[i - 1][j])));
+                        dp[i][j] += (dp[i][j] == NOT_EXIST) ? 0 : dp[i][j];
                     }
                 }
                 // 不使用 该硬币c 时，即 (j-c)
                 else if (j - c > 0) {
                     if (dp[i][j] == NOT_EXIST) {
-                        dp[i][j] = (dp[i - 1][j - c] == NOT_EXIST && dp[i - 1][j] == NOT_EXIST) ? NOT_EXIST :
-                                (((dp[i - 1][j - c] == NOT_EXIST ? 0 : dp[i - 1][j - c]) +
-                                        (dp[i - 1][j] == NOT_EXIST ? 0 : dp[i - 1][j])));
+                        dp[i][j] = (dp[i][j - c] == NOT_EXIST && dp[i][j] == NOT_EXIST)
+                                ? NOT_EXIST :
+                                (
+                                        (dp[i][j - c] == NOT_EXIST ? 0 : dp[i][j - c]) +
+                                                (dp[i][j] == NOT_EXIST ? 0 : dp[i][j])
+                                );
                     } else {
-                        dp[i][j] = (dp[i - 1][j - c] == NOT_EXIST && dp[i - 1][j] == NOT_EXIST) ? NOT_EXIST :
-                                (((dp[i - 1][j - c] == NOT_EXIST ? 0 : dp[i - 1][j - c]) +
-                                        (dp[i - 1][j] == NOT_EXIST ? 0 : dp[i - 1][j])));
+                        dp[i][j] = (dp[i][j - c] == NOT_EXIST && dp[i][j] == NOT_EXIST)
+                                ? NOT_EXIST :
+                                (
+                                        (dp[i][j - c] == NOT_EXIST ? 0 : dp[i][j - c]) +
+                                                (dp[i][j] == NOT_EXIST ? 0 : dp[i][j])
+                                );
                     }
                 }
                 // do nothing
                 else {
-
+                    dp[i][j] = dp[i][j];
                 }
             }
         }

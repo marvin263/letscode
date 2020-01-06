@@ -35,7 +35,7 @@ public class P1143_LongestCommonSubsequence {
 
     public static void main(String[] args) {
         P1143_LongestCommonSubsequence p = new P1143_LongestCommonSubsequence();
-        System.out.println(p.longestCommonSubsequence("abcde", "ace"));//3
+        System.out.println(p.longestCommonSubsequence("abcxacmnk", "mnkabc"));//3
         System.out.println(p.longestCommonSubsequence("abc", "abc"));//3
         System.out.println(p.longestCommonSubsequence("abc", "def"));//0
     }

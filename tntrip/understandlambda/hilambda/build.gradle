@@ -9,6 +9,6 @@
     compile group: 'org.apache.poi', name: 'poi', version: '3.15'
     // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.15'
-    compile ('org.apache.zookeeper:zookeeper:3.4.6')
+    compile ('org.apache.zookeeper:zookeeper:3.5.5')
     compile("org.apache.curator:curator-examples:4.2.0")
 }

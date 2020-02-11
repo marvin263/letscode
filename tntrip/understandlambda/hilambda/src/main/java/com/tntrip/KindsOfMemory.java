@@ -56,7 +56,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
     public class CreateThreadCase implements EachCase {
         @Override
         public void doOnLine(String line) {
-            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
+            int expectedCount = Integer.parseInt(line.substring(prefix()[0].length()));
             keepLeftmostArrays(createdThreads, expectedCount, () -> {
                 Thread t = new Thread() {
                     @Override
@@ -84,7 +84,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
     public class AllocateInternedStringCase implements EachCase {
         @Override
         public void doOnLine(String line) {
-            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
+            int expectedCount = Integer.parseInt(line.substring(prefix()[0].length()));
             keepLeftmostArrays(internedString, expectedCount, () -> {
                 StringBuilder sb = new StringBuilder();
                 while (sb.length() < (M / 2)) {
@@ -106,7 +106,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
         @Override
         public void doOnLine(String line) {
             String mmFile = Thread.currentThread().getContextClassLoader().getResource("").getPath() + MM_FILE_NAME;
-            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
+            int expectedCount = Integer.parseInt(line.substring(prefix()[0].length()));
             keepLeftmostArrays(mmapMemory, expectedCount, () -> {
                 File f = new File(mmFile);
                 long length = f.length();
@@ -137,7 +137,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
     public class AllocateMetaspaceCase implements EachCase {
         @Override
         public void doOnLine(String line) {
-            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
+            int expectedCount = Integer.parseInt(line.substring(prefix()[0].length()));
             keepLeftmostArrays(metaspaceMemory, expectedCount, () -> new MyClassLoader().findClass("com.tntrip.HelloWorld"));
         }
 
@@ -150,7 +150,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
     public class AllocateHeapCase implements EachCase {
         @Override
         public void doOnLine(String line) {
-            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
+            int expectedCount = Integer.parseInt(line.substring(prefix()[0].length()));
             keepLeftmostArrays(heapMemory, expectedCount, () -> new byte[M]);
         }
 
@@ -163,7 +163,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
     public class AllocateDirectMemoryCase implements EachCase {
         @Override
         public void doOnLine(String line) {
-            int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
+            int expectedCount = Integer.parseInt(line.substring(prefix()[0].length()));
             keepLeftmostArrays(directMemory, expectedCount, () -> ByteBuffer.allocateDirect(M));
         }
 

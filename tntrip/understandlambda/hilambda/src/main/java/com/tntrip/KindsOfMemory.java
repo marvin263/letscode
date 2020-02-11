@@ -1,5 +1,7 @@
 package com.tntrip;
 
+import com.tntrip.get24.Get24;
+
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.lang.management.ManagementFactory;
@@ -8,8 +10,10 @@ import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -194,6 +198,28 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
             }
             System.out.println(String.format("Remove Objects, removedCount=%d, expectedCount=%d, orgnSize=%d", (orgnSize - expectedCount), expectedCount, orgnSize));
             System.out.println();
+        }
+    }
+
+    public class CalcNumCase implements EachCase {
+        private Get24 g = new Get24();
+
+        @Override
+        public void doOnLine(String line) {
+            String[] strNumbers = line.substring(prefix()[0].length()).split("\\s+");
+            int[] nums = Arrays.stream(strNumbers).map(Integer::parseInt).mapToInt(e -> e).toArray();
+            Set<String> allFormulas = g.findAllFormulas(nums);
+
+            for (String formula : allFormulas) {
+                System.out.println(formula);
+            }
+            System.out.println("Total: " + allFormulas.size());
+            System.out.println();
+        }
+
+        @Override
+        public String[] prefix() {
+            return new String[]{"c", "Get 24"};
         }
     }
 

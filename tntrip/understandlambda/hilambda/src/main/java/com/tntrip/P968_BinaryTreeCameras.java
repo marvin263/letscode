@@ -54,8 +54,9 @@ public class P968_BinaryTreeCameras {
             throw new RuntimeException("Root node value should not be null");
         }
         TreeNode root = new TreeNode(intValues[0]);
-        TreeNode[] nodes = new TreeNode[mid + 1];
-        nodes[0] = new TreeNode(intValues[0]);
+        //TreeNode[] nodes = new TreeNode[mid + 1];
+        //nodes[0] = new TreeNode(intValues[0]);
+        return null;
     }
 
     public static void main(String[] args) {

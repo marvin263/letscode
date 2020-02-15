@@ -3,7 +3,7 @@ def vJavaLang = '1.7'
 def javaProjects = [
         project(':hilambda'),
         project(':jmh-samples'),
-		project(':jcstress-samples')		
+        project(':jcstress-samples')
 ]
 
 group 'com.tntrip.understand'
@@ -40,7 +40,6 @@ configure(javaProjects) {
     sourceCompatibility = 1.8
 
     repositories {
-        //maven { url 'http://nexus.tuniu.org/nexus/content/groups/public/' }
         mavenCentral()
         maven { url 'http://code.alibabatech.com/mvn/releases/' }
 

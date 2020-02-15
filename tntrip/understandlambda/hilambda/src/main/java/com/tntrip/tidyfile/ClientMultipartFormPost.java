@@ -24,7 +24,7 @@
  * <http://www.apache.org/>.
  *
  */
-package org.apache.http.examples.client;
+package com.tntrip.tidyfile;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -53,14 +53,14 @@ public class ClientMultipartFormPost {
         try {
             HttpPost httppost = new HttpPost("http://192.168.0.105:5000/webapi/entry.cgi?api=SYNO.FileStation.Upload&method=upload&version=2");
             
-            httppost.addHeader("Cookie","id=WkUiJa2tZF0YA1780NNN555507");
+            httppost.addHeader("Cookie","id=eNfL.iMPUCwX.1780NNN555507");
             
             
-            FileBody fileBody = new FileBody(new File("C:\\Users\\libin\\Desktop\\1-160P4230Q1311.jpg"), ContentType.DEFAULT_BINARY, "1-160P4230Q1311.jpg");
+            FileBody fileBody = new FileBody(new File("C:\\Users\\libing\\Desktop\\1-160P4230Q1311.jpg"), ContentType.DEFAULT_BINARY, "1-160P4230Q1311.jpg");
 
             HttpEntity reqEntity = MultipartEntityBuilder.create()
-                    .addPart("overwrite", new StringBody("true", ContentType.TEXT_PLAIN))
-                    .addPart("path", new StringBody("/video/v1d5/v124", ContentType.TEXT_PLAIN))
+                    .addPart("overwrite", new StringBody("false", ContentType.TEXT_PLAIN))
+                    .addPart("path", new StringBody("/video/v15/v124", ContentType.TEXT_PLAIN))
                     .addPart("create_parents", new StringBody("true", ContentType.TEXT_PLAIN))
                     .addPart("filename", fileBody)
                     .setLaxMode()

@@ -13,5 +13,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.drewnoakes/metadata-extractor
     compile group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.13.0'
+    compile 'org.apache.httpcomponents:httpmime:4.5.8'
 
 }

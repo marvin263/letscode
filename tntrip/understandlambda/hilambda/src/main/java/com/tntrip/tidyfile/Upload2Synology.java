@@ -48,7 +48,7 @@ import java.util.regex.Pattern;
 public class Upload2Synology {
 
     private static final String ALREADY_UPLOADED_FILES = "D:\\eden\\gitworkspace\\letscode\\tntrip\\understandlambda\\hilambda\\src\\main\\java\\com\\tntrip\\tidyfile\\alreadyUploaded.txt";
-    private static final ExecutorService ES = Executors.newFixedThreadPool(2);
+    private static final ExecutorService ES = Executors.newFixedThreadPool(3);
 
     public static final FileWriter ALREADY_UPLOADED_FILE_WRITER = createSuccessFile();
 
@@ -61,7 +61,7 @@ public class Upload2Synology {
                             RequestConfig.copy(RequestConfig.DEFAULT)
                                     .setSocketTimeout(20 * 60 * 1000)
                                     .setConnectTimeout(1 * 60 * 1000)
-                                    .setConnectionRequestTimeout(1 * 60 * 1000)
+                                    .setConnectionRequestTimeout(21 * 60 * 1000)
                                     .build())
                     .build();
         } catch (Exception e) {
@@ -318,6 +318,7 @@ public class Upload2Synology {
                 try {
                     uploadOneFile(fp, loginInCookie);
                 } catch (Exception e) {
+                    System.out.println("Error uploading file: " + fp);
                     e.printStackTrace();
                 } finally {
                     cdl.countDown();

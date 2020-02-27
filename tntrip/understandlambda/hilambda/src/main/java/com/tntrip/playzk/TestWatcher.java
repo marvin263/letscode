@@ -1,50 +1,98 @@
 package com.tntrip.playzk;
 
+import com.tntrip.tidyfile.TnStringUtils;
+import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class TestWatcher {
     private static final Logger LOG = LoggerFactory.getLogger(TestWatcher.class);
-    private static final String CONNECT_STRING = "192.168.86.158:2181,192.168.86.158:2182,192.168.86.158:2183";
-    private static final int SESSION_TIMEOUT_IN_MILLS = 30000;
+    private static final String CONNECT_STRING = "192.168.86.203:2181,192.168.86.204:2181,192.168.86.205:2181,192.168.86.206:2181,192.168.86.207:2181";
+    //private static final String CONNECT_STRING = "192.168.86.203:2181";
+
+    // minSessionTimeout 和 maxSessionTimeout，单位ms
+    // 默认为2*tickTime和20*tickTime
+    private static final int SESSION_TIMEOUT_IN_MILLS = 40000 * 5;
 
     private ZooKeeper zk;
     private String note;
-    private static AtomicLong ROUND = new AtomicLong(0);
-    private AtomicLong global = new AtomicLong(0);
-    private AtomicLong explicit = new AtomicLong(0);
+    private int processId;
+    private static AtomicLong ZKROUND = new AtomicLong(0);
+
+    private static AtomicLong GLOBAL = new AtomicLong(0);
+    private static AtomicLong EXPLICIT = new AtomicLong(0);
+
+    public TestWatcher() throws Exception {
+        processId = TnStringUtils.getProcessID();
+        createZK();
+    }
+
+    private void createZK() throws Exception {
+        System.out.println("Start Process: " + processId);
+        if (zk != null) {
+            zk.close(10 * 1000);
+        }
+        zk = new ZooKeeper(CONNECT_STRING, SESSION_TIMEOUT_IN_MILLS, new GlobalWatcher());
+        System.out.println("Create new ZooKeeper instance. ZKROUND=" + ZKROUND.incrementAndGet());
+        GLOBAL.set(0L);
+        EXPLICIT.set(0L);
+        setWatches(zk);
+        System.out.println(readableContext());
+    }
+
+    private void setWatches(ZooKeeper zk) throws Exception {
+        ExplicitWatcher ew = new ExplicitWatcher();
+        String str2 = "/explicitWatcher";
+        
+        long b1 = System.currentTimeMillis();
+        System.out.println("explicitWatcher begin");
+        if (zk.exists(str2, false) == null) {
+            zk.create(str2, "".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        }
+        System.out.println("explicitWatcher end, cost: " + (System.currentTimeMillis() - b1));
+        
+        zk.getChildren(str2, ew);
+        zk.getData(str2, ew, new Stat());
+
+        String str1 = "/globalWatcher";
+        if (zk.exists(str1, false) == null) {
+            zk.create(str1, "".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+        }
+
+        long b2 = System.currentTimeMillis();
+        System.out.println("globalWatcher begin");
+        zk.getChildren(str1, true);
+        System.out.println("globalWatcher end, cost: " + (System.currentTimeMillis() - b2));
+        zk.getData(str1, true, new Stat());
+    }
 
     public class GlobalWatcher implements Watcher {
         @Override
         public void process(WatchedEvent event) {
-            String info = assembleInfo(global);
-            LOG.info(info + " GlobalWatcher: " + event);
-            String path = event.getPath();
-            if (path != null && event.getType() != Event.EventType.NodeDeleted) {
+            GLOBAL.incrementAndGet();
+            LOG.info("GlobalWatcher: " + event + ". " + readableContext());
+            // expire就得创建 ZooKeeper实例
+            if (event.getState() == Event.KeeperState.Expired) {
                 try {
-                    zk.getChildren(event.getPath(), true);
-                    zk.getData(event.getPath(), true, new Stat());
-                    zk.exists("/watchIsTrue/w2", true);
+                    createZK();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-
             }
 
-            if (event.getState() == Event.KeeperState.Expired) {
-                LOG.info("GlobalWatcher RECEIVED Event.KeeperState.Expired");
+            // path上能设置事件，那就设置上事件 
+            String path = event.getPath();
+            if (path != null && event.getType() != Event.EventType.NodeDeleted) {
                 try {
-                    ROUND.incrementAndGet();
-                    zk = create(CONNECT_STRING, SESSION_TIMEOUT_IN_MILLS, new GlobalWatcher());
-                    setWatches(zk);
+                    zk.getChildren(path, true);
+                    zk.getData(path, true, new Stat());
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -52,16 +100,29 @@ public class TestWatcher {
         }
     }
 
-    private String assembleInfo(AtomicLong globalOrExplicit) {
-        return "Round--" + ROUND.get() + ", " + note + "~~" + globalOrExplicit.getAndIncrement();
+    private String readableContext() {
+        return TnStringUtils.format("Process--{0}, zkRound={1}, sessionId={2}, GlobalWatcherRound={3}, ExplicitWatcherRound={4}",
+                processId + "",
+                ZKROUND.get() + "",
+                zk.getSessionId() + "",
+                GLOBAL.get() + "",
+                EXPLICIT.get() + "");
     }
 
     public class ExplicitWatcher implements Watcher {
         @Override
         public void process(WatchedEvent event) {
-            String info = assembleInfo(explicit);
-            LOG.info(info + " ExplicitWatcher: " + event);
-
+            EXPLICIT.incrementAndGet();
+            LOG.info("ExplicitWatcher: " + event + ". " + readableContext());
+            // expire就得创建 ZooKeeper实例
+            if (event.getState() == Event.KeeperState.Expired) {
+                try {
+                    createZK();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            // path上能设置事件，那就设置上事件 
             String path = event.getPath();
             if (path != null && event.getType() != Event.EventType.NodeDeleted) {
                 try {
@@ -71,48 +132,15 @@ public class TestWatcher {
                     throw new RuntimeException(e);
                 }
             }
-
-            if (event.getState() == Event.KeeperState.Expired) {
-                LOG.info("ExplicitWatcher RECEIVED Event.KeeperState.Expired");
-            }
         }
     }
 
-
-    public TestWatcher(String note) throws Exception {
-        this.note = note + "--" + getProcessID();
-        this.zk = create(CONNECT_STRING, SESSION_TIMEOUT_IN_MILLS, new GlobalWatcher());
-        setWatches(this.zk);
-    }
-
-    private ZooKeeper create(String connectString, int sessionTimeout, Watcher watcher) throws Exception {
-        return new ZooKeeper(connectString, sessionTimeout, watcher);
-    }
-
-    private void setWatches(ZooKeeper zk) throws Exception {
-        ExplicitWatcher ew = new ExplicitWatcher();
-        String str2 = "/explicitWatcher";
-        zk.getChildren(str2, ew);
-        zk.getData(str2, ew, new Stat());
-
-        String str1 = "/watchIsTrue";
-        zk.getChildren(str1, true);
-        zk.getData(str1, true, new Stat());
-        zk.getData(str1 + "/w1", true, new Stat());
-        zk.exists(str1 + "/w2", true);
-    }
-
-    public static int getProcessID() {
-        RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
-        System.out.println(runtimeMXBean.getName());
-        return Integer.valueOf(runtimeMXBean.getName().split("@")[0]);
-    }
 
     /**
      * @param args
      */
     public static void main(String[] args) throws Exception {
-        TestWatcher tw1 = new TestWatcher(args[0]);
+        TestWatcher tw1 = new TestWatcher();
         Thread.sleep(1000000000);
     }
 }

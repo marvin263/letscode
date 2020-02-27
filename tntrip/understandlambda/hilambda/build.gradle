@@ -8,7 +8,7 @@ dependencies {
     compile group: 'org.apache.poi', name: 'poi', version: '3.15'
     // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.15'
-    compile('org.apache.zookeeper:zookeeper:3.5.5')
+    compile('org.apache.zookeeper:zookeeper:3.5.7')
     compile("org.apache.curator:curator-examples:4.2.0")
 
     // https://mvnrepository.com/artifact/com.drewnoakes/metadata-extractor

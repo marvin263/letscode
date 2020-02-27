@@ -1,6 +1,8 @@
 package com.tntrip.tidyfile;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -481,6 +483,12 @@ public class TnStringUtils {
         } catch (NumberFormatException e) {
             return dftValue;
         }
+    }
+
+    public static int getProcessID() {
+        RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+        System.out.println(runtimeMXBean.getName());
+        return Integer.parseInt(runtimeMXBean.getName().split("@")[0]);
     }
 }
 

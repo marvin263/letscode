@@ -1,7 +1,7 @@
-def vJavaLang = '1.7'
 
 def javaProjects = [
         project(':hilambda'),
+        project(':hello-site'),
         project(':jmh-samples'),
         project(':jcstress-samples')
 ]
@@ -57,17 +57,6 @@ configure(javaProjects) {
     eclipseJdt.onlyIf { false }
     cleanEclipseJdt.onlyIf { false }
 }
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'com.github.erizo.gradle:jcstress-gradle-plugin:0.8.1'
-    }
-}
-
-apply plugin: 'jcstress'
 
 repositories {
     jcenter()

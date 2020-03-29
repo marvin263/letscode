@@ -5,6 +5,7 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.tntrip.get24.Get24;
+import com.tntrip.tidyfile.DateUtil;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -15,10 +16,13 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.LockSupport;
 import java.util.function.Supplier;
 
 /**
@@ -259,6 +263,40 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
         @Override
         public String[] prefix() {
             return new String[]{"m", "Get file metadata"};
+        }
+    }
+
+    public class TestLockSupportCase implements EachCase {
+        private Thread parkThread;
+        public TestLockSupportCase() {
+            parkThread = new Thread(() -> {
+                AtomicInteger count = new AtomicInteger(0);
+                while (true) {
+                    try {
+                        LockSupport.park();
+                        System.out.println(DateUtil.date2String(new Date(), DateUtil.YYYY_MM_DD_HH_MM_SS) +
+                                ": park done, count= " + count.getAndIncrement() +
+                                ", interrupted=" + Thread.currentThread().isInterrupted());
+                        if (Thread.currentThread().isInterrupted()) {
+                            Thread.interrupted();
+                        }
+                        System.out.println("After recover interrupt status, interrupted:" + Thread.currentThread().isInterrupted());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            parkThread.start();
+        }
+
+        @Override
+        public void doOnLine(String line) {
+            parkThread.interrupt();
+        }
+
+        @Override
+        public String[] prefix() {
+            return new String[]{"u", "park, unpark thread"};
         }
     }
 

@@ -268,6 +268,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
 
     public class TestLockSupportCase implements EachCase {
         private Thread parkThread;
+
         public TestLockSupportCase() {
             parkThread = new Thread(() -> {
                 AtomicInteger count = new AtomicInteger(0);
@@ -297,6 +298,27 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
         @Override
         public String[] prefix() {
             return new String[]{"u", "park, unpark thread"};
+        }
+    }
+
+    public class RemainderIsZero implements EachCase {
+        @Override
+        public void doOnLine(String line) {
+            int n = Integer.parseInt(line.substring(prefix()[0].length()));
+            int middle = (n % 2 == 0) ? n / 2 : (n / 2) + 1;
+            int count = 0;
+            for (int i = 2; i <= middle; i++) {
+                if (n % i == 0) {
+                    System.out.println(i);
+                    count++;
+                }
+            }
+            System.out.println(n + "--> finds " + count + " factors");
+        }
+
+        @Override
+        public String[] prefix() {
+            return new String[]{"f", "Factors whose remainder is 0"};
         }
     }
 

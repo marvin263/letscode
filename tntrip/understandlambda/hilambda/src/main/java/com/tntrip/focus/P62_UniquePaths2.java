@@ -1,4 +1,4 @@
-package com.tntrip;
+package com.tntrip.focus;
 
 public class P62_UniquePaths2 {
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {

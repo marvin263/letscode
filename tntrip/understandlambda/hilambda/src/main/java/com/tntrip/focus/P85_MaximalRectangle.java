@@ -1,4 +1,4 @@
-package com.tntrip;
+package com.tntrip.focus;
 
 public class P85_MaximalRectangle {
     public static int maximalRectangle(char[][] matrix) {

@@ -1,4 +1,4 @@
-package com.tntrip;
+package com.tntrip.focus;
 
 public class P494_TargetSum {
     public int findTargetSumWays(int[] nums, int S) {

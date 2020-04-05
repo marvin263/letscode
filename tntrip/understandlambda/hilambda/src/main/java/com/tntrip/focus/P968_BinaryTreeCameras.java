@@ -1,4 +1,4 @@
-package com.tntrip;
+package com.tntrip.focus;
 
 public class P968_BinaryTreeCameras {
     public static class TreeNode {

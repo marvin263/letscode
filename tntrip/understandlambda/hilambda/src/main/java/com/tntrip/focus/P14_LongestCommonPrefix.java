@@ -1,4 +1,4 @@
-package com.tntrip;
+package com.tntrip.focus;
 
 public class P14_LongestCommonPrefix {
     public String longestCommonPrefix(String[] strs) {

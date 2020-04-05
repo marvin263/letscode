@@ -1,4 +1,4 @@
-package com.tntrip;
+package com.tntrip.focus;
 
 import java.util.Stack;
 

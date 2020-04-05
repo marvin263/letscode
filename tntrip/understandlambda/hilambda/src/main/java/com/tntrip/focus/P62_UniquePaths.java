@@ -1,4 +1,4 @@
-package com.tntrip;
+package com.tntrip.focus;
 
 public class P62_UniquePaths {
     public int uniquePaths(int m, int n) {

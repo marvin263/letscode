@@ -1,4 +1,4 @@
-package com.tntrip;
+package com.tntrip.focus;
 
 public class P115_DistinctSubsequences {
     public int numDistinct(String s, String t) {

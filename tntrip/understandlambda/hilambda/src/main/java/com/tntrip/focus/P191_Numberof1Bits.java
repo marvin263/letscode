@@ -1,4 +1,4 @@
-package com.tntrip;
+package com.tntrip.focus;
 
 public class P191_Numberof1Bits {
         // you need to treat n as an unsigned value

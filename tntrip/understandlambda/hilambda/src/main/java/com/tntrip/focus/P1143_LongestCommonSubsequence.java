@@ -1,4 +1,4 @@
-package com.tntrip;
+package com.tntrip.focus;
 
 public class P1143_LongestCommonSubsequence {
     public int longestCommonSubsequence(String text1, String text2) {

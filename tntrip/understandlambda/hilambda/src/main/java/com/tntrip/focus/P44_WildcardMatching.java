@@ -1,4 +1,4 @@
-package com.tntrip;
+package com.tntrip.focus;
 
 public class P44_WildcardMatching {
     public boolean isMatch(String s, String p) {

@@ -1,4 +1,4 @@
-package com.tntrip;
+package com.tntrip.focus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class P1178_NumberOfValidWordsForEachPuzzle4 {
+public class P1178_NumberOfValidWordsForEachPuzzle3 {
     // a=97, z=122
     public static final int[] MASK = {
             1 << 0,//a
@@ -78,23 +78,26 @@ public class P1178_NumberOfValidWordsForEachPuzzle4 {
     }
 
     private Set<Integer> puzzleNums(String puzzle) {
-        int leadingBit = MASK[((int) puzzle.charAt(0)) - 97];
-        int pNum = 0;
-        for (int i = 0; i < puzzle.length(); i++) {
-            pNum = pNum | MASK[((int) puzzle.charAt(i)) - 97];
-        }
+        List<Integer> cur = new ArrayList<>(64);
+        cur.add(MASK[((int) puzzle.charAt(0)) - 97]);
 
-        Set<Integer> set = new HashSet<>(64);
-        for (int i = pNum; i > 0; i = (i - 1) & pNum) {
-            if ((i & leadingBit) != 0) {
-                set.add(i);
-            }
+        for (int i = 1; i < puzzle.length(); i++) {
+            char p = puzzle.charAt(i);
+            addCombination(cur, p);
         }
-        return set;
+        return new HashSet<>(cur);
     }
-    
+
+    private void addCombination(List<Integer> cur, char p) {
+        int idx = ((int) p) - 97;
+        int curSize = cur.size();
+        for (int i = 0; i < curSize; i++) {
+            cur.add(cur.get(i) | MASK[idx]);
+        }
+    }
+
     public static void main(String[] args) {
-        P1178_NumberOfValidWordsForEachPuzzle4 p = new P1178_NumberOfValidWordsForEachPuzzle4();
+        P1178_NumberOfValidWordsForEachPuzzle3 p = new P1178_NumberOfValidWordsForEachPuzzle3();
         String[] words = new String[]{"aaaa", "asas", "able", "ability", "actt", "actor", "access"};
         String[] puzzles = new String[]{"aboveyz", "abrodyz", "abslute", "absoryz", "actresz", "gaswxyz"};
         System.out.println(p.findNumOfValidWords(words, puzzles));

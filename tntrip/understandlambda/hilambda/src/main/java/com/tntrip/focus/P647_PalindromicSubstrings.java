@@ -1,10 +1,11 @@
-package com.tntrip;
+package com.tntrip.focus;
 
-public class P132_PalindromePartitioning {
-    public int minCut(String s) {
+public class P647_PalindromicSubstrings {
+    public int countSubstrings(String s) {
         if (s.length() == 0) {
             return 0;
         }
+
         // 子串s(i--j)时，该子串 是否是 回文子串
         boolean[][] dp = new boolean[s.length()][s.length()];
         int count = 0;
@@ -27,7 +28,7 @@ public class P132_PalindromePartitioning {
                         dp[i][j] = false;
                     }
                 }
-
+                
                 if (dp[i][j]) {
                     count++;
                 }
@@ -37,17 +38,10 @@ public class P132_PalindromePartitioning {
         return count;
     }
 
-    private void fddfdf(boolean[][] dp) {
-        for (int i = 0; i < dp.length; i++) {
-            boolean[] row = dp[i];
-
-        }
-    }
-
     public static void main(String[] args) {
-        P132_PalindromePartitioning p = new P132_PalindromePartitioning();
-        System.out.println(p.minCut("aaa"));//aa
-        System.out.println(p.minCut("abc"));//bab, aba
+        P647_PalindromicSubstrings p = new P647_PalindromicSubstrings();
+        System.out.println(p.countSubstrings("aaa"));//aa
+        System.out.println(p.countSubstrings("abc"));//bab, aba
     }
 
 }

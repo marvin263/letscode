@@ -2,7 +2,7 @@ package com.tntrip.focus;
 
 import java.util.Arrays;
 
-public class P322_CoinChange {
+public class P0322_CoinChange {
     public static final int NOT_EXIST = -1;
 
     public int coinChange(int[] coins, int amount) {
@@ -37,7 +37,7 @@ public class P322_CoinChange {
     }
 
     public static void main(String[] args) {
-        P322_CoinChange p = new P322_CoinChange();
+        P0322_CoinChange p = new P0322_CoinChange();
 
         System.out.println(p.coinChange(new int[]{1, 2, 5}, 11));//3
         System.out.println(p.coinChange(new int[]{2}, 3));//-1

@@ -1,6 +1,6 @@
 package com.tntrip.focus;
 
-public class P62_UniquePaths2 {
+public class P0062_UniquePaths2 {
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
         // 到达 位置(i,j) 总共的路径数量
         int[][] dp = new int[obstacleGrid.length][obstacleGrid[0].length];
@@ -31,7 +31,7 @@ public class P62_UniquePaths2 {
     }
 
     public static void main(String[] args) {
-        P62_UniquePaths2 p = new P62_UniquePaths2();
+        P0062_UniquePaths2 p = new P0062_UniquePaths2();
         System.out.println(p.uniquePathsWithObstacles(new int[][]{{0, 1}}));//2
         System.out.println(p.uniquePathsWithObstacles(new int[][]{{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}));//2
     }

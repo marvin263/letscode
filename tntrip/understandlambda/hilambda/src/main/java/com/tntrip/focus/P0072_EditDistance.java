@@ -1,6 +1,6 @@
 package com.tntrip.focus;
 
-public class P72_EditDistance {
+public class P0072_EditDistance {
     public enum Action {
         REPLACE {
             @Override
@@ -135,7 +135,7 @@ public class P72_EditDistance {
     }
 
     public static void main(String[] args) {
-        P72_EditDistance p = new P72_EditDistance();
+        P0072_EditDistance p = new P0072_EditDistance();
 
         p.showProgress("horse", "ros");
 

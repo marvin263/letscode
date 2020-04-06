@@ -1,13 +1,13 @@
 package com.tntrip.focus;
 
-public class P44_WildcardMatching {
+public class P0044_WildcardMatching {
     public boolean isMatch(String s, String p) {
         return false;
     }
 
 
     public static void main(String[] args) {
-        P44_WildcardMatching p = new P44_WildcardMatching();
+        P0044_WildcardMatching p = new P0044_WildcardMatching();
         System.out.println(p.isMatch("aa", "a"));//false
         System.out.println(p.isMatch("aa", "*"));//true
         System.out.println(p.isMatch("cb", "?a"));//false

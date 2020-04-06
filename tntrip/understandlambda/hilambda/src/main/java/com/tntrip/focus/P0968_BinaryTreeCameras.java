@@ -1,6 +1,6 @@
 package com.tntrip.focus;
 
-public class P968_BinaryTreeCameras {
+public class P0968_BinaryTreeCameras {
     public static class TreeNode {
         int val;
         TreeNode left;
@@ -60,7 +60,7 @@ public class P968_BinaryTreeCameras {
     }
 
     public static void main(String[] args) {
-        P968_BinaryTreeCameras p = new P968_BinaryTreeCameras();
+        P0968_BinaryTreeCameras p = new P0968_BinaryTreeCameras();
         //Integer[] intValues1 = new Integer[]{0, 0, null, 0, 0};
         Integer[] intValues2 = new Integer[]{0, 0, null, 0, null, 0, null, null, 0};
         //TreeNode treeNode1 = p.toTree(intValues1);

@@ -1,6 +1,6 @@
 package com.tntrip.focus;
 
-public class P85_MaximalRectangle {
+public class P0085_MaximalRectangle {
     public static int maximalRectangle(char[][] matrix) {
         int verticalLength = matrix.length;
         int horizontalLength = matrix[0].length;

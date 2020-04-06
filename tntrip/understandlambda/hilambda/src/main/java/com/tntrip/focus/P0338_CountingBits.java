@@ -2,7 +2,7 @@ package com.tntrip.focus;
 
 import java.util.Arrays;
 
-public class P338_CountingBits {
+public class P0338_CountingBits {
     public int[] countBits(int num) {
         int[] array = new int[num + 1];
         for (int n = 1; n <= num; n++) {
@@ -14,7 +14,7 @@ public class P338_CountingBits {
     }
 
     public static void main(String[] args) {
-        P338_CountingBits p = new P338_CountingBits();
+        P0338_CountingBits p = new P0338_CountingBits();
         System.out.println(Arrays.toString(p.countBits(500)));
     }
 }

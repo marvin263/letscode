@@ -1,6 +1,6 @@
 package com.tntrip.focus;
 
-public class P14_LongestCommonPrefix {
+public class P0014_LongestCommonPrefix {
     public String longestCommonPrefix(String[] strs) {
         if (strs == null || strs.length == 0) {
             return "";
@@ -35,7 +35,7 @@ public class P14_LongestCommonPrefix {
     }
 
     public static void main(String[] args) {
-        P14_LongestCommonPrefix p = new P14_LongestCommonPrefix();
+        P0014_LongestCommonPrefix p = new P0014_LongestCommonPrefix();
         String[] strs = {"flower", "flow", "1floght"};
         System.out.println(p.longestCommonPrefix(strs));
     }

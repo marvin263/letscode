@@ -1,6 +1,6 @@
 package com.tntrip.focus;
 
-public class P62_UniquePaths {
+public class P0062_UniquePaths {
     public int uniquePaths(int m, int n) {
         // 到达 位置(i,j) 总共的路径数量
         int[][] dp = new int[m][n];
@@ -26,7 +26,7 @@ public class P62_UniquePaths {
 
 
     public static void main(String[] args) {
-        P62_UniquePaths p = new P62_UniquePaths();
+        P0062_UniquePaths p = new P0062_UniquePaths();
         System.out.println(p.uniquePaths(3, 2));//3
         System.out.println(p.uniquePaths(7, 3));//28
     }

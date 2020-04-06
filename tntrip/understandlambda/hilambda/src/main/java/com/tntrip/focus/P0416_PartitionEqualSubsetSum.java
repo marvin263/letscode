@@ -1,7 +1,7 @@
 package com.tntrip.focus;
 
 
-public class P416_PartitionEqualSubsetSum {
+public class P0416_PartitionEqualSubsetSum {
 
     public boolean canPartition(int[] nums) {
         int sum = 0;
@@ -73,7 +73,7 @@ public class P416_PartitionEqualSubsetSum {
     }
 
     public static void main(String[] args) {
-        P416_PartitionEqualSubsetSum p = new P416_PartitionEqualSubsetSum();
+        P0416_PartitionEqualSubsetSum p = new P0416_PartitionEqualSubsetSum();
 
         System.out.println(p.canPartition2(new int[]{1, 2, 5}));//false
         System.out.println(p.canPartition2(new int[]{1, 5, 11, 5}));//true

@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class P401_BinaryWatch {
+public class P0401_BinaryWatch {
     public static final int N_000000 = 0X00;
     public static final int N_000001 = 0X01;
     public static final int N_000010 = 0X02;
@@ -101,7 +101,7 @@ public class P401_BinaryWatch {
     }
 
     public static void main(String[] args) {
-        P401_BinaryWatch bw = new P401_BinaryWatch();
+        P0401_BinaryWatch bw = new P0401_BinaryWatch();
         List<String> strings = bw.readBinaryWatch(4);
         System.out.println(strings);
     }

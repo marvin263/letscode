@@ -1,6 +1,6 @@
 package com.tntrip.focus;
 
-public class P10_RegExpMatching {
+public class P0010_RegExpMatching {
     /**
      * '.' 匹配任意单个字符
      * '*' 匹配零个或多个前面的那一个元素
@@ -68,7 +68,7 @@ public class P10_RegExpMatching {
 
 
     public static void main(String[] args) {
-        P10_RegExpMatching p = new P10_RegExpMatching();
+        P0010_RegExpMatching p = new P0010_RegExpMatching();
         System.out.println(p.isMatch("aa", "a"));//false
         System.out.println(p.isMatch("aa", "a*"));//true
         System.out.println(p.isMatch("ab", ".*"));//true

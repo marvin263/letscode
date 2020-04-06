@@ -1,6 +1,6 @@
 package com.tntrip.focus;
 
-public class P516_LongestPalindromicSubsequence {
+public class P0516_LongestPalindromicSubsequence {
     public int longestPalindromeSubseq(String s) {
         if (s.length() == 0) {
             return 0;
@@ -34,7 +34,7 @@ public class P516_LongestPalindromicSubsequence {
     }
 
     public static void main(String[] args) {
-        P516_LongestPalindromicSubsequence p = new P516_LongestPalindromicSubsequence();
+        P0516_LongestPalindromicSubsequence p = new P0516_LongestPalindromicSubsequence();
         System.out.println(p.longestPalindromeSubseq("aacdefcaa"));//7
         System.out.println(p.longestPalindromeSubseq("bbbab"));//4
     }

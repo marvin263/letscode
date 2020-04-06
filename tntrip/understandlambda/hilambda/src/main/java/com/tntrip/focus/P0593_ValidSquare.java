@@ -2,7 +2,7 @@ package com.tntrip.focus;
 
 import java.util.Arrays;
 
-public class P593_ValidSquare {
+public class P0593_ValidSquare {
     public boolean validSquare(int[] p1, int[] p2, int[] p3, int[] p4) {
         int[][] array = new int[4][2];
         array[0] = p1;
@@ -30,7 +30,7 @@ public class P593_ValidSquare {
     }
 
     public static void main(String[] args) {
-        P593_ValidSquare p = new P593_ValidSquare();
+        P0593_ValidSquare p = new P0593_ValidSquare();
         int[] p1 = {0, 0}, p2 = {1, 1}, p3 = {1, 0}, p4 = {0, 1};
         System.out.println(p.validSquare(p1, p2, p3, p4));
     }

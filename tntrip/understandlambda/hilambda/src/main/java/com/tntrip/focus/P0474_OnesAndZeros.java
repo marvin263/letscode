@@ -3,7 +3,7 @@ package com.tntrip.focus;
 import java.util.ArrayList;
 import java.util.List;
 
-public class P474_OnesAndZeros {
+public class P0474_OnesAndZeros {
     public int findMaxForm(String[] strs, int m, int n) {
         int[][] dp = new int[m + 1][n + 1];
         for (int k = 0; k < strs.length; k++) {
@@ -115,7 +115,7 @@ public class P474_OnesAndZeros {
     }
 
     public static void main(String[] args) {
-        P474_OnesAndZeros p = new P474_OnesAndZeros();
+        P0474_OnesAndZeros p = new P0474_OnesAndZeros();
         String[] strs1 = new String[]{"10", "0001", "111001", "1", "0"};
         int m1 = 5;
         int n1 = 3;

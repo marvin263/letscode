@@ -1,6 +1,6 @@
 package com.tntrip.focus;
 
-public class P494_TargetSum {
+public class P0494_TargetSum {
     public int findTargetSumWays(int[] nums, int S) {
         // 前i个数，最终加和为j
         // 此时 符号组合 的次数 dp[i][j] 
@@ -36,7 +36,7 @@ public class P494_TargetSum {
 
 
     public static void main(String[] args) {
-        P494_TargetSum p = new P494_TargetSum();
+        P0494_TargetSum p = new P0494_TargetSum();
         int[] nums = new int[]{1, 2, 7, 9, 981};
         int S = 1000000000;
         System.out.println(p.findTargetSumWays(nums, S));

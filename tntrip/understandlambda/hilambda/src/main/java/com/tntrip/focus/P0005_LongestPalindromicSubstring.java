@@ -1,6 +1,6 @@
 package com.tntrip.focus;
 
-public class P5_LongestPalindromicSubstring {
+public class P0005_LongestPalindromicSubstring {
     public String longestPalindrome(String s) {
         if (s.length() == 0) {
             return "";
@@ -53,7 +53,7 @@ public class P5_LongestPalindromicSubstring {
     }
 
     public static void main(String[] args) {
-        P5_LongestPalindromicSubstring p = new P5_LongestPalindromicSubstring();
+        P0005_LongestPalindromicSubstring p = new P0005_LongestPalindromicSubstring();
         System.out.println(p.longestPalindrome("aacdefcaa"));//aa
         System.out.println(p.longestPalindrome("babad"));//bab, aba
     }

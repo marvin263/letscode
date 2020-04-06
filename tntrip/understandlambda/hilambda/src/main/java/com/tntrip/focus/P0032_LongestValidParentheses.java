@@ -2,7 +2,7 @@ package com.tntrip.focus;
 
 import java.util.Stack;
 
-public class P32_LongestValidParentheses {
+public class P0032_LongestValidParentheses {
     public int longestValidParentheses(String s) {
         int[] dp = new int[s.length()];
         Stack<Integer> stack = new Stack<>();
@@ -46,7 +46,7 @@ public class P32_LongestValidParentheses {
     }
 
     public static void main(String[] args) {
-        P32_LongestValidParentheses p = new P32_LongestValidParentheses();
+        P0032_LongestValidParentheses p = new P0032_LongestValidParentheses();
         System.out.println(p.longestValidParentheses("(()"));//2
         System.out.println(p.longestValidParentheses("()(()"));//2
         System.out.println(p.longestValidParentheses(")()())("));//4

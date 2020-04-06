@@ -1,6 +1,6 @@
 package com.tntrip.focus;
 
-public class P191_Numberof1Bits {
+public class P0191_Numberof1Bits {
         // you need to treat n as an unsigned value
         public int hammingWeight(int n) {
             int count = 0;
@@ -13,7 +13,7 @@ public class P191_Numberof1Bits {
         }
 
     public static void main(String[] args) {
-        P191_Numberof1Bits n = new P191_Numberof1Bits();
+        P0191_Numberof1Bits n = new P0191_Numberof1Bits();
         System.out.println(n.hammingWeight(Integer.MAX_VALUE));
         System.out.println(n.hammingWeight(Integer.MIN_VALUE));
         System.out.println(n.hammingWeight(11));

@@ -11,7 +11,8 @@ version '1.0-SNAPSHOT'
 
 
 repositories {
-    mavenCentral()
+    maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
 }
 
 configure(allprojects) {
@@ -40,9 +41,8 @@ configure(javaProjects) {
     sourceCompatibility = 1.8
 
     repositories {
-        mavenCentral()
-        maven { url 'http://code.alibabatech.com/mvn/releases/' }
-
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
     }
 
     // Ensure that all Gradle-compiled classes are available to Eclipse's
@@ -59,10 +59,12 @@ configure(javaProjects) {
 }
 
 repositories {
-    jcenter()
+    maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
 }
 repositories {
-    mavenLocal()
+    maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
 }
 
 

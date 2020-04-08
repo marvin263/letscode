@@ -61,7 +61,8 @@ public class P0887_SuperEggDrop {
 
         int finalRst = Integer.MAX_VALUE;
         for (int n = 1; n <= N; n++) {
-            finalRst = Math.min(finalRst,
+            finalRst = Math.min(
+                    finalRst,
                     Math.max(dp(result, K - 1, n - 1), dp(result, K, N - n))+1
             );
         }
@@ -72,7 +73,7 @@ public class P0887_SuperEggDrop {
 
     public static void main(String[] args) {
         P0887_SuperEggDrop p = new P0887_SuperEggDrop();
-        System.out.println(p.superEggDrop(2, 10));//2
+        System.out.println(p.superEggDropd(9000000, 100000000));//2
 //        System.out.println(p.superEggDrop(2, 6));//3
 //        System.out.println(p.superEggDrop(3, 14));//4
 //        System.out.println(p.superEggDrop(2, 100));//14

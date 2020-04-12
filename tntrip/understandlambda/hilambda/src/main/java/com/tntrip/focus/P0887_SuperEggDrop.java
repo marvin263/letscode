@@ -1,10 +1,7 @@
 package com.tntrip.focus;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 public class P0887_SuperEggDrop {
     /**
@@ -22,7 +19,7 @@ public class P0887_SuperEggDrop {
      * @param N
      * @return
      */
-    public int superEggDropd(int K, int N) {
+    public int superEggDrop_2(int K, int N) {
         int[] dp = new int[K + 1];
         int step = 0;
         for (; dp[K] < N; step++) {
@@ -32,7 +29,7 @@ public class P0887_SuperEggDrop {
         return step;
     }
 
-    public int superEggDrop(int K, int N) {
+    public int superEggDrop_recursive(int K, int N) {
         int[][] result = new int[K + 1][N + 1];
         for (int[] row : result) {
             Arrays.fill(row, -1);
@@ -74,91 +71,6 @@ public class P0887_SuperEggDrop {
         //System.out.println("K=" + K + ", N=" + N + ", finalRst=" + finalRst);
         return finalRst;
     }
-
-
-    public int ddddd(int K, int N) {
-        // dp[i]
-        // 给定i个蛋，消耗了S步骤，能探测到的最大楼层数 dp[i]
-
-        int S = 1000;
-        int[][] dp = new int[K + 1][S + 1];
-        // dp[k][s]
-        // 使用k个蛋，消耗s步，能探测最大楼层 dp[k][s]
-
-        // 用1个蛋，1步 做探测
-        //   碎：k-1个蛋，s-1步：还能再探测 dp[k-1][s-1]
-        // 不碎：k  个蛋，s-1步：  还能再探测 dp[k][s-1]
-        // dp[k][s] = 1 + 
-
-
-        // 给定s个步骤
-//        for (int s = 0; s < S; s++) {
-//            for (int k = 1; k < K; k++) {
-//                dp[k] = 1 + dp[k-1]+dp[k];
-//            }
-//        }
-//        
-//        
-        int step = 0;
-//        for (; dp[K] < N; step++) {
-//            for (int i = K; i > 0; i--)
-//                dp[i] = (1 + dp[i] + dp[i - 1]);
-//        }
-        return step;
-    }
-
-    public Node getExisted(int parentFloor, int floor, int eggs) {
-        return null;
-    }
-
-    public static class Node {
-        public static final int FLOORS = 6;
-        public static final int NO_PARENT_FLOOR = -1;
-
-        public final int parentFloor;
-
-        /**
-         * 楼层。当前就是要 站在该楼层上扔鸡蛋
-         * <p>
-         * 第1层、第2层、第3层...
-         */
-        public final int floor;
-
-        /**
-         * 站在当前楼层，手里持有的鸡蛋个数
-         */
-        public final int eggs;
-        List<Node> left = new ArrayList<>();
-        List<Node> right = new ArrayList<>();
-
-        // 从该节点开始时，依然可用的eggs
-        Node(int parentFloor, int floor, int eggs) {
-            this.parentFloor = parentFloor;
-            this.floor = floor;
-            this.eggs = eggs;
-        }
-
-        public static Node create(int parentFloor, int floor, int eggs) {
-            Node n = new Node(parentFloor, floor, eggs);
-            return n;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Node node = (Node) o;
-            return parentFloor == node.parentFloor &&
-                    floor == node.floor &&
-                    eggs == node.eggs;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(parentFloor, floor, eggs);
-        }
-    }
-
 
     /**
      * 计算排列(permutation)的数量
@@ -295,25 +207,59 @@ public class P0887_SuperEggDrop {
         return r;
     }
 
+
+    public int superEggDrop(int K, int N) {
+        if (K == 1) {
+            return N;
+        }
+        int nextFullBSTHeight = (int) (Math.ceil(log(N + 1, 2)));
+        int width = nextFullBSTHeight;
+        int height = nextFullBSTHeight;
+        // 蛋足够多
+        if (K >= width) {
+            return height;
+        }
+
+        // 0-based col
+        int rightMostCol = width - 1;
+        int leftMostCol = width - K;
+
+        int nodeCountOnCol = 0;
+        int[] leavesOnEachCol = new int[width];
+        for (int col = leftMostCol; col <= rightMostCol; col++) {
+            nodeCountOnCol += nodeCountOfColumn(height, col);
+            leavesOnEachCol[col] = leafCountOfColumn(height, col);
+        }
+        int supplementaryCount = N - nodeCountOnCol;
+
+        int minSteps = 0;
+        int round = 0;
+        if (supplementaryCount > 0) {
+            int alreadyDone = 0;
+            while (alreadyDone < supplementaryCount) {
+                for (int col = leftMostCol; col <= rightMostCol; col++) {
+                    alreadyDone += (col == leftMostCol) ? leavesOnEachCol[col] : 2 * leavesOnEachCol[col];
+                    leavesOnEachCol[col] = (col == rightMostCol) ? leavesOnEachCol[col] : (leavesOnEachCol[col] + leavesOnEachCol[col + 1]);
+                }
+                round++;
+            }
+            minSteps = height + round;
+        }
+        // 无需补充
+        else {
+            minSteps = height;
+        }
+
+        System.out.println("K=" + K + ", N=" + N + ", supplementaryCount=" + supplementaryCount + ", round=" + round + ", minSteps=" + minSteps);
+        return minSteps;
+    }
+
+    public static double log(double d, double based) {
+        return Math.log10(d) / Math.log10(based);
+    }
+
     public static void main(String[] args) {
         P0887_SuperEggDrop p = new P0887_SuperEggDrop();
-        System.out.println(p.superEggDropd(2, 40));//2
-        //System.out.println(p.superEggDrop(6, 127));//3
-//        System.out.println(p.superEggDrop(3, 14));//4
-//        System.out.println(p.superEggDrop(2, 100));//14
-//        System.out.println(p.superEggDrop(5, 10000));//14
-        System.out.println(p(8, 8));
-        System.out.println(p(15, 5));
-        System.out.println(p(6, 2));
-
-        int height = 100;
-        for (int h = 1; h <= height; h++) {
-            for (int c = 0; c < h; c++) {
-                int nodeCount = nodeCountOfColumn(h, c);
-                int leafCount = leafCountOfColumn(h, c);
-                System.out.println("height=" + h + ", col=" + c + ", nodeCount=" + nodeCount + ", leafCount=" + leafCount);
-            }
-            System.out.println();
-        }
+        p.superEggDrop(2, 1);
     }
 }

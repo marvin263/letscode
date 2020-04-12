@@ -1,5 +1,6 @@
 package com.tntrip.focus;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -159,15 +160,160 @@ public class P0887_SuperEggDrop {
     }
 
 
+    /**
+     * 计算排列(permutation)的数量
+     * <p>
+     * n>0，且，0<= m <= n
+     *
+     * @param n
+     * @param m
+     * @return
+     */
+    public static int p(int n, int m) {
+        if (!(n >= 0)) {
+            throw new RuntimeException("Require: n>=0. Actual n=" + m + ", m=" + m);
+        }
+        if (!(m >= 0 && m <= n)) {
+            throw new RuntimeException("Require: 0 <= m <= n. Actual n=" + m + ", m=" + m);
+        }
+
+        if (n == 0) {
+            return 0;
+        }
+        if (m == 0) {
+            return 1;
+        }
+
+        int k = n - m;
+        BigInteger d = BigInteger.valueOf(1);
+        for (long i = n; i > k; i--) {
+            d = d.multiply(BigInteger.valueOf(i));
+        }
+
+        // p(n, m)的实际值
+        // d > Integer.MAX_VALUE
+        if (d.max(BigInteger.valueOf(Integer.MAX_VALUE).add(BigInteger.ONE)).equals(d)) {
+            throw new RuntimeException("permutationCount > Integer.MAX_VALUE. Actual n=" + n + ", m=" + m + ", permutationCount=" + d);
+        }
+
+        // n! / ( (n-m)! )
+        int r = d.intValue();
+        //System.out.println("n=" + n + ", m=" + m + ", permutationCount=" + r);
+        return r;
+    }
+
+
+    /**
+     * 计算组合(combination)的数量
+     * <p>
+     * n>0，且，0<= m <= n
+     *
+     * @param n
+     * @param m
+     * @return
+     */
+    public static int c(int n, int m) {
+        if (!(n >= 0)) {
+            throw new RuntimeException("Require: n>=0. Actual n=" + m + ", m=" + m);
+        }
+        if (!(m >= 0 && m <= n)) {
+            throw new RuntimeException("Require: 0 <= m <= n. Actual n=" + m + ", m=" + m);
+        }
+
+        if (n == 0) {
+            return 0;
+        }
+
+        if (m == 0 || m == n) {
+            return 1;
+        }
+
+        long max = Math.max(m, (n - m));
+        BigInteger d1 = BigInteger.valueOf(1);
+        for (long i = n; i > max; i--) {
+            d1 = d1.multiply(BigInteger.valueOf(i));
+        }
+
+        long min = Math.min(m, (n - m));
+        BigInteger d2 = BigInteger.valueOf(1);
+        for (long i = min; i > 0; i--) {
+            d2 = d2.multiply(BigInteger.valueOf(i));
+        }
+        // c(n, m)的实际值
+        BigInteger d = d1.divide(d2);
+        // d > Integer.MAX_VALUE
+        if (d.max(BigInteger.valueOf(Integer.MAX_VALUE).add(BigInteger.ONE)).equals(d)) {
+            throw new RuntimeException("combinationCount > Integer.MAX_VALUE. Actual n=" + n + ", m=" + m + ", combinationCount=" + d);
+        }
+        // n!/(m! (n-m)!)
+        int r = d.intValue();
+        //System.out.println("n=" + n + ", m=" + m + ", combinationCount=" + r);
+        return r;
+    }
+
+    /**
+     * h：Full BST时的高度，1-based。也就是层的数量，每一层算作高度1
+     * <p>
+     * c：列的索引，0-based。最左侧是第0列，最右侧的列的索引是 (h-1)
+     *
+     * @param h
+     * @param c
+     * @return
+     */
+    public static int nodeCountOfColumn(int h, int c) {
+        // (h)!/( c! (h-c)! )
+        // c(h, c)
+        if (!(h > 0)) {
+            throw new RuntimeException("nodeCountOfColumn requires: h>0. Actual h=" + h + ", c=" + c);
+        }
+        int r = c(h, c);
+        //System.out.println("height=" + h + ", col=" + c + ", nodeCount=" + r);
+        return r;
+    }
+
+    /**
+     * h：Full BST时的高度，1-based。也就是层的数量，每一层算作高度1
+     * <p>
+     * c：列的索引，0-based。最左侧是第0列，最右侧的列的索引是 (h-1)
+     *
+     * @param h
+     * @param c
+     * @return
+     */
+    public static int leafCountOfColumn(int h, int c) {
+        // h' = h-1
+        // (h')!/( c! (h'-c)! )
+        // c(h', c)
+        if (!(h > 0)) {
+            throw new RuntimeException("leafCountOfColumn requires: h>0. Actual h=" + h + ", c=" + c);
+        }
+        if (h == 1) {
+            return 1;
+        }
+        int r = c((h - 1), c);
+        //System.out.println("height=" + h + ", col=" + c + ", leafCount=" + r);
+        return r;
+    }
+
     public static void main(String[] args) {
         P0887_SuperEggDrop p = new P0887_SuperEggDrop();
-        //System.out.println(p.superEggDropd(9000000, 100000000));//2
-        System.out.println(p.superEggDrop(6, 127));//3
+        System.out.println(p.superEggDropd(2, 40));//2
+        //System.out.println(p.superEggDrop(6, 127));//3
 //        System.out.println(p.superEggDrop(3, 14));//4
 //        System.out.println(p.superEggDrop(2, 100));//14
 //        System.out.println(p.superEggDrop(5, 10000));//14
-        
-        
-        
+        System.out.println(p(8, 8));
+        System.out.println(p(15, 5));
+        System.out.println(p(6, 2));
+
+        int height = 100;
+        for (int h = 1; h <= height; h++) {
+            for (int c = 0; c < h; c++) {
+                int nodeCount = nodeCountOfColumn(h, c);
+                int leafCount = leafCountOfColumn(h, c);
+                System.out.println("height=" + h + ", col=" + c + ", nodeCount=" + nodeCount + ", leafCount=" + leafCount);
+            }
+            System.out.println();
+        }
     }
 }

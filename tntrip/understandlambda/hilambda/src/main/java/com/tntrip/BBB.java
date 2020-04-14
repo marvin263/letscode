@@ -1,5 +1,7 @@
 package com.tntrip;
 
+import com.tntrip.focus.P0887_SuperEggDrop;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -121,14 +123,18 @@ public class BBB {
     }
 
     private Node createTree() {
-        int nodeCount = 64;
-        int rootValue = nodeCount / 2;
+        int nodeCount = 8195;
+        int rootValue = (nodeCount+1) / 2;
+        int height = (int) Math.ceil(P0887_SuperEggDrop.log(nodeCount + 1, 2));
+        System.out.println(height);
+        
         Node root = Node.create(rootValue);
+        
         Queue<Node> queue = new ArrayDeque<>();
         queue.offer(root);
 
         Queue<Node> nextQueue = queue;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 1; i < height; i++) {
             nextQueue = addNodes(nextQueue);
         }
         resetTreeColIndex(treeHeight(root), root);
@@ -169,7 +175,14 @@ public class BBB {
         Node root = b.createTree();
         List<Node> list = b.bfs(root);
 
-        list.sort(Comparator.comparingInt(o -> o.col));
+        list.sort(new Comparator<Node>() {
+            @Override
+            public int compare(Node n1, Node n2) {
+                return n1.col != n2.col ?
+                        n1.col - n2.col
+                        : ((n1.level != n2.level) ? n1.level - n2.level : n1.value - n2.value);
+            }
+        });
 
         for (Node n : list) {
             System.out.println(n);

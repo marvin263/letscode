@@ -3,11 +3,9 @@ package com.tntrip;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Queue;
-import java.util.TreeMap;
 
 public class BBB {
     public List<String> letterCasePermutation(String S) {
@@ -53,9 +51,9 @@ public class BBB {
 
     public static class Node {
         // 0-based
-        public int col = 0;
-        // 0-based
         public int level = 0;
+        // 0-based
+        public int col = 0;
         public final int value;
         public Node left;
         public Node right;
@@ -65,80 +63,117 @@ public class BBB {
             return n;
         }
 
-        public Node(final int value) {
+        private Node(final int value) {
             this.value = value;
         }
-
 
         public void appendLeft(Node left) {
             this.left = left;
             left.level = this.level + 1;
-            left.col = this.col;
+            left.col = this.col - 1;
         }
 
         public void appendRight(Node right) {
             this.right = right;
             right.level = this.level + 1;
-            right.col = this.col + 1;
+            right.col = this.col;
         }
 
-        public void incrCol() {
-            col++;
+        public void offsetNodeColIndex(int h) {
+            this.col = h - 1 + this.col;
         }
 
-        public void incrLevel() {
-            col++;
-        }
-    }
-
-    public static void ddd(int d) {
-        int nodeCount = 64;
-        int initialValue = nodeCount / 2;
-        int step = initialValue / 2;
-
-        List<Integer> initial = Collections.singletonList(initialValue);
-
-
-        List<String> curLevel = new ArrayList<>();
-        for (int i = nodeCount / 2; i >= 1; i++) {
-            Node n = Node.create(i + "");
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "col=" + col +
+                    ", level=" + level +
+                    ", value=" + value +
+                    '}';
         }
     }
 
-    private Queue<Node> calcNextLevel(Queue<Node> queue) {
+    private int treeHeight(Node n) {
+        return n == null ? 0 : (1 + Math.max(treeHeight(n.left), treeHeight(n.right)));
+    }
+
+
+    private Queue<Node> addNodes(Queue<Node> queue) {
         Queue<Node> rstQueue = new ArrayDeque<>();
+        if (queue.isEmpty()) {
+            return rstQueue;
+        }
+
         int step = queue.peek().value / 2;
         while (!queue.isEmpty()) {
-            Node n = queue.remove();
+            Node parent = queue.remove();
 
-            Node left = Node.create(n.value - step);
-            n.appendLeft(left);
+            Node left = Node.create(parent.value - step);
+            parent.appendLeft(left);
+            rstQueue.offer(left);
 
-            Node right = Node.create(n.value + step);
-            n.appendRight(right);
+            Node right = Node.create(parent.value + step);
+            parent.appendRight(right);
+            rstQueue.offer(right);
         }
-        List<Integer> level = new ArrayList<>(prevLevel.size() * 2);
-        for (Integer v : prevLevel) {
-            level.add(v - step);
-            level.add(v + step);
-        }
-        return level;
+        System.out.println("Current level node count: " + queue.size() + ", Next level node count: " + rstQueue.size());
+        return rstQueue;
     }
+
+    private Node createTree() {
+        int nodeCount = 64;
+        int rootValue = nodeCount / 2;
+        Node root = Node.create(rootValue);
+        Queue<Node> queue = new ArrayDeque<>();
+        queue.offer(root);
+
+        Queue<Node> nextQueue = queue;
+        for (int i = 0; i < 5; i++) {
+            nextQueue = addNodes(nextQueue);
+        }
+        resetTreeColIndex(treeHeight(root), root);
+        return root;
+    }
+
+    private void resetTreeColIndex(int h, Node n) {
+        if (n == null) {
+            return;
+        }
+
+        n.offsetNodeColIndex(h);
+        resetTreeColIndex(h, n.left);
+        resetTreeColIndex(h, n.right);
+
+    }
+
+    private List<Node> bfs(Node root) {
+        List<Node> rst = new ArrayList<>();
+        Queue<Node> queue = new ArrayDeque<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            Node n = queue.remove();
+            rst.add(n);
+            if (n.left != null) {
+                queue.offer(n.left);
+            }
+            if (n.right != null) {
+                queue.offer(n.right);
+            }
+        }
+        return rst;
+    }
+
 
     public static void main(String[] args) {
         BBB b = new BBB();
+        Node root = b.createTree();
+        List<Node> list = b.bfs(root);
 
-        System.out.println(b.switchCase('1'));
-        System.out.println(b.switchCase('D'));
-        System.out.println(b.switchCase('Q'));
+        list.sort(Comparator.comparingInt(o -> o.col));
 
-        System.out.println(b.letterCasePermutation("a1b"));
-
-        TreeMap<String, String> d1 = new TreeMap<>();
-        HashMap<String, String> d2 = new HashMap<>();
-        LinkedHashMap<String, String> d3 = new LinkedHashMap<>();
-        System.out.println(d2.get(null));
-        System.out.println(d3.get(null));
-        System.out.println(d1.get(null));
+        for (Node n : list) {
+            System.out.println(n);
+        }
     }
+
 }

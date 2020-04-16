@@ -1,74 +1,74 @@
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by nuc on 2016/1/2.
  */
 public class Permutation {
-
-    public String getPermutation(int n, int k) {
-        int[] elements = new int[n];
-        for (int i = 0; i < elements.length; i++) {
-            elements[i] = i + 1;
+    /**
+     * @param elements
+     * @param fromIndex, inclusive
+     * @param endIndex,  inclusive
+     * @param <E>
+     * @return
+     */
+    public static <E> List<List<E>> p(E[] elements, int fromIndex, int endIndex) {
+        if (!(endIndex >= 0 && endIndex < elements.length) &&
+                !(fromIndex >= endIndex)) {
+            throw new RuntimeException(String.format("Require: fromIndex >= endIndex && endIndex > elements.length. Actually: fromIndex=%d, endIndex=%d, elements.length=%d", fromIndex, endIndex, elements.length));
         }
-        List<int[]> listOldAlready = generateNewPermutation(elements);
-        int[] indicx = listOldAlready.get(k - 1);
-
-        StringBuilder sb = new StringBuilder();
-        for (int i : indicx) {
-            sb.append(elements[i]);
+        List<List<E>> result = new ArrayList<>((int) fact(endIndex - fromIndex + 1));
+        doP(elements, result, fromIndex, endIndex);
+        System.out.println(String.format("Element count: %d, permutation count: %d", (endIndex - fromIndex + 1), result.size()));
+        for (List<E> row : result) {
+            System.out.println(row);
         }
-        return sb.toString();
+        return result;
     }
 
-    private List<int[]> generateNewPermutation(int[] elements) {
-        List<int[]> listOldAlready = Collections.emptyList();
-        for (int i = 0; i < elements.length; i++) {
-            listOldAlready = generateNewPermutationByAddingNewElement(listOldAlready, i);
+    private static <E> void doP(E[] elements, List<List<E>> result, int fromIndex, int endIndex) {
+        if (fromIndex > endIndex) {
+            return;
         }
-        return listOldAlready;
+        List<List<E>> newResult = new ArrayList<>();
+        if (result.isEmpty()) {
+            List<E> row = new LinkedList<>();
+            newResult.add(row);
+            row.add(elements[fromIndex]);
+        } else {
+            for (List<E> row : result) {
+                for (int i = 0; i <= row.size(); i++) {
+                    List<E> copyRow = new LinkedList<>(row);
+                    newResult.add(copyRow);
+                    copyRow.add(i, elements[fromIndex]);
+                }
+            }
+        }
+        result.clear();
+        result.addAll(newResult);
+
+        doP(elements, result, (fromIndex + 1), endIndex);
     }
 
-    private List<int[]> generateNewPermutationByAddingNewElement(List<int[]> listOldAlready, int aNewIndex) {
-        List<int[]> listNewAlready = new ArrayList<>();
-        for (int[] ints : listOldAlready) {
-            listNewAlready.addAll(insertInGap(ints, aNewIndex));
+    public static long fact(long n) {
+        if (n < 0L) {
+            throw new RuntimeException(String.format("Require: n > 0. Actually: n=%d", n));
         }
-        listNewAlready.addAll(prependInHeader(listOldAlready, aNewIndex));
-        return listNewAlready;
-    }
+        if (n == 0L) {
+            return 1L;
+        }
+        long rst = 1L;
+        for (long i = 1L; i <= n; i++) {
+            rst *= i;
+        }
+        return rst;
 
-    private List<int[]> insertInGap(int[] prevSeq, int aNewIndex) {
-        int len = prevSeq.length;
-        List<int[]> listSeqs = new ArrayList<>(len);
-        for (int i = len - 1; i >= 0; i--) {
-            int[] newSeq = new int[len + 1];
-            System.arraycopy(prevSeq, 0, newSeq, 0, i + 1);
-            newSeq[i + 1] = aNewIndex;
-            System.arraycopy(prevSeq, i + 1, newSeq, i + 2, len - i - 1);
-            listSeqs.add(newSeq);
-        }
-        return listSeqs;
-    }
-
-    private List<int[]> prependInHeader(List<int[]> listOldAlready, int aNewIndex) {
-        if (listOldAlready.isEmpty()) {
-            List<int[]> list = new ArrayList<>(1);
-            list.add(new int[]{aNewIndex});
-            return list;
-        }
-        List<int[]> list = new ArrayList<>(listOldAlready.size());
-        for (int[] ints : listOldAlready) {
-            int[] newSeq = new int[ints.length + 1];
-            System.arraycopy(ints, 0, newSeq, 1, ints.length);
-            newSeq[0] = aNewIndex;
-            list.add(newSeq);
-        }
-        return list;
     }
 
     public static void main(String[] args) {
-        //System.out.println(new Permutation().getPermutation(9, 273815));
+        String[] arr = new String[]{"a", "b", "c", "d", "e", "f"};
+        p(arr, 0, 5);
     }
+
 }

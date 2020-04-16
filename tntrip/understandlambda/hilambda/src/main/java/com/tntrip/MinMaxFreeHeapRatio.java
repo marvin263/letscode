@@ -56,7 +56,7 @@ public class MinMaxFreeHeapRatio extends AbstractDoCases {
 
         @Override
         public String[] prefix() {
-            return new String[]{"a", "Just a test"};
+            return new String[]{"j", "Just a test"};
         }
     }
 

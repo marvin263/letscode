@@ -401,6 +401,7 @@ public class GoodLuckFrame extends JFrame {
 
         glf.setIconImage(COMPANY_LOGO_ICON);
         glf.setTitle("Looking for Good-Luck-Provider");
+        System.out.println("dd");
         Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
         int width = 630;
         int height = 850;

@@ -26,6 +26,7 @@ public class S_06_StraightInsertSort_insertion extends AbstractBasicSort {
         for (int i = start + 1; i <= end; i++) {
             int curValue = array[i];
             int newIndex = start;
+            
             for (int s = i - 1; s >= start; s--) {
                 if (curValue < array[s]) {
                     array[s + 1] = array[s];// (s+1) shifts back
@@ -34,6 +35,7 @@ public class S_06_StraightInsertSort_insertion extends AbstractBasicSort {
                     break;
                 }
             }
+            
             array[newIndex] = curValue;
         }
     }

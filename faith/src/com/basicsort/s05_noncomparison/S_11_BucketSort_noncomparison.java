@@ -3,6 +3,7 @@ package com.basicsort.s05_noncomparison;
 import com.basicsort.AbstractBasicSort;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * <pre>
@@ -19,7 +20,9 @@ public class S_11_BucketSort_noncomparison extends AbstractBasicSort {
 
     @Override
     public int[] doSort(int start, int end, int[] array) {
-        return null;
+        ArrayList<Integer> list = new ArrayList<>();
+        Arrays.stream(array).forEach(list::add);
+        return bucketSort(list, 3).stream().mapToInt(e -> e).toArray();
     }
 
     /**
@@ -29,7 +32,7 @@ public class S_11_BucketSort_noncomparison extends AbstractBasicSort {
      * @param bucketSize
      * @return
      */
-    public static ArrayList<Integer> BucketSort(ArrayList<Integer> array, int bucketSize) {
+    public static ArrayList<Integer> bucketSort(ArrayList<Integer> array, int bucketSize) {
         if (array == null || array.size() < 2)
             return array;
         int max = array.get(0), min = array.get(0);
@@ -56,7 +59,7 @@ public class S_11_BucketSort_noncomparison extends AbstractBasicSort {
             } else {
                 if (bucketCount == 1)
                     bucketSize--;
-                ArrayList<Integer> temp = BucketSort(bucketArr.get(i), bucketSize);
+                ArrayList<Integer> temp = bucketSort(bucketArr.get(i), bucketSize);
                 for (int j = 0; j < temp.size(); j++)
                     resultArr.add(temp.get(j));
             }

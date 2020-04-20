@@ -19,7 +19,7 @@ public class S_10_CountingSort_noncomparison extends AbstractBasicSort {
 
     @Override
     public int[] doSort(int start, int end, int[] array) {
-        return null;
+        return countingSort(Arrays.copyOfRange(array, 0, array.length));
     }
 
     /**
@@ -28,7 +28,7 @@ public class S_10_CountingSort_noncomparison extends AbstractBasicSort {
      * @param array
      * @return
      */
-    public static int[] CountingSort(int[] array) {
+    public static int[] countingSort(int[] array) {
         if (array.length == 0) return array;
         int bias, min = array[0], max = array[0];
         for (int i = 1; i < array.length; i++) {

@@ -7,7 +7,7 @@ import com.util.CommUtil;
  * <pre>
  *
  *   第 05 种：  树选择排序
- *   属于 选择排序(selection)
+ *   选择排序(selection)
  *   unstable, best--n^2, average--n^2, worst--n^2, memory--1
  *
  * </pre>

@@ -6,8 +6,8 @@ import com.util.CommUtil;
 /**
  * <pre>
  *
- *   第 04 种：  简单选择排序
- *   属于 选择排序(selection)
+ *   第 03 种：  简单选择排序
+ *   选择排序(selection)
  *   unstable, best--n^2, average--n^2, worst--n^2, memory--1
  *
  * </pre>
@@ -15,7 +15,7 @@ import com.util.CommUtil;
  * @author marvin
  * 
  */
-public class S_04_SimpleSelectionSort_selection extends AbstractBasicSort {
+public class S_03_SimpleSelectionSort_selection extends AbstractBasicSort {
 
     @Override
     public int[] doSort(int start, int end, int[] array) {
@@ -55,6 +55,6 @@ public class S_04_SimpleSelectionSort_selection extends AbstractBasicSort {
     }
 
     public static void main(String[] args) {
-        runTest(new S_04_SimpleSelectionSort_selection());
+        runTest(new S_03_SimpleSelectionSort_selection());
     }
 }

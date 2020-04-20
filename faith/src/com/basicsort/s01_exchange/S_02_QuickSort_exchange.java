@@ -1,23 +1,17 @@
-package com.basicsort.exchange;
+package com.basicsort.s01_exchange;
 
 import com.basicsort.AbstractBasicSort;
 
 /**
  * <pre>
- * 稳定性：稳定
- * 
- * 空间复杂度，辅助空间：O(logn)
- * 
- * 时间复杂度
- *          最坏：O(n^2)
- * 
- *          最好：O(nlogn)
- * 
- *          平均：O(nlogn)
+ *
+ *   第 02 种：  快速排序
+ *   交换排序(exchange)
+ *   unstable, best--nlogn, average--nlogn, worst--n^2, memory--logn
+ *
  * </pre>
- * 
+ *
  * @author marvin
- * 
  */
 public class S_02_QuickSort_exchange extends AbstractBasicSort {
 

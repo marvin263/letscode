@@ -1,25 +1,20 @@
-package com.basicsort.insertion;
+package com.basicsort.s03_insertion;
 
 import com.basicsort.AbstractBasicSort;
 
 /**
  * <pre>
- * 稳定性：稳定
- * 
- * 空间复杂度，辅助空间：O(1)
- * 
- * 时间复杂度
- *          最坏：O(n^2)
- * 
- *          最好：O(n)
- * 
- *          平均：O(n^2)
+ *
+ *   第 07 种：  希尔排序
+ *   属于 插入排序(insertion)
+ *   unstable, best--nlogn, average--n^(4/3), worst--n^(4/3), memory--1
+ *
  * </pre>
  * 
  * @author marvin
  * 
  */
-public class S_03_ShellSort_insertion extends AbstractBasicSort {
+public class S_07_ShellSort_insertion extends AbstractBasicSort {
 
     @Override
     public int[] doSort(int start, int end, int[] array) {
@@ -45,6 +40,6 @@ public class S_03_ShellSort_insertion extends AbstractBasicSort {
 
     public static void main(String[] args) {
         int[] array = new int[] { 35, 2, 47, 10, 4, 23, 10, 12, 1, 32 };
-        runTest(new S_03_ShellSort_insertion());
+        runTest(new S_07_ShellSort_insertion());
     }
 }

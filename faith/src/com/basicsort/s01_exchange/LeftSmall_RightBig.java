@@ -1,4 +1,4 @@
-package com.basicsort.exchange;
+package com.basicsort.s01_exchange;
 
 public class LeftSmall_RightBig {
     public static int partition(int low, int high, int[] array) {

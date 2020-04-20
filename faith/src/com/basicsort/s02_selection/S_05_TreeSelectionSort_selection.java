@@ -1,26 +1,21 @@
-package com.basicsort.selection;
+package com.basicsort.s02_selection;
 
 import com.basicsort.AbstractBasicSort;
 import com.util.CommUtil;
 
 /**
  * <pre>
- * 稳定性：稳定
- * 
- * 空间复杂度，辅助空间：O(1)
- * 
- * 时间复杂度
- *          最坏：O(n^2)
- * 
- *          最好：O(n)
- * 
- *          平均：O(n^2)
+ *
+ *   第 05 种：  树选择排序
+ *   属于 选择排序(selection)
+ *   unstable, best--n^2, average--n^2, worst--n^2, memory--1
+ *
  * </pre>
  * 
  * @author marvin
  * 
  */
-public class S_07_TreeSelectionSort_selection extends AbstractBasicSort {
+public class S_05_TreeSelectionSort_selection extends AbstractBasicSort {
 
     @Override
     public int[] doSort(int start, int end, int[] array) {
@@ -48,6 +43,6 @@ public class S_07_TreeSelectionSort_selection extends AbstractBasicSort {
     }
 
     public static void main(String[] args) {
-        runTest(new S_07_TreeSelectionSort_selection());
+        runTest(new S_05_TreeSelectionSort_selection());
     }
 }

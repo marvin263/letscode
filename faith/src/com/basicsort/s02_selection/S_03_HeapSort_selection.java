@@ -1,4 +1,4 @@
-package com.basicsort.selection;
+package com.basicsort.s02_selection;
 
 import java.util.Arrays;
 
@@ -7,22 +7,16 @@ import com.util.CommUtil;
 
 /**
  * <pre>
- * 稳定性：稳定
- * 
- * 空间复杂度，辅助空间：O(1)
- * 
- * 时间复杂度
- *          最坏：O(n^2)
- * 
- *          最好：O(n)
- * 
- *          平均：O(n^2)
+ *
+ *   第 03 种：  堆排序
+ *   属于 选择排序(selection)
+ *   unstable, best--nlogn, average--nlogn, worst--nlogn, memory--1
+ *
  * </pre>
  * 
  * @author marvin
- * 
  */
-public class S_05_HeapSort_selection extends AbstractBasicSort {
+public class S_03_HeapSort_selection extends AbstractBasicSort {
 
     @Override
     public int[] doSort(int start, int end, int[] array) {
@@ -117,6 +111,6 @@ public class S_05_HeapSort_selection extends AbstractBasicSort {
 
     public static void main(String[] args) {
         int[] array = CommUtil.genereateRandomArray(10, 50);
-        runTest(new S_05_HeapSort_selection(), 1, array.length - 1, array);
+        runTest(new S_03_HeapSort_selection(), 1, array.length - 1, array);
     }
 }

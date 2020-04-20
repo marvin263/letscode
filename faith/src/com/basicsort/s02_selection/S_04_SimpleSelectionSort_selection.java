@@ -1,26 +1,21 @@
-package com.basicsort.selection;
+package com.basicsort.s02_selection;
 
 import com.basicsort.AbstractBasicSort;
 import com.util.CommUtil;
 
 /**
  * <pre>
- * 稳定性：不稳定
- * 
- * 空间复杂度，辅助空间：O(1)
- * 
- * 时间复杂度
- *          最坏：O(n^2)
- * 
- *          最好：O(n^2)
- * 
- *          平均：O(n^2)
+ *
+ *   第 04 种：  简单选择排序
+ *   属于 选择排序(selection)
+ *   unstable, best--n^2, average--n^2, worst--n^2, memory--1
+ *
  * </pre>
  * 
  * @author marvin
  * 
  */
-public class S_06_SimpleSelectionSort_selection extends AbstractBasicSort {
+public class S_04_SimpleSelectionSort_selection extends AbstractBasicSort {
 
     @Override
     public int[] doSort(int start, int end, int[] array) {
@@ -37,11 +32,11 @@ public class S_06_SimpleSelectionSort_selection extends AbstractBasicSort {
      * 
      * 算法步骤：
      * 
-     * 　　1)首先在未排序序列中找到 最小 元素，存放到排序序列的起始位置
+     *     1)首先在未排序序列中找到 最小 元素，存放到排序序列的起始位置
      * 
-     * 　　2)再从 剩余未排序元素中 继续寻找 最小 元素，然后放到 已排序 序列的末尾
+     *     2)再从 剩余未排序元素中 继续寻找 最小 元素，然后放到 已排序 序列的末尾
      * 
-     * 　　3)重复第二步，直到所有元素均排序完毕。
+     *     3)重复第二步，直到所有元素均排序完毕。
      * 
      */
     public void simpleSelectionSort(int start, int end, int[] array) {
@@ -60,6 +55,6 @@ public class S_06_SimpleSelectionSort_selection extends AbstractBasicSort {
     }
 
     public static void main(String[] args) {
-        runTest(new S_06_SimpleSelectionSort_selection());
+        runTest(new S_04_SimpleSelectionSort_selection());
     }
 }

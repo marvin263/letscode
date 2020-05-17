@@ -37,7 +37,7 @@ public class TopN {
 
         System.out.println(Arrays.toString(arrayTopN));
 
-        System.out.printf("TopN cost millionseconds: %d\n",
+        System.out.printf("TopN cost ms: %d\n",
                 (System.currentTimeMillis() - begin));
 
         System.out.println(gi.toString());

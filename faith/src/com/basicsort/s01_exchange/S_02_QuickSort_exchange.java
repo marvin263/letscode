@@ -16,22 +16,23 @@ import com.basicsort.AbstractBasicSort;
 public class S_02_QuickSort_exchange extends AbstractBasicSort {
 
     @Override
-    public int[] doSort(int start, int end, int[] array) {
-        quickSort(start, end, array);
+    public int[] doSort(int start, int endInclusive, int[] array) {
+        quickSort(start, endInclusive, array);
         return array;
     }
 
-    public void quickSort(int start, int end, int[] array) {
-        if (start >= end) {
+    public void quickSort(int start, int endInclusive, int[] array) {
+        if (start >= endInclusive) {
             return;
         }
-        int pivot = firstElement_Should_Fall_Into(start, end, array);
+        int pivot = firstElement_Should_Fall_Into(start, endInclusive, array);
         quickSort(start, pivot - 1, array);
-        quickSort(pivot + 1, end, array);
+        quickSort(pivot + 1, endInclusive, array);
     }
 
     private int firstElement_Should_Fall_Into(int low, int high, int[] array) {
         int firstValue = array[low];
+        // high同样是 inclusive 哦
         while (low < high) {
             while (low < high && array[high] >= firstValue) {
                 high--;

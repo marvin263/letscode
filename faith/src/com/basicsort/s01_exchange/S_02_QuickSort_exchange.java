@@ -45,6 +45,7 @@ public class S_02_QuickSort_exchange extends AbstractBasicSort {
             array[high] = array[low];
         }
         array[low] = firstValue;
+        
         System.out.println("low=" + low + ", high=" + high
                 + ". First element falls into: " + low);
         return low;

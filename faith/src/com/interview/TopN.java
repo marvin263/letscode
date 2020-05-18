@@ -3,9 +3,7 @@ package com.interview;
 import java.util.Arrays;
 
 public class TopN {
-    // Find the top n number from more than 100,000,000 numbers
     public static int[] topN(int n, IntGenerator gi) {
-        // please note: 0 element is ignored
         int[] arrayTopN = new int[n];
         for (int i = 0; i < arrayTopN.length; i++) {
             arrayTopN[i] = gi.next();

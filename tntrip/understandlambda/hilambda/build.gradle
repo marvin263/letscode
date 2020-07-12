@@ -16,4 +16,5 @@ dependencies {
     compile 'org.apache.httpcomponents:httpmime:4.5.8'
     compile 'com.alibaba:transmittable-thread-local:2.11.5'
     compile 'com.github.spotbugs:spotbugs:4.0.6'
+    compile 'org.apache.kafka:kafka-clients:2.5.0'
 }

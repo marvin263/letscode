@@ -1,0 +1,104 @@
+
+#
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 60
+    contextPath: /myboot224
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 80
+
+logging: 
+  config: classpath:logback-zkweb.xml
+
+spring: 
+  h2: 
+    console: 
+      enabled: 'true'
+      path: /console
+      settings: 
+        trace: false
+        web-allow-others: 'true'
+  jta:
+    enabled: false
+  hateoas: 
+    use-hal-as-default-json-media-type: 'false'
+  http:
+    encoding:
+      force: true
+  thymeleaf: 
+    # THYMELEAF (ThymeleafAutoConfiguration)
+    #开启模板缓存（默认值：true）
+    cache: false
+    #Check that the template exists before rendering it.
+    check-template: true
+    #检查模板位置是否正确(默认值:true)
+    check-template-location: true
+    #Content-Type的值（默认值：text/html）
+    servlet: 
+      content-type: text/html
+    #开启MVC Thymeleaf视图解析(默认值：true)
+    enabled: true
+    #模板编码
+    encoding: UTF-8
+    #要被排除在解析之外的视图名称列表，用逗号分隔
+    excluded-view-names: 
+    #要运用于模板之上的模板模式。另见StandardTemplate-ModeHandlers(默认值：HTML5)
+    mode: HTML
+    #在构建URL时添加到视图名称前的前缀（默认值：classpath:/templates/）
+    prefix: classpath:/templates/
+    #在构建URL时添加到视图名称后的后缀（默认值：.html）
+    suffix: .html
+    #Thymeleaf模板解析器在解析器链中的顺序。默认情况下，它排第一位。顺序从1开始，只有在定义了额外的TemplateResolver Bean时才需要设置这个属性。
+    #template-resolver-order: 
+    #可解析的视图名称列表，用逗号分隔
+    #view-names: 
+#  datasource:
+#    platform: h2
+#    #type: com.mchange.v2.c3p0.ComboPooledDataSource
+#    url: jdbc:h2:file:~/.h2/zkweb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;FILE_LOCK=SOCKET
+#    username: sa
+#    password: sa
+#    driver-class-name: org.h2.Driver
+#    initial-pool-size: 10
+#    min-pool-size: 5
+#    max-pool-size: 20
+#    acquire-increment: 3 
+#    idle-connection-test-period: 60  
+#    max-idle-time: 60 
+#    max-statements: 100
+#    acquire-retry-attempts: 30
+#    break-after-acquire-failure: false
+  resources:
+    cache:
+      period: 0
+#    static-locations:
+#      - classpath:/META-INF/resources/
+#      - classpath:/resources/
+#      - classpath:/static/
+#      - classpath:/public/
+  profiles:
+    active: local
+  mvc:
+    servlet:
+      load-on-startup: 1
+    #view:
+    #  prefix: /WEB-INF/views/
+    #  suffix: .jsp
+  session:
+    store-type: NONE
+  cache:
+    type: NONE
+  #freemarker
+#  freemarker:
+#    allow-request-override: false
+#    cache: true
+#    check-template-location: true
+#    charset: UTF-8
+#    content-type: text/html
+#    expose-request-attributes: false
+#    expose-session-attributes: false
+#    expose-spring-macro-helpers: false
+

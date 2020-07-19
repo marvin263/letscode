@@ -14,7 +14,7 @@ debug:
 		<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/> 
 		<property name="APP_Name" value="myAppName" />   
 -->
-	<property name="path.log" value="./log" />   
+	<property name="path.log" value="./logs" />   
 <!--     <appender name="FILE"   class="ch.qos.logback.core.FileAppender"> -->
 <!--     	<Encoding>UTF-8</Encoding> -->
 <!--         <File>logger-default.log</File> -->
@@ -29,7 +29,7 @@ debug:
 <!--          <File>${path.log}/default.log</File> -->
          <Prudent>true</Prudent>
          <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-             <FileNamePattern>${path.log}/default-%d{yyyy-MM-dd-HH}-%i.log</FileNamePattern>
+             <FileNamePattern>${path.log}/myboot224-%d{yyyy-MM-dd-HH}-%i.log</FileNamePattern>
              <MaxHistory>30</MaxHistory>
              <MaxFileSize>10MB</MaxFileSize>
              <totalSizeCap>10GB</totalSizeCap>  

@@ -2,7 +2,6 @@ package com.example.myboot224;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.stereotype.Service;
 
 
 public class MyBeanPostProcessor2 implements BeanPostProcessor {
@@ -10,7 +9,6 @@ public class MyBeanPostProcessor2 implements BeanPostProcessor {
     public MyBeanPostProcessor2() {
         super();
         System.out.println("这是BeanPostProcessor实现类构造器！！");
-        // TODO Auto-generated constructor stub
     }
 
     @Override

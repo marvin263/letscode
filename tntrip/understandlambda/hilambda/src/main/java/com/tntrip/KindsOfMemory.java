@@ -264,7 +264,7 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
 
         @Override
         public String[] prefix() {
-            return new String[]{"m", "Get file metadata"};
+            return new String[]{"mf", "Get file metadata"};
         }
     }
 

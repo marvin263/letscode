@@ -36,6 +36,7 @@ import java.util.function.Supplier;
  *
  *  -XX:+UseSerialGC -Xms10M -Xmx400M -XX:+PrintGCDetails -Xloggc:c:/gc/gc.log  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=c:/gc/heapdump.hprof
  *
+ *  -Xms1024m -Xmx1024m -XX:+HeapDumpBeforeFullGC -XX:+HeapDumpAfterFullGC -XX:HeapDumpPath=E:/dump/test.hdump
  * </pre>
  */
 public class KindsOfMemory extends MinMaxFreeHeapRatio {

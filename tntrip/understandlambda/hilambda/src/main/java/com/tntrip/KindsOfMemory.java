@@ -139,7 +139,8 @@ public class KindsOfMemory extends MinMaxFreeHeapRatio {
     }
 
     public class ReadWriteSocket implements EachCase {
-        private LetsSocket ls = new LetsSocket("192.168.0.7", 8080);
+        private LetsSocket ls =null;
+                //new LetsSocket("192.168.0.7", 8080);
 
         @Override
         public void doOnLine(String line) {

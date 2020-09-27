@@ -11,6 +11,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 
 @Controller
@@ -25,18 +26,11 @@ public class GreetingController {
     @RequestMapping("/greeting")
     public @ResponseBody
     String greeting(HttpServletResponse rsp, @RequestParam(name = "cost") long cost) {
-//        try {
-//            ServletOutputStream os = rsp.getOutputStream();
-//            int i = 'a';
-//            while (i < 'z') {
-//                os.write(i);
-//                os.flush();
-//                //Thread.sleep(cost * 1000L);
-//                i++;
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+                Thread.sleep(cost * 1000L);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
         LOG.info(format);
         return format;

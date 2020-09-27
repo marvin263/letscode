@@ -7,10 +7,10 @@ server:
       timeout: 60
     contextPath: /myboot224
   tomcat:
-    accept-count: 5
-    max-connections: 400
-    connection-timeout: 50000ms
-    max-threads: 20
+    accept-count: 615
+    max-connections: 932
+    connection-timeout: 9000000ms
+    max-threads: 215
     uri-encoding: UTF-8
     basedir: ./
     accesslog:
@@ -22,7 +22,21 @@ server:
 logging: 
   config: classpath:logback-zkweb.xml
 
-spring: 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+spring:
+  application:
+    name: myboot224
   h2: 
     console: 
       enabled: 'true'

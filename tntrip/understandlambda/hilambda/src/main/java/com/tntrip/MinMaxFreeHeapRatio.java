@@ -1,5 +1,7 @@
 package com.tntrip;
 
+import com.tntrip.docases.AbstractDoCases;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +24,10 @@ public class MinMaxFreeHeapRatio extends AbstractDoCases {
     private List<byte[]> listArray = new ArrayList<>();
     public static final int ARRAY_SIZE = 1024 * 1024;//1M
 
-    public class AllocateMemoryCase implements EachCase {
-        @Override
+    public class AllocateMemoryCase 
+            //implements EachCase 
+    {
+        //@Override
         public void doOnLine(String line) {
             int expectedCount = Integer.valueOf(line.substring(prefix()[0].length()));
             keepLeftmostArrays(expectedCount);
@@ -54,7 +58,7 @@ public class MinMaxFreeHeapRatio extends AbstractDoCases {
             }
         }
 
-        @Override
+        //@Override
         public String[] prefix() {
             return new String[]{"j", "Just a test"};
         }

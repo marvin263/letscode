@@ -102,7 +102,15 @@ public class ClassUtil {
                 //LOG.debug("fileSearchPath: " + fileSearchPath);
                 System.out.println("packageName=" + packageName + ", packageNameFullPath=" + ": " + fileSearchPath);
 
-                fileSearchPath = fileSearchPath.substring(0, fileSearchPath.indexOf("/classes"));
+                String classesfolder = "/classes/java/main";
+                if(fileSearchPath.contains(classesfolder)){
+                    classesfolder = "/classes/java/main";
+                }else{
+                    classesfolder = "/classes";
+                }
+
+
+                fileSearchPath = fileSearchPath.substring(0, fileSearchPath.indexOf(classesfolder));
                 //LOG.debug("fileSearchPath: " + fileSearchPath);
                 System.out.println("fileSearchPath: " + fileSearchPath);
                 fileNames = getClassNameByFile(fileSearchPath, packagePath);
@@ -145,8 +153,14 @@ public class ClassUtil {
                 // D:/eden/gitworkspace/letscode/tntrip/understandlambda/hilambda/out/production/classes/com/tntrip/docases/AbstractDoCases$LsCase.class
                 String fullPath = childFilePath.replaceAll("\\\\", "/");
                 if (fullPath.endsWith(".class") && fullPath.contains(packagePath)) {
+                    String classesfolder = "/classes/java/main";
+                    if(fullPath.contains(classesfolder)){
+                        classesfolder = "/classes/java/main";
+                    }else{
+                        classesfolder = "/classes";
+                    }
                     // com.tntrip.docases.AbstractDoCases$LsCase
-                    String fullyQualifiedCls = fullPath.substring(fullPath.indexOf("/classes") + 9, fullPath.lastIndexOf(".")).replace("/", ".");
+                    String fullyQualifiedCls = fullPath.substring(fullPath.indexOf(classesfolder) + classesfolder.length()+1, fullPath.lastIndexOf(".")).replace("/", ".");
                     myClassName.add(fullyQualifiedCls);
                 }
             }

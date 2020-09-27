@@ -38,7 +38,7 @@ public class TnNetUtil {
                         continue;
                     }
                     // LOGGER.info("Interface: " + ni.getName() + ", IP: " + ip);
-                    System.out.println("Interface: " + ni.getName() + ", IP: " + ip);
+                    //System.out.println("Interface: " + ni.getName() + ", IP: " + ip);
                     ipList.add(ip);
                 }
             }

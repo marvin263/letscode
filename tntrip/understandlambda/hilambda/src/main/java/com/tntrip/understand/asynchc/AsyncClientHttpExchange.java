@@ -11,7 +11,8 @@ import java.util.concurrent.Future;
  * This example demonstrates a basic asynchronous HTTP request / response exchange.
  * Response content is buffered in memory for simplicity.
  */
-public class AsyncClientHttpExchange {
+public class 
+AsyncClientHttpExchange {
 
     public static void main(final String[] args) throws Exception {
         CloseableHttpAsyncClient httpclient = HttpAsyncClients.createDefault();

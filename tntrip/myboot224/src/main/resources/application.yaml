@@ -4,7 +4,7 @@ server:
   port: 8080
   servlet:
     session:
-      timeout: 60
+      timeout: 60000
     contextPath: /myboot224
   tomcat:
     accept-count: 5

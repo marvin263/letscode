@@ -2,6 +2,7 @@ package com.tntrip;
 
 import com.tntrip.focus.P0887_SuperEggDrop;
 
+import java.nio.channels.SelectionKey;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -171,6 +172,11 @@ public class BBB {
 
 
     public static void main(String[] args) {
+        System.out.println(String.format("SelectionKey.OP_READ == 1 << 0 == %d", SelectionKey.OP_READ));
+        System.out.println(String.format("SelectionKey.OP_WRITE = 1 << 2 == %d", SelectionKey.OP_WRITE));
+        System.out.println(String.format("SelectionKey.OP_CONNECT = 1 << 3 == %d", SelectionKey.OP_CONNECT));
+        System.out.println(String.format("SelectionKey.OP_ACCEPT = 1 << 4 == %d", SelectionKey.OP_ACCEPT));
+        
         BBB b = new BBB();
         Node root = b.createTree();
         List<Node> list = b.bfs(root);

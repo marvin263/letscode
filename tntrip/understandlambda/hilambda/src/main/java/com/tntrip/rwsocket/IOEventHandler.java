@@ -101,8 +101,6 @@ public class IOEventHandler implements Runnable {
         } else {
             // 否则继续读取
             state = READING;
-            // 把提示发到界面
-            sc.write(ByteBuffer.wrap("\r\nreactor> ".getBytes()));
             selectionKey.interestOps(SelectionKey.OP_READ);
         }
     }
@@ -126,6 +124,7 @@ public class IOEventHandler implements Runnable {
                 } else if (ch == '\n') {
                     // 读取到了 \r\n 读取结束
                     state = SENDING;
+                    System.out.println("Reading done: " + request.toString());
                     return true;
                 } else {
                     request.append((char) ch);
@@ -151,7 +150,6 @@ public class IOEventHandler implements Runnable {
 
         // 清空旧数据，接着处理后续的请求
         output.clear();
-        request.delete(0, request.length());
         return false;
     }
 }

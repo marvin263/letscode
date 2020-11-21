@@ -9,7 +9,6 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -27,7 +26,7 @@ import java.util.concurrent.Executors;
  */
 public class MultiReactor {
     // Acceptor所使用的线程
-    private final Executor MAIN_REACTOR_EXECUTOR = Executors.newFixedThreadPool(1, new NamedThreadFactory("mainReactor"));
+    private final Executor MAIN_REACTOR_EXECUTOR = Executors.newFixedThreadPool(1, new NamedThreadFactory("Acceptor"));
 
     // Reactor所使用的线程
     private static final int SUB_REACTOR_COUNT = 2;
@@ -61,7 +60,7 @@ public class MultiReactor {
         MAIN_REACTOR_EXECUTOR.execute(acceptor);
 
         for (int i = 0; i < subReactors.length; i++) {
-            SUB_REACTOR_EXECUTOR.execute(new Reactor());
+            SUB_REACTOR_EXECUTOR.execute(subReactors[i]);
         }
     }
 
@@ -89,6 +88,7 @@ public class MultiReactor {
                 while (!Thread.interrupted()) {
                     // 接收连接，非阻塞模式下，没有连接直接返回 null
                     SocketChannel sc = serverSocketChannel.accept();
+                    System.out.println(sc);
                     if (sc != null) {
                         chooseSubReactor().configSocketChannel(sc);
                         System.out.println("Acceptor: " + sc.socket().getLocalSocketAddress() + " 注册到 subReactor-" + reqCount);
@@ -106,12 +106,11 @@ public class MultiReactor {
     }
 
     static class Reactor implements Runnable {
-        private final ConcurrentLinkedQueue<IOEventHandler> events = new ConcurrentLinkedQueue<>();
         // reactor所使用的selector
         final Selector selector;
 
         public Reactor() throws IOException {
-            selector = Selector.open();
+            this.selector = Selector.open();
         }
 
         void configSocketChannel(SocketChannel sc) throws Exception {
@@ -122,7 +121,7 @@ public class MultiReactor {
             // 管理事件的处理程序
             IOEventHandler handler = new IOEventHandler(sc, selectionKey);
             selectionKey.attach(handler);
-
+            //Thread.sleep(5000);
             selector.wakeup();
         }
 
@@ -132,9 +131,15 @@ public class MultiReactor {
             try {
                 while (!Thread.interrupted()) {
                     // 阻塞，直到有通道事件就绪
-                    selector.select();
+                    int select = selector.select(2000);
+                    if (select > 0) {
+                        System.out.println("ddd");
+                    } else {
+                        continue;
+                    }
                     // 拿到就绪通道 SelectionKey 的集合
                     Set<SelectionKey> keys = selector.selectedKeys();
+                    System.out.println(keys.size());
                     for (SelectionKey eachKey : keys) {
                         dispatch(eachKey);
                     }

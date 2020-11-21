@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Random;
 
 
 @Controller
@@ -25,15 +25,35 @@ public class GreetingController {
 
     @RequestMapping("/greeting")
     public @ResponseBody
-    String greeting(HttpServletResponse rsp, @RequestParam(name = "cost") long cost) {
+    String greeting(HttpServletResponse rsp, HttpServletRequest req, @RequestParam(name = "cost") long cost) throws Exception {
+        sleepQuietly(2000L);
+        byte[] hw = "HWD".getBytes();
+        for (byte b1 : hw) {
+            rsp.getOutputStream().write(b1);
+            rsp.getOutputStream().flush();
+        }
+
+        int contentLength = req.getContentLength();
+        String content = "";
+        if (contentLength > 0) {
+            byte[] b = new byte[contentLength];
+            int read = req.getInputStream().read(b);
+            content = new String(b, StandardCharsets.UTF_8);
+        }
+        String format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()) + content;
+        LOG.info(format);
+
+        sleepQuietly(cost * 1000L);
+
+        return format;
+    }
+
+    private void sleepQuietly(long milli) {
         try {
-                Thread.sleep(cost * 1000L);
+            Thread.sleep(milli);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
-        LOG.info(format);
-        return format;
     }
 
 }

@@ -1,11 +1,12 @@
-package com.tntrip.docases;
+package com.tntrip.rwsocket;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
-public class ReadWriteSocket implements EachCase {
+public class TestNginxParameterSocket {
     private volatile boolean broken = true;
     private volatile OutputStreamWriter osw;
 
@@ -57,6 +58,28 @@ public class ReadWriteSocket implements EachCase {
         System.out.println(Thread.currentThread().getName() + "--Done close client socket.");
     }
 
+    public void doOnLine(String line) {
+        if (isBroken()) {
+            try {
+                //String host = TnNetUtil.getLocalIpAddr().get(0);
+                //int port = 16333;
+//                String host = "192.168.86.204";
+//                int port = 8080;
+                String host = "a.com";
+                int port = 80;
+                prepareReadSocket(host, port);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        doWriteSocket(line, osw);
+    }
+
     public void doWriteSocket(String actualLine, OutputStreamWriter osw) {
         if (broken) {
             return;
@@ -76,32 +99,26 @@ public class ReadWriteSocket implements EachCase {
         }
     }
 
-    @Override
-    public void doOnLine(String line) {
-        String actualLine = line.substring(prefix()[0].length());
-        if (isBroken()) {
-            try {
-                //String host = TnNetUtil.getLocalIpAddr().get(0);
-                //int port = 16333;
-//                String host = "192.168.86.204";
-//                int port = 8080;
-                String host = "a.com";
-                int port = 80;
-                prepareReadSocket(host, port);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    private void endlesslyRun() {
+        Scanner scn = new Scanner(System.in);
+        while (true) {
+            System.out.println("Type your http request:\n");
+            while (true) {
+                String line = scn.nextLine();
+                try {
+                    doOnLine(line);
+                } catch (Exception e) {
+                    System.out.println("Exception happened. line=" + line);
+                    e.printStackTrace();
+                    break;
+                }
             }
         }
-        doWriteSocket(actualLine, osw);
     }
 
-    @Override
-    public String[] prefix() {
-        return new String[]{"02", "Write socket"};
+    public static void main(String[] args) {
+        TestNginxParameterSocket tnps = new TestNginxParameterSocket();
+        tnps.endlesslyRun();
     }
+
 }

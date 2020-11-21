@@ -7,10 +7,10 @@ server:
       timeout: 60000
     contextPath: /myboot224
   tomcat:
-    accept-count: 5
-    max-connections: 7
+    accept-count: 1
+    max-connections: 1
     connection-timeout: 9000000ms
-    max-threads: 1
+    max-threads: 100
     uri-encoding: UTF-8
     basedir: ./
     accesslog:

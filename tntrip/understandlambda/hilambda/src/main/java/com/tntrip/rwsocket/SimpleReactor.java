@@ -20,12 +20,12 @@ import java.util.Set;
  * @see IOEventHandler
  * @see MultiThreadHandler
  */
-public class Reactor implements Runnable {
+public class SimpleReactor implements Runnable {
     // 选择器，通知通道就绪的事件
     final Selector selector;
     final ServerSocketChannel serverSocketChannel;
 
-    public Reactor(int port) throws IOException {
+    public SimpleReactor(int port) throws IOException {
         selector = Selector.open();
         serverSocketChannel = ServerSocketChannel.open();
         serverSocketChannel.socket().bind(new InetSocketAddress(port));
@@ -102,7 +102,7 @@ public class Reactor implements Runnable {
 
     public static void main(String[] args) {
         try {
-            Thread th = new Thread(new Reactor(10393));
+            Thread th = new Thread(new SimpleReactor(10393));
             th.setName("Reactor");
             th.start();
             th.join();

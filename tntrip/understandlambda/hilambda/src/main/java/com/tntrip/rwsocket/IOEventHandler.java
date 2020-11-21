@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -13,7 +12,7 @@ import java.util.concurrent.Executors;
  * 单线程基本处理器，I/O 的读写以及业务的处理均由 Reactor 线程完成
  *
  * @author tongwu.net
- * @see Reactor
+ * @see SimpleReactor
  */
 public class IOEventHandler implements Runnable {
 
@@ -22,7 +21,7 @@ public class IOEventHandler implements Runnable {
     private static Executor WORKER_POOL = Executors.newFixedThreadPool(5);
 
     // 定义服务的逻辑状态
-    public static final int READING = 0, SENDING = 1, CLOSED = 2, PROCESSING = 4;
+    public static final int READING = 0, SENDING = 1, CLOSED = 2;
     // 缓存每次读取的内容
     private final StringBuilder request = new StringBuilder();
 
@@ -42,7 +41,7 @@ public class IOEventHandler implements Runnable {
         this.selectionKey = selectionKey;
     }
 
-    public void doInIOEventHandler() {
+    public void handleEvent() {
         WORKER_POOL.execute(this);
     }
 
@@ -50,11 +49,13 @@ public class IOEventHandler implements Runnable {
     public void run() {
         try {
             // 此时通道已经准备好读取字节
-            if (state == READING)
+            if (state == READING) {
                 read();
-                // 此时通道已经准备好写入字节
-            else if (state == SENDING)
+            }
+            // 此时通道已经准备好写入字节
+            else if (state == SENDING) {
                 send();
+            }
         } catch (IOException ex) {
             // 关闭连接
             try {
@@ -65,7 +66,6 @@ public class IOEventHandler implements Runnable {
         }
     }
 
-
     public void read() throws IOException {
         // 为什么要同步？Processor 线程处理时通道还有可能有读事件发生
         // 保护 input ByteBuffer 不会重置和状态的可见性
@@ -75,42 +75,35 @@ public class IOEventHandler implements Runnable {
             int n = sc.read(input);
             if (inputIsComplete(n)) {
 
-                // 读取完毕后将后续的处理交给
-                state = PROCESSING;
-                WORKER_POOL.execute(new Processor());
+                // 发送交给 Reactor 触发
+                state = SENDING;
+                selectionKey.interestOps(SelectionKey.OP_WRITE);
+
+                // 这里需要唤醒 Selector，因为当把处理交给 workpool 时，Reactor 线程已经阻塞在 select() 方法了， 注意
+                // 此时该通道感兴趣的事件还是 OP_READ，这里将通道感兴趣的事件改为 OP_WRITE
+                // 如果不唤醒的话，就只能在 下次select 返回时才能有响应了，当然了也可以在 select 方法上设置超时
+                selectionKey.selector().wakeup();
             }
         }
     }
 
-    class Processor implements Runnable {
-        @Override
-        public void run() {
-            processAndHandOff();
+    protected void send() throws IOException {
+        int written = -1;
+        // 切换到读取模式，判断是否有数据要发送
+        output.flip();
+        if (output.hasRemaining()) {
+            written = sc.write(output);
         }
-    }
 
-    private void processAndHandOff() {
-        synchronized (lock) {
-            try {
-                process();
-            } catch (EOFException e) {
-                // 直接关闭连接
-                try {
-                    selectionKey.channel().close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                return;
-            }
-
-            // 最后的发送还是交给 Reactor 线程处理
-            state = SENDING;
-            selectionKey.interestOps(SelectionKey.OP_WRITE);
-
-            // 这里需要唤醒 Selector，因为当把处理交给 workpool 时，Reactor 线程已经阻塞在 select() 方法了， 注意
-            // 此时该通道感兴趣的事件还是 OP_READ，这里将通道感兴趣的事件改为 OP_WRITE，如果不唤醒的话，就只能在
-            // 下次select 返回时才能有响应了，当然了也可以在 select 方法上设置超时
-            selectionKey.selector().wakeup();
+        // 检查连接是否处理完毕，是否断开连接
+        if (outputIsComplete(written)) {
+            selectionKey.channel().close();
+        } else {
+            // 否则继续读取
+            state = READING;
+            // 把提示发到界面
+            sc.write(ByteBuffer.wrap("\r\nreactor> ".getBytes()));
+            selectionKey.interestOps(SelectionKey.OP_READ);
         }
     }
 
@@ -146,41 +139,6 @@ public class IOEventHandler implements Runnable {
         return false;
     }
 
-    /**
-     * 根据业务处理结果，判断如何响应
-     *
-     * @throws EOFException 用户输入 ctrl+c 主动关闭
-     */
-    protected void process() throws EOFException {
-        if (state == CLOSED) {
-            throw new EOFException();
-        } else if (state == SENDING) {
-            // 请求内容
-            String requestContent = request.toString();
-            byte[] response = requestContent.getBytes(StandardCharsets.UTF_8);
-            output.put(response);
-        }
-    }
-
-    protected void send() throws IOException {
-        int written = -1;
-        // 切换到读取模式，判断是否有数据要发送
-        output.flip();
-        if (output.hasRemaining()) {
-            written = sc.write(output);
-        }
-
-        // 检查连接是否处理完毕，是否断开连接
-        if (outputIsComplete(written)) {
-            selectionKey.channel().close();
-        } else {
-            // 否则继续读取
-            state = READING;
-            // 把提示发到界面
-            sc.write(ByteBuffer.wrap("\r\nreactor> ".getBytes()));
-            selectionKey.interestOps(SelectionKey.OP_READ);
-        }
-    }
 
     /**
      * 当用户输入了一个空行，表示连接可以关闭了

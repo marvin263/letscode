@@ -149,7 +149,7 @@ public class MultiReactor {
         void dispatch(SelectionKey k) {
             // 拿到通道注册时附加的对象
             IOEventHandler r = (IOEventHandler) (k.attachment());
-            r.doInIOEventHandler();
+            r.handleEvent();
         }
     }
 

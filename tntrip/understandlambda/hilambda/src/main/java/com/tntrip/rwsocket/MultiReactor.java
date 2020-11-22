@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * 为了匹配 CPU 和 IO 的速率，可设计多个 Reactor（即 Selector 池）：<p>
@@ -81,7 +82,7 @@ public class MultiReactor {
             serverSocketChannel.configureBlocking(false);
             // 注册到 选择器 并设置处理 socket 连接事件
             SelectionKey selectionKey = serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-            selectionKey.attach(this);
+            selectionKey.attach(serverSocketChannel);
             System.out.println("Acceptor: Listening on port: " + port);
         }
 
@@ -89,29 +90,29 @@ public class MultiReactor {
         public void run() {
             try {
                 while (!Thread.interrupted()) {
-                    int select = selector.select(2000);
-                    if (select <= 0) {
-                        continue;
+                    selector.select(500);
+                    Set<SelectionKey> keys = selector.selectedKeys();
+                    Iterator<SelectionKey> it = keys.iterator();
+                    while (it.hasNext()) {
+                        SelectionKey eachKey = it.next();
+                        it.remove();
+                        ServerSocketChannel ssc = (ServerSocketChannel) eachKey.attachment();
+                        SocketChannel sc = ssc.accept();
+                        if (sc != null) {
+                            int idx = Math.abs(reqCount++ % SUB_REACTOR_COUNT);
+                            Reactor reactor = subReactors[idx];
+                            reactor.addEvent(Reactor.InterestEvent.create(sc, SelectionKey.OP_READ,
+                                    new IOEventHandler(sc, reactor)));
+                            System.out.println("Acceptor: " + sc.socket().getRemoteSocketAddress() + " 注册到 subReactor-" + idx);
+                        }
                     }
                     // 接收连接，非阻塞模式下，没有连接直接返回 null
-                    SocketChannel sc = serverSocketChannel.accept();
-                    System.out.println(sc);
-                    if (sc != null) {
-                        Reactor reactor = chooseSubReactor();
-                        reactor.addEvent(Reactor.InterestEvent.create(sc, SelectionKey.OP_READ,
-                                new IOEventHandler(sc, reactor)));
-                        System.out.println("Acceptor: " + sc.socket().getLocalSocketAddress() + " 注册到 subReactor-" + reqCount);
-                    }
+
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
-    }
-
-    private Reactor chooseSubReactor() {
-        final int i = Math.abs(this.reqCount++ % SUB_REACTOR_COUNT);
-        return this.subReactors[i];
     }
 
     static class Reactor implements Runnable {
@@ -128,11 +129,11 @@ public class MultiReactor {
 
             private Object attach;
 
-            public static InterestEvent create(SocketChannel sc, int interestOps, Object attach) {
+            public static InterestEvent create(SocketChannel sc, int interestOps, IOEventHandler handler) {
                 InterestEvent ie = new InterestEvent();
                 ie.sc = sc;
                 ie.interestOps = interestOps;
-                ie.attach = attach;
+                ie.attach = handler;
                 return ie;
             }
         }
@@ -143,25 +144,28 @@ public class MultiReactor {
             events.add(e);
             selector.wakeup();
         }
+
         private void setupSocketChannel() {
             Iterator<InterestEvent> it = events.iterator();
             while (it.hasNext()) {
                 InterestEvent ie = it.next();
                 it.remove();
-
-                if (ie.attach!=null) {
+                System.out.println("events.size()=" + events.size());
+                if (ie.attach != null) {
                     try {
                         ie.sc.configureBlocking(false);
                         ie.sc.register(selector, ie.interestOps, ie.attach);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     SelectionKey selectionKey = ie.sc.keyFor(selector);
                     selectionKey.interestOps(ie.interestOps);
                 }
             }
         }
+
+        private static AtomicLong al = new AtomicLong();
 
         // normally in a new Thread
         @Override
@@ -169,22 +173,25 @@ public class MultiReactor {
             try {
                 while (!Thread.interrupted()) {
                     // 阻塞，直到有通道事件就绪
-                    int select = selector.select(2000);
+                    selector.select(1000);
                     setupSocketChannel();
-                    if (select > 0) {
-                        System.out.println("ddd");
-                    } else {
-                        continue;
-                    }
 
                     // 拿到就绪通道 SelectionKey 的集合
                     Set<SelectionKey> keys = selector.selectedKeys();
-                    System.out.println(keys.size());
-                    for (SelectionKey eachKey : keys) {
+                    if (keys.size() <= 0) {
+                        continue;
+                    }
+                    System.out.println("round " + al.incrementAndGet() + ", keys:" + keys.size());
+                    Iterator<SelectionKey> it = keys.iterator();
+                    while (it.hasNext()) {
+                        SelectionKey eachKey = it.next();
+                        it.remove();
+                        int orgnOps = eachKey.interestOps();
+                        int readyOps = eachKey.readyOps();
+                        System.out.println("orgnOps=" + orgnOps + ", readyOps=" + readyOps);
+                        eachKey.interestOps(orgnOps & (~readyOps));
                         dispatch(eachKey);
                     }
-                    // 清空就绪通道的 key
-                    keys.clear();
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -199,7 +206,7 @@ public class MultiReactor {
     }
 
     public static void main(String[] args) throws IOException {
-        MultiReactor mr = new MultiReactor(10393);
+        MultiReactor mr = new MultiReactor(10080);
         mr.start();
     }
 }

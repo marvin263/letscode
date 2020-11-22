@@ -8,7 +8,9 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -69,9 +71,10 @@ public class MultiReactor {
      */
     class Acceptor implements Runnable {
         final ServerSocketChannel serverSocketChannel;
+        final Selector selector;
 
         public Acceptor(int port) throws IOException {
-            Selector selector = Selector.open();
+            selector = Selector.open();
             serverSocketChannel = ServerSocketChannel.open();
             serverSocketChannel.socket().bind(new InetSocketAddress(port));
             // 设置成非阻塞模式
@@ -86,11 +89,17 @@ public class MultiReactor {
         public void run() {
             try {
                 while (!Thread.interrupted()) {
+                    int select = selector.select(2000);
+                    if (select <= 0) {
+                        continue;
+                    }
                     // 接收连接，非阻塞模式下，没有连接直接返回 null
                     SocketChannel sc = serverSocketChannel.accept();
                     System.out.println(sc);
                     if (sc != null) {
-                        chooseSubReactor().configSocketChannel(sc);
+                        Reactor reactor = chooseSubReactor();
+                        reactor.addEvent(Reactor.InterestEvent.create(sc, SelectionKey.OP_READ,
+                                new IOEventHandler(sc, reactor)));
                         System.out.println("Acceptor: " + sc.socket().getLocalSocketAddress() + " 注册到 subReactor-" + reqCount);
                     }
                 }
@@ -113,16 +122,45 @@ public class MultiReactor {
             this.selector = Selector.open();
         }
 
-        void configSocketChannel(SocketChannel sc) throws Exception {
-            // 设置非阻塞
-            sc.configureBlocking(false);
-            // Optionally try first read now。注册通道
-            SelectionKey selectionKey = sc.register(selector, SelectionKey.OP_READ);
-            // 管理事件的处理程序
-            IOEventHandler handler = new IOEventHandler(sc, selectionKey);
-            selectionKey.attach(handler);
-            //Thread.sleep(5000);
+        public static class InterestEvent {
+            private SocketChannel sc;
+            private int interestOps;
+
+            private Object attach;
+
+            public static InterestEvent create(SocketChannel sc, int interestOps, Object attach) {
+                InterestEvent ie = new InterestEvent();
+                ie.sc = sc;
+                ie.interestOps = interestOps;
+                ie.attach = attach;
+                return ie;
+            }
+        }
+
+        private final ConcurrentLinkedQueue<InterestEvent> events = new ConcurrentLinkedQueue<>();
+
+        public void addEvent(InterestEvent e) {
+            events.add(e);
             selector.wakeup();
+        }
+        private void setupSocketChannel() {
+            Iterator<InterestEvent> it = events.iterator();
+            while (it.hasNext()) {
+                InterestEvent ie = it.next();
+                it.remove();
+
+                if (ie.attach!=null) {
+                    try {
+                        ie.sc.configureBlocking(false);
+                        ie.sc.register(selector, ie.interestOps, ie.attach);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    SelectionKey selectionKey = ie.sc.keyFor(selector);
+                    selectionKey.interestOps(ie.interestOps);
+                }
+            }
         }
 
         // normally in a new Thread
@@ -132,11 +170,13 @@ public class MultiReactor {
                 while (!Thread.interrupted()) {
                     // 阻塞，直到有通道事件就绪
                     int select = selector.select(2000);
+                    setupSocketChannel();
                     if (select > 0) {
                         System.out.println("ddd");
                     } else {
                         continue;
                     }
+
                     // 拿到就绪通道 SelectionKey 的集合
                     Set<SelectionKey> keys = selector.selectedKeys();
                     System.out.println(keys.size());

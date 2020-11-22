@@ -28,17 +28,16 @@ public class IOEventHandler implements Runnable {
     private static final int MAXIN = 1024;
     private static final int MAXOUT = 1024;
 
-    protected SocketChannel sc;
-    protected SelectionKey selectionKey;
+    protected SocketChannel sc;MultiReactor.Reactor reactor;
 
     protected ByteBuffer input = ByteBuffer.allocate(MAXIN);
     protected ByteBuffer output = ByteBuffer.allocate(MAXOUT);
 
     protected int state = READING;
 
-    public IOEventHandler(SocketChannel sc, SelectionKey selectionKey) {
+    public IOEventHandler(SocketChannel sc, MultiReactor.Reactor reactor) {
         this.sc = sc;
-        this.selectionKey = selectionKey;
+        this.reactor = reactor;
     }
 
     public void handleEvent() {
@@ -59,7 +58,7 @@ public class IOEventHandler implements Runnable {
         } catch (IOException ex) {
             // 关闭连接
             try {
-                selectionKey.channel().close();
+                sc.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -77,12 +76,12 @@ public class IOEventHandler implements Runnable {
 
                 // 发送交给 Reactor 触发
                 state = SENDING;
-                selectionKey.interestOps(SelectionKey.OP_WRITE);
+                reactor.addEvent(MultiReactor.Reactor.InterestEvent.create(sc, SelectionKey.OP_WRITE, null));
 
                 // 这里需要唤醒 Selector，因为当把处理交给 workpool 时，Reactor 线程已经阻塞在 select() 方法了， 注意
                 // 此时该通道感兴趣的事件还是 OP_READ，这里将通道感兴趣的事件改为 OP_WRITE
                 // 如果不唤醒的话，就只能在 下次select 返回时才能有响应了，当然了也可以在 select 方法上设置超时
-                selectionKey.selector().wakeup();
+
             }
         }
     }
@@ -97,11 +96,11 @@ public class IOEventHandler implements Runnable {
 
         // 检查连接是否处理完毕，是否断开连接
         if (outputIsComplete(written)) {
-            selectionKey.channel().close();
+            sc.close();
         } else {
             // 否则继续读取
             state = READING;
-            selectionKey.interestOps(SelectionKey.OP_READ);
+            reactor.addEvent(MultiReactor.Reactor.InterestEvent.create(sc, SelectionKey.OP_READ, null));
         }
     }
 

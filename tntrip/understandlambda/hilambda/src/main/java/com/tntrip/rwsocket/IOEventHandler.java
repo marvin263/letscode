@@ -71,7 +71,7 @@ public class IOEventHandler implements Runnable {
         }
     }
 
-    public void read() throws IOException {
+    public void read() throws Exception {
         // 为什么要同步？
         // 保护 input ByteBuffer 不会重置和状态的可见性
         // 应该是这样
@@ -85,8 +85,8 @@ public class IOEventHandler implements Runnable {
                 // 这里需要唤醒 Selector，因为当把处理交给 workpool 时，Reactor 线程已经阻塞在 select() 方法了， 注意
                 // 此时该通道感兴趣的事件还是 OP_READ，这里将通道感兴趣的事件改为 OP_WRITE
                 // 如果不唤醒的话，就只能在 下次select 返回时才能有响应了，当然了也可以在 select 方法上设置超时
-            }else{
-                
+            } else {
+
             }
         }
     }
@@ -172,12 +172,14 @@ public class IOEventHandler implements Runnable {
      * @param read 读取的字节数，-1 通常是连接被关闭，0 非阻塞模式可能返回
      * @throws IOException
      */
-    protected boolean inputIsComplete(int read) throws IOException {
+    protected boolean inputIsComplete(int read) throws Exception {
         if (read > 0) {
             input.flip(); // 切换成读取模式
             while (input.hasRemaining()) {
-                request.append((char) input.get());
-                // 读取到了 \r\n 读取结束
+                char c = (char) input.get();
+                request.append(c);
+                System.out.println(request.length());
+                // 读取到了 \r\n\r\n 读取结束
                 if (done()) {
                     state = SENDING;
                     System.out.println("Reading done: " + request.toString());

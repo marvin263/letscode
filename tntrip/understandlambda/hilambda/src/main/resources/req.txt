@@ -1,0 +1,8 @@
+GET /myboot224/greeting?cost=10 HTTP/1.1
+User-Agent: PostmanRuntime/7.26.5
+Accept: */*
+Cache-Control: no-cache
+Postman-Token: ba44c420-475f-4dea-a9c8-34a56e463b0c
+Host: localhost:8080
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive

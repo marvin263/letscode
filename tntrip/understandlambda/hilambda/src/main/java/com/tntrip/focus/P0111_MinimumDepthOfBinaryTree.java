@@ -15,6 +15,19 @@ public class P0111_MinimumDepthOfBinaryTree {
         return maxPathSum(0, cur, next);
     }
 
+
+    public int dfs(TreeNode n) {
+        if(n == null){
+            return 0;
+        }
+        TreeNode left = n.left;
+        TreeNode right = n.right;
+        
+        //TODO: not solved
+        
+        return -1;
+    }
+
     public int maxPathSum(int prevHeight, List<TreeNode> cur, List<TreeNode> next) {
         next.clear();
         for (TreeNode n : cur) {

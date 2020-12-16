@@ -1,0 +1,8 @@
+GET /myboot224/greeting?cost=10 HTTP/1.1
+Host: a.com
+Connection: keep-alive
+User-Agent: whatever
+Accept-Encoding: gzip, deflate
+Content-Length: 9
+
+12345${2000}6789

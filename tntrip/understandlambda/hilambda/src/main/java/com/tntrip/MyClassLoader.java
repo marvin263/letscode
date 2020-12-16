@@ -53,7 +53,8 @@ public class MyClassLoader extends ClassLoader {
     }
 
     private String pathForClassName(String name) {
-        return Thread.currentThread().getContextClassLoader().getResource("").getPath() + name.replace(".", File.separator) + ".class";
+        //return Thread.currentThread().getContextClassLoader().getResource("").getPath() + name.replace(".", File.separator) + ".class";
+        return "d:/HelloWorld.class";
     }
 
     public static void main(String[] args) {

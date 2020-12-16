@@ -1,16 +1,6 @@
 package com.tntrip.focus;
 
 public class P0968_BinaryTreeCameras {
-    public static class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode(int x) {
-            val = x;
-        }
-    }
-
     public int minCameraCover(TreeNode root) {
         return -1;
     }

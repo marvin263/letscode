@@ -4,6 +4,9 @@ import com.tntrip.understand.asynchc.NamedThreadFactory;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.SocketOption;
+import java.net.SocketOptions;
+import java.net.StandardSocketOptions;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -154,6 +157,7 @@ public class MultiReactor {
                 if (ie.attach != null) {
                     try {
                         ie.sc.configureBlocking(false);
+                        ie.sc.setOption(StandardSocketOptions.TCP_NODELAY, true);
                         ie.sc.register(selector, ie.interestOps, ie.attach);
                     } catch (IOException e) {
                         e.printStackTrace();

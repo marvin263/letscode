@@ -83,10 +83,10 @@ public class ReadWriteSocket implements EachCase {
             try {
                 //String host = TnNetUtil.getLocalIpAddr().get(0);
                 //int port = 16333;
-                String host = "127.0.0.1";
-                int port = 10393;
-//                String host = "a.com";
-//                int port = 80;
+//                String host = "127.0.0.1";
+//                int port = 10393;
+                String host = "a.com";
+                int port = 80;
                 prepareReadSocket(host, port);
             } catch (Exception e) {
                 e.printStackTrace();

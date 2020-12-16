@@ -3,6 +3,11 @@ package com.tntrip.focus;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * 
+ * https://www.nowcoder.com/questionTerminal/7f24eb7266ce4b0792ce8721d6259800
+ * 
+ */
 public class GetTheSum {
     public static void main(String[] args) {
         //testIt();

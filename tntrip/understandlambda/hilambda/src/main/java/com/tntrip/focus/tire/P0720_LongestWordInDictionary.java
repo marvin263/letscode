@@ -27,7 +27,15 @@ public class P0720_LongestWordInDictionary {
             return cells[idx].child;
         }
 
-        public List<TrieNode> validDirectChildren() {
+        /**
+         * 在当前这个 node 中， 某些 cell 已经是 某个词的终结符了。
+         * 这些cell下的 child节点 才 *有可能* 后续被继续使用
+         * <p>
+         * 注意：这些child节点本身，可能并不包含词的终结符，所以是rawCandidate
+         *
+         * @return
+         */
+        public List<TrieNode> rawCandidates() {
             if (cells == null) {
                 return Collections.emptyList();
             }
@@ -79,6 +87,24 @@ public class P0720_LongestWordInDictionary {
         return buildLongestWord(deepestNode);
     }
 
+    /**
+     * 该node中的某个cell确实是 某个word的终结符
+     *
+     * @param n
+     * @return
+     */
+    private boolean nodeContainsWordTerminator(TrieNode n) {
+        if (n == null || n.cells == null) {
+            return false;
+        }
+        for (TrieNode.Cell cell : n.cells) {
+            if (cell != null && cell.asTerminatorCount > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private TrieNode deepestNode(TrieNode root) {
         List<TrieNode> curLevel = new ArrayList<>();
         curLevel.add(root);
@@ -86,8 +112,8 @@ public class P0720_LongestWordInDictionary {
         List<TrieNode> nextLevel = new ArrayList<>();
         while (true) {
             nextLevel.clear();
-            for (TrieNode n : curLevel) {
-                nextLevel.addAll(n.validDirectChildren());
+            for (TrieNode cur : curLevel) {
+                nextLevel.addAll(cur.rawCandidates());
             }
             if (nextLevelIsEmpty(nextLevel)) {
                 break;
@@ -95,16 +121,18 @@ public class P0720_LongestWordInDictionary {
             curLevel.clear();
             curLevel.addAll(nextLevel);
         }
-        return curLevel.get(0);
+
+        for (TrieNode n : curLevel) {
+            if (nodeContainsWordTerminator(n)) {
+                return n;
+            }
+        }
+        return null;
     }
 
     private boolean nextLevelIsEmpty(List<TrieNode> nextLevel) {
-        if (nextLevel.isEmpty()) {
-            return true;
-        }
-
         for (TrieNode n : nextLevel) {
-            if (n.cells != null) {
+            if (nodeContainsWordTerminator(n)) {
                 return false;
             }
         }
@@ -113,12 +141,20 @@ public class P0720_LongestWordInDictionary {
 
 
     public String buildLongestWord(TrieNode n) {
-        int whichCell = 0;
+        if (n == null) {
+            return "";
+        }
+
+        int whichCell = -1;
         for (int i = 0; i < n.cells.length; i++) {
-            if (n.cells[i] != null) {
+            if (n.cells[i] != null && n.cells[i].asTerminatorCount > 0) {
                 whichCell = i;
                 break;
             }
+        }
+        
+        if (whichCell == -1) {
+            throw new RuntimeException("Should never been here");
         }
 
         List<Character> list = new ArrayList<>();
@@ -142,12 +178,12 @@ public class P0720_LongestWordInDictionary {
 
     public static void main(String[] args) {
         P0720_LongestWordInDictionary p = new P0720_LongestWordInDictionary();
-        // world
-        String[] words = new String[]{"w", "wo", "wor", "worl", "world"};
+        // "yyd"
+        String[] words = new String[]{"n", "j", "sl", "yyd", "slo", "jk", "jkdt", "y", "yy"};
         System.out.println(p.longestWord(words));
 
         // apple
-        String[] words2 = new String[]{"a", "banana", "app", "appl", "ap", "apply", "apple"};
-        System.out.println(p.longestWord(words2));
+        //String[] words2 = new String[]{"a", "banana", "app", "appl", "ap", "apply", "apple"};
+        //System.out.println(p.longestWord(words2));
     }
 }

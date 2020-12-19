@@ -6,53 +6,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class P0720_LongestWordInDictionary {
-    public static class TrieNode {
-        private boolean wordTerminator;
-        public TrieNode[] children;
-
-        public TrieNode setChar(char c, boolean wordTerminator) {
-            children = children == null ? new TrieNode[26] : children;
-            int idx = toIdx(c);
-            children[idx] = children[idx] == null ? new TrieNode() : children[idx];
-            if (wordTerminator) {
-                children[idx].wordTerminator = true;
-            }
-            return children[idx];
-        }
-
-        public boolean containsChar(char c) {
-            return children != null && children[toIdx(c)] != null;
-        }
-
-        public boolean charIsWordTerminator(char c) {
-            return containsChar(c) && children[toIdx(c)].wordTerminator;
-        }
-
-        public TrieNode getNode(char c) {
-            return children == null ? null : children[toIdx(c)];
-        }
-
-        public boolean existWordTerminator() {
-            if (children == null) {
-                return false;
-            }
-            for (TrieNode n : children) {
-                if (n != null && n.wordTerminator) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    public static int toIdx(char c) {
-        return (int) c - (int) 'a';
-    }
-
-    public static char toChar(int idx) {
-        return (char) ((int) 'a' + idx);
-    }
-
     public String longestWord(String[] words) {
         TrieNode root = new TrieNode();
         TrieNode curNode = null;
@@ -80,7 +33,7 @@ public class P0720_LongestWordInDictionary {
                     break;
                 }
             }
-            
+
             if (legal) {
                 if (str.length() > strLongest.length()) {
                     strLongest = str;

@@ -85,8 +85,8 @@ public class ReadWriteSocket implements EachCase {
                 //int port = 16333;
 //                String host = "127.0.0.1";
 //                int port = 10393;
-                String host = "a.com";
-                int port = 80;
+                String host = "192.168.86.204";
+                int port = 16333;
                 prepareReadSocket(host, port);
             } catch (Exception e) {
                 e.printStackTrace();

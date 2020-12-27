@@ -31,9 +31,11 @@ public class AcceptSocket implements EachCase {
             int size = SOCKET_LIST.size();
             try {
                 SOCKET_LIST.get(0).getOutputStream().write("nihao 0".getBytes());
+                SOCKET_LIST.get(0).getOutputStream().flush();
                 System.out.println("[ServerSocket] Writing nihao first");
 
                 SOCKET_LIST.get(size - 1).getOutputStream().write("nihao last".getBytes());
+                SOCKET_LIST.get(size - 1).getOutputStream().flush();
                 System.out.println("[ServerSocket] Writing nihao " + size);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -78,6 +80,7 @@ public class AcceptSocket implements EachCase {
         ss.setReuseAddress(true);
         while (true) {
             Socket socket = ss.accept();
+            socket.setKeepAlive(true);
             SOCKET_MAP.put(socket, SEQ.incrementAndGet());
             SOCKET_LIST.add(socket);
             System.out.println("[ServerSocket] Socket accepted--" + SOCKET_MAP.get(socket).intValue() + ", socket=" + socket);

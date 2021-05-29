@@ -17,4 +17,7 @@ dependencies {
     compile 'com.alibaba:transmittable-thread-local:2.11.5'
     compile 'com.github.spotbugs:spotbugs:4.0.6'
     compile 'org.apache.kafka:kafka-clients:2.5.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
+
 }

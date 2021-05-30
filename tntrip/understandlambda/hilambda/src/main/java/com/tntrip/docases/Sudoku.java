@@ -130,6 +130,15 @@ public class Sudoku {
         int c = -1;
         int whichCandidate = -1;
         int[][] orgnValues = null;
+
+        public static Trying createTrying(int r, int c, int whichCandidate, int[][] orgnValues) {
+            Trying t = new Trying();
+            t.r = r;
+            t.c = c;
+            t.whichCandidate = whichCandidate;
+            t.orgnValues = orgnValues;
+            return t;
+        }
     }
 
     /**
@@ -165,6 +174,25 @@ public class Sudoku {
 
             fillAllDeterminateValue();
 
+        }
+
+        private boolean hasTheCandidate(TreeSet<Integer> set, int nextIdx) {
+            return nextIdx <= set.size() - 1;
+        }
+
+        private int getTheCandidate(TreeSet<Integer> set, int nextIdx) {
+            if (!hasTheCandidate(set, nextIdx)) {
+                throw new RuntimeException(String.format("nextIdx beyond the range. nextIdx=%d, candidate.size()=%d", nextIdx, set.size()));
+            }
+
+            int cur = 0;
+            for (Integer v : set) {
+                if (cur == nextIdx) {
+                    return v;
+                }
+            }
+            // never hit
+            return -1;
         }
 
         private TreeSet<Integer>[][] createExistedWithinSquare(SudokuEnum suku) {
@@ -310,6 +338,13 @@ public class Sudoku {
             return sb.toString();
         }
 
+        /**
+         * 没有填值 && 候选值>0
+         * <p>
+         * 尚未完成
+         *
+         * @return
+         */
         private boolean doneSituation() {
             for (int r = 0; r < candidates.length; r++) {
                 TreeSet<Integer>[] row = candidates[r];
@@ -328,8 +363,11 @@ public class Sudoku {
 
         }
 
+
         /**
-         * 不满足规则
+         * 没有填值 && 候选值==0
+         * <p>
+         * 死局
          *
          * @return
          */
@@ -396,114 +434,70 @@ public class Sudoku {
     private Stack<Situation> stack = new Stack<>();
 
     private void fdfd(Situation cur) {
-        if (cur.doneSituation()) {
-            System.out.println(cur.values2Str());
-            return;
-        }
-        // 该设置带来了问题。不要了
-        if (cur.deadSituation()) {
-            return;
-        }
-
-        // 可以继续处理
-        int[] rc = cur.findLeastCandidateCell();
-        TreeSet<Integer> set = cur.candidates[rc[0]][rc[1]];
-        Trying t = new Trying();
-        t.r = rc[0];
-        t.c = rc[1];
-        // trying index
-        t.whichCandidate = 0;
-        t.orgnValues = Arrays.copyOf(cur.values, cur.values.length);
-        cur.t = t;
-        cur.fillAllDeterminateValue();
-
         stack.push(cur);
         while (!stack.isEmpty()) {
             Situation s = stack.peek();
+            // 1. 找到了
             if (s.doneSituation()) {
                 System.out.println(s.values2Str());
                 return;
             }
+            // 2. 当前死局
+            if (s.deadSituation()) {
+                TreeSet<Integer> candidate = s.candidates[s.t.r][s.t.r];
+                int nextIdx = s.t.whichCandidate + 1;
+                // 2-1. 还可以换个候选项
+                if (s.hasTheCandidate(candidate, nextIdx)) {
+                    int v = s.getTheCandidate(candidate, nextIdx);
+                    int[][] newValues = s.t.orgnValues;
+                    newValues[s.t.r][s.t.c] = v;
+                    Situation another = new Situation(newValues);
+                    Trying tt = Trying.createTrying(s.t.r, s.t.c, nextIdx, Arrays.copyOf(s.t.orgnValues, s.t.orgnValues.length));
+                    another.t = tt;
+                    stack.push(another);
+
+                }
+                // 2-2. 候选项都用完了。看上一层
+                else {
+                    stack.pop();
+                    continue;
+                }
+            }
+
+            // 3. 当前可以继续下去
+            int[] rc = s.findLeastCandidateCell();
+            Trying t = Trying.createTrying(rc[0], rc[1], 0, Arrays.copyOf(s.values, s.values.length));
+            s.t = t;
+
+            s.values[t.r][t.c] = s.getTheCandidate(s.candidates[rc[0]][rc[1]], 0);
+            s.fillAllDeterminateValue();
+            stack.push(s);
+
+
+            int v = s.getTheCandidate(s.candidates[s.t.r][s.t.r], s.t.whichCandidate + 1);
+
+            int[][] newValues = s.t.orgnValues;
+            newValues[s.t.r][s.t.c] = v;
+            Situation ddd = new Situation(newValues);
+            Trying tt = Trying.createTrying(s.t.r, s.t.c, s.t.whichCandidate + 1, Arrays.copyOf(s.t.orgnValues, s.t.orgnValues.length));
+            ddd.t = tt;
+
+            cur.values[t.r][t.c] = cur.getTheCandidate(cur.candidates[rc[0]][rc[1]], 0);
+            cur.fillAllDeterminateValue();
+
+            ddd.t = s.t;
 
             // 可以继续处理
-            // 最后一个啦。但，还没有答案
-            if (s.t.whichCandidate == (s.candidates[s.t.r][s.t.r].size() - 1)) {
-                stack.pop();
-                continue;
-            }
+            int[] src = s.findLeastCandidateCell();
+            // 针对这些candidate进行试验
+            // 当前进行的是 第0个 
+            Trying t = Trying.createTrying(rc[0], rc[1], 0, Arrays.copyOf(cur.values, cur.values.length));
+            cur.t = t;
 
-            TreeSet<Integer> ssssss = s.candidates[s.t.r][s.t.r];
-            int i = 0;
-            for (Integer v : set) {
-                if (s.t.whichCandidate + 1 == i) {
-                    Trying t = new Trying();
-                    t.r = rc[0];
-                    t.c = rc[1];
-                    // trying index
-                    t.whichCandidate = 0;
-                    t.orgnValues = Arrays.copyOf(cur.values, cur.values.length);
-                    cur.t = t;
-                    cur.fillAllDeterminateValue();
-                }
-                i++;
-            }
-
-
-            if (s.trying[0] == -1) {
-                int[] rc = s.findLeastCandidateCell();
-                TreeSet<Integer> set = s.candidates[rc[0]][rc[1]];
-
-                int[][] newValues = Arrays.copyOf(s.values, s.values.length);
-                newValues[rc[0]][rc[1]] = set.stream().findFirst().get();
-                Situation next = new Situation(newValues);
-                next.trying[0] = rc[0];
-                next.trying[1] = rc[1];
-                next.trying[2] = set.stream().findFirst().get();
-
-
-                s.values[rc[0]][rc[1]] = set.stream().findFirst().get();
-
-            }
-
-
-            TreeSet<Integer> set = s.candidates[s.trying[0]][s.trying[1]];
-            for (Integer v : set) {
-                // 处理过了
-                if (v != s.trying[2]) {
-                    continue;
-                }
-                int[][] newValues = Arrays.copyOf(s.values, s.values.length);
-                int[] newTrying = Arrays.copyOf(s.trying, s.trying.length);
-
-                newValues[rc[0]][rc[1]] = v;
-
-                Situation next = new Situation(newValues);
-
-                if (next.doneSituation()) {
-                    System.out.println(next.values2Str());
-                    return;
-                }
-                // 该设置带来了问题。不要了
-                if (next.deadSituation()) {
-                    continue;
-                }
-
-                fdfd(next);
-            }
+            cur.values[t.r][t.c] = cur.getTheCandidate(cur.candidates[rc[0]][rc[1]], 0);
+            cur.fillAllDeterminateValue();
 
         }
-
-
-        if (cur.doneSituation()) {
-            System.out.println(cur.values2Str());
-            return;
-        }
-        // 该设置带来了问题。不要了
-        if (cur.deadSituation()) {
-            return;
-        }
-
-
     }
 
     // 0号：当前已确定的值，已经确定则为1，尚未确定则为0

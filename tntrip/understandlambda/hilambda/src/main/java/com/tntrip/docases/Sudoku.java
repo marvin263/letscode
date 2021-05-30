@@ -173,20 +173,19 @@ public class Sudoku {
             this.candidates = createCandidates();
 
             fillAllDeterminateValue();
-
         }
 
-        private boolean hasTheCandidate(TreeSet<Integer> set, int nextIdx) {
-            return nextIdx <= set.size() - 1;
+        private boolean hasTheCandidate(TreeSet<Integer> candidate, int nextIdx) {
+            return nextIdx <= candidate.size() - 1;
         }
 
-        private int getTheCandidate(TreeSet<Integer> set, int nextIdx) {
-            if (!hasTheCandidate(set, nextIdx)) {
-                throw new RuntimeException(String.format("nextIdx beyond the range. nextIdx=%d, candidate.size()=%d", nextIdx, set.size()));
+        private int getTheCandidate(TreeSet<Integer> candidate, int nextIdx) {
+            if (!hasTheCandidate(candidate, nextIdx)) {
+                throw new RuntimeException(String.format("nextIdx beyond the range. nextIdx=%d, candidate.size()=%d", nextIdx, candidate.size()));
             }
 
             int cur = 0;
-            for (Integer v : set) {
+            for (Integer v : candidate) {
                 if (cur == nextIdx) {
                     return v;
                 }
@@ -225,11 +224,8 @@ public class Sudoku {
         private void fillRowColSquare() {
             this.existed4Row.clear();
             this.existed4Col.clear();
-            for (TreeSet<Integer>[] row : this.existedWithinSquare) {
-                for (TreeSet<Integer> aSet : row) {
-                    aSet.clear();
-                }
-            }
+            // 清楚掉每一个cell的小方形候选值
+            Arrays.stream(existedWithinSquare).forEach(row -> Arrays.stream(row).forEach(TreeSet::clear));
 
             for (int r = 0; r < values.length; r++) {
                 int[] row = values[r];
@@ -275,11 +271,8 @@ public class Sudoku {
          * @return
          */
         private void calcCandidates() {
-            for (TreeSet<Integer>[] row : candidates) {
-                for (TreeSet<Integer> aSet : row) {
-                    aSet.clear();
-                }
-            }
+            // 清除掉每一个cell的candidate
+            Arrays.stream(candidates).forEach(row -> Arrays.stream(row).forEach(TreeSet::clear));
 
             for (int eachValue = 1; eachValue <= suku.width; eachValue++) {
                 for (int r = 0; r < suku.width; r++) {
@@ -314,19 +307,23 @@ public class Sudoku {
          *
          * @return
          */
-        public boolean fillAllDeterminateValue() {
+        private void fillAllDeterminateValue() {
             boolean found = false;
             do {
                 fillRowColSquare();
                 calcCandidates();
                 if (deadSituation()) {
-                    return true;
+                    return;
                 }
                 found = fillDeterminateValue();
             } while (found);
 
+            // 下次要尝试谁，安排的明明白白
+            if (!doneSituation() && !deadSituation()) {
+                int[] rc = findLeastCandidateCell();
+                this.t = Trying.createTrying(rc[0], rc[1], 0, Arrays.copyOf(this.values, this.values.length));
+            }
             System.out.println(values2Str());
-            return deadSituation();
         }
 
         public String values2Str() {
@@ -339,7 +336,7 @@ public class Sudoku {
         }
 
         /**
-         * 没有填值 && 候选值>0
+         * 没有填值
          * <p>
          * 尚未完成
          *
@@ -350,22 +347,17 @@ public class Sudoku {
                 TreeSet<Integer>[] row = candidates[r];
                 for (int c = 0; c < row.length; c++) {
                     // 有值的cell，忽略
-                    if (fixedCell(r, c)) {
-                        continue;
-                    }
-                    // 依然存在尚未填充的，尚未完成
-                    if (candidates[r][c].size() > 0) {
+                    if (!fixedCell(r, c)) {
                         return false;
                     }
                 }
             }
             return true;
-
         }
 
 
         /**
-         * 没有填值 && 候选值==0
+         * 存在 (尚未填值 && 候选值==0) 的cell
          * <p>
          * 死局
          *
@@ -375,12 +367,8 @@ public class Sudoku {
             for (int r = 0; r < candidates.length; r++) {
                 TreeSet<Integer>[] row = candidates[r];
                 for (int c = 0; c < row.length; c++) {
-                    // 有值的cell，忽略
-                    if (fixedCell(r, c)) {
-                        continue;
-                    }
                     // 尚未填充。且，完全不好使，该cell没有任何可用的值
-                    if (candidates[r][c].size() == 0) {
+                    if (!fixedCell(r, c) && candidates[r][c].size() == 0) {
                         String info = String.format("[%d, %d] has NO candidate!!!", r, c);
                         System.out.println(info);
                         return true;
@@ -394,12 +382,9 @@ public class Sudoku {
             for (int r = 0; r < candidates.length; r++) {
                 TreeSet<Integer>[] row = candidates[r];
                 for (int c = 0; c < row.length; c++) {
-                    // 有值的cell，忽略
-                    if (fixedCell(r, c)) {
-                        continue;
-                    }
-                    if (candidates[r][c].size() == 1) {
-                        values[r][c] = candidates[r][c].stream().findFirst().get();
+                    // 尚未填充。且，该出仅有一个候选值，填上它
+                    if (!fixedCell(r, c) && candidates[r][c].size() == 1) {
+                        values[r][c] = candidates[r][c].stream().findFirst().orElseThrow(() -> new RuntimeException("Should never happen. candidates[r][c].size()=1"));
                         String info = String.format("[%d, %d] has determinate candidate %d.", r, c, values[r][c]);
                         System.out.println(info);
                         return true;
@@ -428,12 +413,11 @@ public class Sudoku {
             }
             return rc;
         }
-
     }
 
-    private Stack<Situation> stack = new Stack<>();
+    private final Stack<Situation> stack = new Stack<>();
 
-    private void fdfd(Situation cur) {
+    private void letsFind(Situation cur) {
         stack.push(cur);
         while (!stack.isEmpty()) {
             Situation s = stack.peek();
@@ -444,18 +428,17 @@ public class Sudoku {
             }
             // 2. 当前死局
             if (s.deadSituation()) {
-                TreeSet<Integer> candidate = s.candidates[s.t.r][s.t.r];
+                TreeSet<Integer> candidate = s.candidates[s.t.r][s.t.c];
                 int nextIdx = s.t.whichCandidate + 1;
                 // 2-1. 还可以换个候选项
                 if (s.hasTheCandidate(candidate, nextIdx)) {
                     int v = s.getTheCandidate(candidate, nextIdx);
+                    
                     int[][] newValues = s.t.orgnValues;
                     newValues[s.t.r][s.t.c] = v;
                     Situation another = new Situation(newValues);
-                    Trying tt = Trying.createTrying(s.t.r, s.t.c, nextIdx, Arrays.copyOf(s.t.orgnValues, s.t.orgnValues.length));
-                    another.t = tt;
                     stack.push(another);
-
+                    continue;
                 }
                 // 2-2. 候选项都用完了。看上一层
                 else {
@@ -464,39 +447,18 @@ public class Sudoku {
                 }
             }
 
-            // 3. 当前可以继续下去
-            int[] rc = s.findLeastCandidateCell();
-            Trying t = Trying.createTrying(rc[0], rc[1], 0, Arrays.copyOf(s.values, s.values.length));
-            s.t = t;
+            // 3. 尚未找到，且，可以继续
+            TreeSet<Integer> candidate = s.candidates[s.t.r][s.t.c];
+            int nextIdx = s.t.whichCandidate;
+            // 2-1. 还可以换个候选项
+            if (s.hasTheCandidate(candidate, nextIdx)) {
+                int v = s.getTheCandidate(candidate, nextIdx);
 
-            s.values[t.r][t.c] = s.getTheCandidate(s.candidates[rc[0]][rc[1]], 0);
-            s.fillAllDeterminateValue();
-            stack.push(s);
-
-
-            int v = s.getTheCandidate(s.candidates[s.t.r][s.t.r], s.t.whichCandidate + 1);
-
-            int[][] newValues = s.t.orgnValues;
-            newValues[s.t.r][s.t.c] = v;
-            Situation ddd = new Situation(newValues);
-            Trying tt = Trying.createTrying(s.t.r, s.t.c, s.t.whichCandidate + 1, Arrays.copyOf(s.t.orgnValues, s.t.orgnValues.length));
-            ddd.t = tt;
-
-            cur.values[t.r][t.c] = cur.getTheCandidate(cur.candidates[rc[0]][rc[1]], 0);
-            cur.fillAllDeterminateValue();
-
-            ddd.t = s.t;
-
-            // 可以继续处理
-            int[] src = s.findLeastCandidateCell();
-            // 针对这些candidate进行试验
-            // 当前进行的是 第0个 
-            Trying t = Trying.createTrying(rc[0], rc[1], 0, Arrays.copyOf(cur.values, cur.values.length));
-            cur.t = t;
-
-            cur.values[t.r][t.c] = cur.getTheCandidate(cur.candidates[rc[0]][rc[1]], 0);
-            cur.fillAllDeterminateValue();
-
+                int[][] newValues = s.t.orgnValues;
+                newValues[s.t.r][s.t.c] = v;
+                Situation another = new Situation(newValues);
+                stack.push(another);
+            }
         }
     }
 
@@ -513,7 +475,7 @@ public class Sudoku {
 
         Situation s9 = new Situation(NINE_VALUES);
         Sudoku sudu = new Sudoku();
-        sudu.fdfd(s9);
+        sudu.letsFind(s9);
 
 //        Situation s41 = new Situation(SudokuEnum.FOUR, s4.values);
 //        System.out.println(s41);

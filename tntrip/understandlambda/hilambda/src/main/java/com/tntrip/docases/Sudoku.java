@@ -43,6 +43,15 @@ public class Sudoku {
             new int[]{0, 0, 0, 0, 0, 2, 0, 3, 0},
 
     };
+    public static final int[][] SIX_VALUES = new int[][]{
+            new int[]{0, 6, 4, 2, 3, 0},
+            new int[]{0, 2, 0, 0, 1, 0},
+            new int[]{2, 0, 6, 3, 0, 1},
+
+            new int[]{3, 0, 5, 6, 0, 2},
+            new int[]{0, 3, 0, 0, 2, 0},
+            new int[]{4, 5, 0, 0, 6, 3},
+    };
 
     public static final int[][] FOUR_VALUES = new int[][]{
             new int[]{0, 4, 2, 0},
@@ -90,15 +99,15 @@ public class Sudoku {
                 return bounds[rowIndex][colIndex];
             }
 
-            int quotient_w = rowIndex / this.squareW;
-            int quotient_h = colIndex / this.squareH;
-            int r_leftTop = this.squareW * quotient_w;
-            int c_leftTop = this.squareH * quotient_h;
+            int quotient_w = colIndex / this.squareW;
+            int quotient_h = rowIndex / this.squareH;
+            int r_leftTop = this.squareH * quotient_h;
+            int c_leftTop = this.squareW * quotient_w;
             bounds[rowIndex][colIndex] = new SquareBound(
-                    this.squareW * quotient_w,
-                    (this.squareW * (quotient_w + 1)) - 1,
                     this.squareH * quotient_h,
                     (this.squareH * (quotient_h + 1)) - 1,
+                    this.squareW * quotient_w,
+                    (this.squareW * (quotient_w + 1)) - 1,
                     r_leftTop,
                     c_leftTop
             );
@@ -128,14 +137,14 @@ public class Sudoku {
     public static class Trying {
         int r = -1;
         int c = -1;
-        int whichCandidate = -1;
+        int candidateIndex = -1;
         int[][] orgnValues = null;
 
         public static Trying createTrying(int r, int c, int whichCandidate, int[][] orgnValues) {
             Trying t = new Trying();
             t.r = r;
             t.c = c;
-            t.whichCandidate = whichCandidate;
+            t.candidateIndex = whichCandidate;
             t.orgnValues = orgnValues;
             return t;
         }
@@ -145,7 +154,7 @@ public class Sudoku {
             return "Trying{" +
                     "r=" + r +
                     ", c=" + c +
-                    ", whichCandidate=" + whichCandidate +
+                    ", whichCandidate=" + candidateIndex +
                     '}';
         }
     }
@@ -160,10 +169,7 @@ public class Sudoku {
          * 当前正在测试
          */
         Trying t;
-        /**
-         * 如果当前所有的测试都未通过，则，回退到它指定的位置
-         */
-        Trying backTo;
+
         /**
          * 任意一个给定行，其上所已存在的数字
          */
@@ -216,12 +222,11 @@ public class Sudoku {
         }
 
 
-
         private boolean hasTheCandidate() {
             if (t == null) {
                 return false;
             }
-            return t.whichCandidate <= candidates[t.r][t.c].size() - 1;
+            return t.candidateIndex <= candidates[t.r][t.c].size() - 1;
         }
 
         private int getTheCandidate() {
@@ -231,7 +236,7 @@ public class Sudoku {
 
             int cur = 0;
             for (Integer v : candidates[t.r][t.c]) {
-                if (cur == t.whichCandidate) {
+                if (cur == t.candidateIndex) {
                     return v;
                 }
                 cur++;
@@ -246,9 +251,11 @@ public class Sudoku {
                 TreeSet<Integer>[] rows = existedWithinSquare[r];
                 for (int c = 0; c < rows.length; c++) {
                     SquareBound bd = suku.getBound(r, c);
+
                     if (existedWithinSquare[bd.r_leftTop][bd.c_leftTop] == null) {
                         existedWithinSquare[bd.r_leftTop][bd.c_leftTop] = new TreeSet<>();
                     }
+
                     existedWithinSquare[r][c] = existedWithinSquare[bd.r_leftTop][bd.c_leftTop];
                 }
             }
@@ -270,7 +277,7 @@ public class Sudoku {
         private void fillRowColSquare() {
             this.existed4Row.clear();
             this.existed4Col.clear();
-            // 清楚掉每一个cell的小方形候选值
+            // 清除掉每一个cell的小方形候选值
             Arrays.stream(existedWithinSquare).forEach(row -> Arrays.stream(row).forEach(TreeSet::clear));
 
             for (int r = 0; r < values.length; r++) {
@@ -365,10 +372,9 @@ public class Sudoku {
          * @return
          */
         private boolean doneSituation() {
-            for (int r = 0; r < candidates.length; r++) {
-                TreeSet<Integer>[] row = candidates[r];
-                for (int c = 0; c < row.length; c++) {
-                    // 有值的cell，忽略
+            for (int r = 0; r < suku.width; r++) {
+                for (int c = 0; c < suku.width; c++) {
+                    // 尚未设置，未结束
                     if (!fixedCell(r, c)) {
                         return false;
                     }
@@ -407,7 +413,7 @@ public class Sudoku {
                 for (int c = 0; c < row.length; c++) {
                     // 尚未填充。且，该出仅有一个候选值，填上它
                     if (!fixedCell(r, c) && candidates[r][c].size() == 1) {
-                        values[r][c] = candidates[r][c].stream().findFirst().orElseThrow(() -> new RuntimeException("Should never happen. candidates[r][c].size()=1"));
+                        values[r][c] = candidates[r][c].stream().findFirst().get();
                         String info = String.format("[%d, %d] has determinate candidate %d.", r, c, values[r][c]);
                         System.out.println(info);
                         System.out.println(values2Str());
@@ -428,6 +434,9 @@ public class Sudoku {
                         continue;
                     }
                     TreeSet<Integer> aSet = row[c];
+                    if (aSet.size() == 0) {
+                        throw new RuntimeException("fdfdf");
+                    }
                     if (aSet.size() < min) {
                         min = aSet.size();
                         rc[0] = r;
@@ -459,10 +468,12 @@ public class Sudoku {
             if (s.hasTheCandidate()) {
                 int[][] newValues = Arrays.copyOf(s.t.orgnValues, s.t.orgnValues.length);
                 newValues[s.t.r][s.t.c] = s.getTheCandidate();
-                
+                s.t.candidateIndex = s.t.candidateIndex + 1;
+
                 Situation nextSituation = new Situation(newValues);
+
                 stack.push(nextSituation);
-            }else{
+            } else {
                 stack.pop();
             }
 
@@ -470,12 +481,12 @@ public class Sudoku {
     }
 
     public static void main(String[] args) {
-//        Situation s4 = new Situation(FOUR_VALUES);
-//        System.out.println(s4);
-
-        Situation s9 = new Situation(NINE_VALUES);
         Sudoku sudu = new Sudoku();
-        sudu.letsFind(s9);
+
+//        sudu.letsFind(new Situation(FOUR_VALUES));
+//        sudu.letsFind(new Situation(SIX_VALUES));
+        sudu.letsFind(new Situation(NINE_VALUES));
+
 
 //        Situation s41 = new Situation(SudokuEnum.FOUR, s4.values);
 //        System.out.println(s41);

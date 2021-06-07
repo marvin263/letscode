@@ -29,6 +29,7 @@ public class Sudoku {
             0x100F,// 256   01_0000_0000
             0x200F,// 512   10_0000_0000
     };
+
     public static final int[][] NINE_VALUES = new int[][]{
             new int[]{0, 6, 0, 7, 0, 0, 0, 0, 0},
             new int[]{0, 0, 2, 0, 0, 0, 8, 0, 3},
@@ -43,6 +44,52 @@ public class Sudoku {
             new int[]{0, 0, 0, 0, 0, 2, 0, 3, 0},
 
     };
+
+    public static final int[][] NINE_VALUES_2 = new int[][]{
+            new int[]{0, 9, 0, 8, 0, 0, 0, 3, 0},
+            new int[]{0, 0, 2, 0, 0, 0, 7, 0, 6},
+            new int[]{0, 0, 0, 3, 5, 2, 0, 0, 0},
+
+            new int[]{0, 0, 8, 0, 0, 0, 6, 0, 0},
+            new int[]{2, 0, 0, 1, 0, 9, 0, 0, 3},
+            new int[]{0, 0, 7, 0, 0, 0, 1, 0, 0},
+
+            new int[]{0, 0, 0, 4, 2, 6, 0, 0, 0},
+            new int[]{5, 0, 3, 0, 0, 0, 9, 0, 0},
+            new int[]{0, 4, 0, 0, 0, 3, 0, 8, 0},
+
+    };
+
+    public static final int[][] NINE_VALUES_3 = new int[][]{
+            new int[]{0, 0, 0, 0, 1, 0, 5, 0, 0},
+            new int[]{0, 0, 0, 0, 3, 4, 0, 0, 0},
+            new int[]{3, 0, 9, 0, 0, 0, 0, 0, 4},
+
+            new int[]{0, 6, 3, 0, 0, 0, 0, 5, 0},
+            new int[]{0, 4, 5, 0, 0, 0, 0, 6, 7},
+            new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0},
+
+            new int[]{5, 0, 0, 0, 6, 1, 9, 0, 0},
+            new int[]{0, 0, 0, 0, 4, 2, 0, 0, 0},
+            new int[]{8, 0, 6, 0, 0, 0, 7, 0, 0},
+
+    };
+
+    public static final int[][] NINE_VALUES_4 = new int[][]{
+            new int[]{6, 7, 8, 6, 1, 0, 5, 8, 3},
+            new int[]{6, 5, 8, 9, 3, 4, 2, 9, 9},
+            new int[]{3, 1, 9, 2, 5, 8, 6, 7, 4},
+            
+            new int[]{2, 6, 3, 7, 8, 9, 4, 5, 1},
+            new int[]{9, 4, 5, 1, 2, 3, 8, 6, 7},
+            new int[]{1, 8, 7, 4, 0, 0, 2, 3, 9},
+            
+            new int[]{5, 2, 4, 3, 6, 1, 9, 8, 0},
+            new int[]{7, 9, 1, 8, 4, 2, 3, 0, 0},
+            new int[]{8, 3, 6, 5, 9, 0, 7, 0, 2},
+
+    };
+
     public static final int[][] SIX_VALUES = new int[][]{
             new int[]{0, 6, 4, 2, 3, 0},
             new int[]{0, 2, 0, 0, 1, 0},
@@ -140,11 +187,11 @@ public class Sudoku {
         int candidateIndex = -1;
         int[][] orgnValues = null;
 
-        public static Trying createTrying(int r, int c, int whichCandidate, int[][] orgnValues) {
+        public static Trying createTrying(int r, int c, int candidateIndex, int[][] orgnValues) {
             Trying t = new Trying();
             t.r = r;
             t.c = c;
-            t.candidateIndex = whichCandidate;
+            t.candidateIndex = candidateIndex;
             t.orgnValues = orgnValues;
             return t;
         }
@@ -154,7 +201,7 @@ public class Sudoku {
             return "Trying{" +
                     "r=" + r +
                     ", c=" + c +
-                    ", whichCandidate=" + candidateIndex +
+                    ", candidateIndex=" + candidateIndex +
                     '}';
         }
     }
@@ -194,6 +241,8 @@ public class Sudoku {
             this.existedWithinSquare = createExistedWithinSquare(suku);
             this.candidates = createCandidates();
             fillAllDeterminateValue();
+            System.out.println("Constructor generates:");
+            System.out.println(values2Str());
         }
 
         /**
@@ -208,9 +257,9 @@ public class Sudoku {
             do {
                 fillRowColSquare();
                 calcCandidates();
-                if (deadSituation()) {
-                    return;
-                }
+//                if (deadSituation()) {
+//                    break;
+//                }
                 found = fillDeterminateValue();
             } while (found);
 
@@ -218,7 +267,6 @@ public class Sudoku {
                 int[] rc = findLeastCandidateCell();
                 this.t = Trying.createTrying(rc[0], rc[1], 0, values);
             }
-            System.out.println(values2Str());
         }
 
 
@@ -234,21 +282,21 @@ public class Sudoku {
                 throw new RuntimeException(String.format("no candidate exists for: t=%s", t.toString()));
             }
 
-            int cur = 0;
+            int idx = 0;
             for (Integer v : candidates[t.r][t.c]) {
-                if (cur == t.candidateIndex) {
+                if (idx == t.candidateIndex) {
                     return v;
                 }
-                cur++;
+                idx++;
             }
-            // never hit
-            return -1;
+            throw new RuntimeException("aaaaaaa");
         }
 
         private TreeSet<Integer>[][] createExistedWithinSquare(SudokuEnum suku) {
             TreeSet<Integer>[][] existedWithinSquare = new TreeSet[suku.width][suku.width];
             for (int r = 0; r < existedWithinSquare.length; r++) {
                 TreeSet<Integer>[] rows = existedWithinSquare[r];
+
                 for (int c = 0; c < rows.length; c++) {
                     SquareBound bd = suku.getBound(r, c);
 
@@ -258,6 +306,7 @@ public class Sudoku {
 
                     existedWithinSquare[r][c] = existedWithinSquare[bd.r_leftTop][bd.c_leftTop];
                 }
+
             }
             return existedWithinSquare;
         }
@@ -282,6 +331,7 @@ public class Sudoku {
 
             for (int r = 0; r < values.length; r++) {
                 int[] row = values[r];
+
                 if (!this.existed4Row.containsKey(r)) {
                     this.existed4Row.put(r, new TreeSet<>());
                 }
@@ -304,6 +354,7 @@ public class Sudoku {
         private TreeSet<Integer> existed(SudokuEnum suku, int[][] values, int rowIndex, int colIndex) {
             TreeSet<Integer> existed = new TreeSet<>();
             SquareBound bd = suku.getBound(rowIndex, colIndex);
+
             for (int r = bd.r_left_inclusive; r <= bd.r_right_inclusive; r++) {
                 for (int c = bd.c_top_inclusive; c <= bd.c_bottom_inclusive; c++) {
                     addExistedValue(existed, values[r][c]);
@@ -428,17 +479,17 @@ public class Sudoku {
             int[] rc = new int[]{0, 0};
             int min = Integer.MAX_VALUE;
             for (int r = 0; r < candidates.length; r++) {
-                TreeSet<Integer>[] row = candidates[r];
-                for (int c = 0; c < row.length; c++) {
+                TreeSet<Integer>[] rows = candidates[r];
+                for (int c = 0; c < rows.length; c++) {
                     if (fixedCell(r, c)) {
                         continue;
                     }
-                    TreeSet<Integer> aSet = row[c];
-                    if (aSet.size() == 0) {
+                    TreeSet<Integer> candidates = rows[c];
+                    if (candidates.size() == 0) {
                         throw new RuntimeException("fdfdf");
                     }
-                    if (aSet.size() < min) {
-                        min = aSet.size();
+                    if (candidates.size() < min) {
+                        min = candidates.size();
                         rc[0] = r;
                         rc[1] = c;
                     }
@@ -456,11 +507,13 @@ public class Sudoku {
             Situation s = stack.peek();
             // 1. 找到了
             if (s.doneSituation()) {
+                System.out.println("Finally found!!!");
                 System.out.println(s.values2Str());
                 return;
             }
             // 2. 当前死局
             if (s.deadSituation()) {
+                System.out.println("dddddd");
                 stack.pop();
                 continue;
             }
@@ -471,9 +524,9 @@ public class Sudoku {
                 s.t.candidateIndex = s.t.candidateIndex + 1;
 
                 Situation nextSituation = new Situation(newValues);
-
                 stack.push(nextSituation);
             } else {
+                System.out.println("ffdfdff");
                 stack.pop();
             }
 
@@ -485,7 +538,11 @@ public class Sudoku {
 
 //        sudu.letsFind(new Situation(FOUR_VALUES));
 //        sudu.letsFind(new Situation(SIX_VALUES));
-        sudu.letsFind(new Situation(NINE_VALUES));
+//        sudu.letsFind(new Situation(NINE_VALUES_2));
+
+//        sudu.letsFind(new Situation(NINE_VALUES));
+        sudu.letsFind(new Situation(NINE_VALUES_3));
+//        sudu.letsFind(new Situation(NINE_VALUES_4));
 
 
 //        Situation s41 = new Situation(SudokuEnum.FOUR, s4.values);

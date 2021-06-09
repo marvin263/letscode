@@ -1,36 +1,22 @@
 package com.tntrip.docases;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @Author libin
  * @Date 2021/5/20
  */
 public class Sudoku {
-    public static final AtomicLong global = new AtomicLong();
-    public static final short n_00_0000_0000 = 0x00F;
-    public static final short n2 = 0x02;
-    public static final short n3 = 0x03;
-    public static final short[] mask = new short[]{
-            0x01F,//    1   00_0000_0001
-            0x02F,//    2   00_0000_0010
-            0x04F,//    4   00_0000_0100
-            0x08F,//    8   00_0000_1000
-            0x10F,//   16   00_0001_0000
-            0x20F,//   32   00_0010_0000
-            0x40F,//   64   00_0100_0000
-            0x80F,//  128   00_1000_0000
-            0x100F,// 256   01_0000_0000
-            0x200F,// 512   10_0000_0000
-    };
-
-    public static final int[][] NINE_VALUES = new int[][]{
+    public static final int[][] NINE_VALUES_1 = new int[][]{
             new int[]{0, 6, 0, 7, 0, 0, 0, 0, 0},
             new int[]{0, 0, 2, 0, 0, 0, 8, 0, 3},
             new int[]{0, 0, 0, 0, 1, 0, 7, 0, 6},
@@ -103,6 +89,20 @@ public class Sudoku {
             new int[]{0, 6, 0, 0, 0, 0, 1, 7, 0},
             new int[]{2, 0, 7, 0, 0, 1, 0, 0, 9},
 
+    };
+
+    public static final int[][] NINE_VALUES_56 = new int[][]{
+            new int[]{0, 0, 4, 0, 3, 5, 0, 2, 0},
+            new int[]{0, 0, 0, 8, 0, 0, 4, 0, 1},
+            new int[]{5, 0, 9, 0, 1, 0, 0, 8, 0},
+
+            new int[]{0, 9, 0, 0, 0, 1, 0, 0, 3},
+            new int[]{2, 0, 3, 0, 0, 0, 1, 0, 8},
+            new int[]{7, 0, 0, 3, 0, 0, 0, 4, 0},
+
+            new int[]{0, 5, 0, 0, 4, 0, 8, 0, 2},
+            new int[]{9, 0, 2, 0, 0, 8, 0, 0, 0},
+            new int[]{0, 4, 0, 1, 2, 0, 7, 0, 0},
     };
 
     public static final int[][] SIX_VALUES = new int[][]{
@@ -285,8 +285,8 @@ public class Sudoku {
             this.candidates = createCandidates();
 
             fillAllDeterminateValue();
-            System.out.println("Constructor generates:");
-            System.out.println(values2Str());
+            //System.out.println("Constructor generates:");
+            //System.out.println(values2Str());
         }
 
         private TreeMap<Integer, TreeSet<Integer>>[] createRowCol() {
@@ -451,8 +451,8 @@ public class Sudoku {
                     if (!fixedCell(r, c) && candidates[r][c].size() == 1) {
                         values[r][c] = candidates[r][c].stream().findFirst().get();
                         String info = String.format("[%d, %d] has determinate candidate %d.", r, c, values[r][c]);
-                        System.out.println(info);
-                        System.out.println(values2Str());
+                        //System.out.println(info);
+                        //System.out.println(values2Str());
                         return true;
                     }
                 }
@@ -502,8 +502,8 @@ public class Sudoku {
                     // 尚未填充。且，完全不好使，该cell没有任何可用的值
                     if (!fixedCell(r, c) && candidates[r][c].size() == 0) {
                         String info = String.format("[%d, %d] has NO candidate!!!", r, c);
-                        System.out.println(info);
-                        System.out.println(values2Str());
+                        //System.out.println(info);
+                        //System.out.println(values2Str());
                         return true;
                     }
                 }
@@ -549,41 +549,53 @@ public class Sudoku {
             }
             // 2. 当前死局
             if (s.deadSituation()) {
-                System.out.println("dead situation, pop");
+                //System.out.println("dead situation, pop");
+                //System.out.println(s.values2Str());
                 stack.pop();
                 continue;
             }
             // 3. 当前挺好，继续向下钻取
             if (s.t != null && s.t.hasTheCandidate()) {
-                int[][] newValues = Arrays.copyOf(s.t.orgnValues, s.t.orgnValues.length);
+                int[][] newValues = deepCopy(s.t.orgnValues);
                 newValues[s.t.r][s.t.c] = s.t.getTheCandidate();
                 s.t.candidateIndex = s.t.candidateIndex + 1;
 
                 Situation nextSituation = new Situation(newValues);
                 stack.push(nextSituation);
             } else {
-                System.out.println("no candidate, pop");
+                //System.out.println("no candidate, pop");
+                //System.out.println(s.values2Str());
                 stack.pop();
             }
 
         }
     }
 
+    public static <T> T deepCopy(T src) {
+        try {
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(byteOut);
+            out.writeObject(src);
+            ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+            ObjectInputStream in = new ObjectInputStream(byteIn);
+            return (T) in.readObject();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void main(String[] args) {
         Sudoku sudu = new Sudoku();
 
-//        sudu.letsFind(new Situation(FOUR_VALUES));
-//        sudu.letsFind(new Situation(SIX_VALUES));
-//        sudu.letsFind(new Situation(NINE_VALUES_2));
+        sudu.letsFind(new Situation(FOUR_VALUES));
+        sudu.letsFind(new Situation(SIX_VALUES));
 
-//        sudu.letsFind(new Situation(NINE_VALUES));
-//        sudu.letsFind(new Situation(NINE_VALUES_3));
-//        sudu.letsFind(new Situation(NINE_VALUES_4));
+        sudu.letsFind(new Situation(NINE_VALUES_1));
+        sudu.letsFind(new Situation(NINE_VALUES_2));
+        sudu.letsFind(new Situation(NINE_VALUES_3));
+        sudu.letsFind(new Situation(NINE_VALUES_4));
         sudu.letsFind(new Situation(NINE_VALUES_55));
-
-
-//        Situation s41 = new Situation(SudokuEnum.FOUR, s4.values);
-//        System.out.println(s41);
+        sudu.letsFind(new Situation(NINE_VALUES_56));
     }
 
 }

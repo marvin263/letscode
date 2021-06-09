@@ -285,8 +285,8 @@ public class Sudoku {
             this.candidates = createCandidates();
 
             fillAllDeterminateValue();
-            //System.out.println("Constructor generates:");
-            //System.out.println(values2Str());
+            System.out.println("Constructor generates:");
+            System.out.println(values2Str());
         }
 
         private TreeMap<Integer, TreeSet<Integer>>[] createRowCol() {
@@ -451,8 +451,8 @@ public class Sudoku {
                     if (!fixedCell(r, c) && candidates[r][c].size() == 1) {
                         values[r][c] = candidates[r][c].stream().findFirst().get();
                         String info = String.format("[%d, %d] has determinate candidate %d.", r, c, values[r][c]);
-                        //System.out.println(info);
-                        //System.out.println(values2Str());
+                        System.out.println(info);
+                        System.out.println(values2Str());
                         return true;
                     }
                 }
@@ -502,8 +502,8 @@ public class Sudoku {
                     // 尚未填充。且，完全不好使，该cell没有任何可用的值
                     if (!fixedCell(r, c) && candidates[r][c].size() == 0) {
                         String info = String.format("[%d, %d] has NO candidate!!!", r, c);
-                        //System.out.println(info);
-                        //System.out.println(values2Str());
+                        System.out.println(info);
+                        System.out.println(values2Str());
                         return true;
                     }
                 }
@@ -549,8 +549,8 @@ public class Sudoku {
             }
             // 2. 当前死局
             if (s.deadSituation()) {
-                //System.out.println("dead situation, pop");
-                //System.out.println(s.values2Str());
+                System.out.println("dead situation, pop");
+                System.out.println(s.values2Str());
                 stack.pop();
                 continue;
             }
@@ -563,8 +563,8 @@ public class Sudoku {
                 Situation nextSituation = new Situation(newValues);
                 stack.push(nextSituation);
             } else {
-                //System.out.println("no candidate, pop");
-                //System.out.println(s.values2Str());
+                System.out.println("no candidate, pop");
+                System.out.println(s.values2Str());
                 stack.pop();
             }
 

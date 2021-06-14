@@ -105,6 +105,20 @@ public class Sudoku {
             new int[]{0, 4, 0, 1, 2, 0, 7, 0, 0},
     };
 
+    public static final int[][] NINE_VALUES_99 = new int[][]{
+            new int[]{0, 0, 5, 0, 0, 8, 0, 0, 9},
+            new int[]{0, 0, 0, 0, 0, 0, 4, 2, 8},
+            new int[]{0, 0, 6, 0, 0, 1, 0, 0, 0},
+
+            new int[]{0, 0, 0, 0, 2, 0, 1, 0, 7},
+            new int[]{0, 3, 0, 0, 0, 0, 0, 5, 0},
+            new int[]{9, 0, 4, 0, 5, 0, 0, 0, 0},
+
+            new int[]{0, 0, 0, 7, 0, 0, 8, 0, 0},
+            new int[]{1, 2, 9, 0, 0, 0, 0, 0, 0},
+            new int[]{5, 0, 0, 9, 0, 0, 2, 0, 0}
+    };
+
     public static final int[][] SIX_VALUES = new int[][]{
             new int[]{0, 6, 4, 2, 3, 0},
             new int[]{0, 2, 0, 0, 1, 0},
@@ -113,6 +127,16 @@ public class Sudoku {
             new int[]{3, 0, 5, 6, 0, 2},
             new int[]{0, 3, 0, 0, 2, 0},
             new int[]{4, 5, 0, 0, 6, 3},
+    };
+
+    public static final int[][] SIX_VALUES_1 = new int[][]{
+            new int[]{1, 0, 5, 2, 0, 4},
+            new int[]{3, 0, 0, 0, 5, 6},
+            new int[]{5, 4, 0, 0, 0, 3},
+
+            new int[]{0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0},
+            new int[]{0, 0, 0, 0, 0, 0}
     };
 
     public static final int[][] FOUR_VALUES = new int[][]{
@@ -587,15 +611,17 @@ public class Sudoku {
     public static void main(String[] args) {
         Sudoku sudu = new Sudoku();
 
-        sudu.letsFind(new Situation(FOUR_VALUES));
-        sudu.letsFind(new Situation(SIX_VALUES));
-
-        sudu.letsFind(new Situation(NINE_VALUES_1));
-        sudu.letsFind(new Situation(NINE_VALUES_2));
-        sudu.letsFind(new Situation(NINE_VALUES_3));
-        sudu.letsFind(new Situation(NINE_VALUES_4));
-        sudu.letsFind(new Situation(NINE_VALUES_55));
-        sudu.letsFind(new Situation(NINE_VALUES_56));
+//        sudu.letsFind(new Situation(FOUR_VALUES));
+//        sudu.letsFind(new Situation(SIX_VALUES));
+//
+//        sudu.letsFind(new Situation(NINE_VALUES_1));
+//        sudu.letsFind(new Situation(NINE_VALUES_2));
+//        sudu.letsFind(new Situation(NINE_VALUES_3));
+//        sudu.letsFind(new Situation(NINE_VALUES_4));
+//        sudu.letsFind(new Situation(NINE_VALUES_55));
+//        sudu.letsFind(new Situation(NINE_VALUES_56));
+//        sudu.letsFind(new Situation(SIX_VALUES_1));
+        sudu.letsFind(new Situation(NINE_VALUES_99));
     }
 
 }

@@ -12,7 +12,7 @@ public class PrintPet {
         listPets.add("cat");
 
         favorNewPets(listPets);
-
+        // dog, cat（而不是rabbit, hamster）
         System.out.println(listPets);
     }
 
@@ -23,9 +23,4 @@ public class PrintPet {
 
         listPets = listNew;
     }
-
-    public static void main(String[] args) {
-        printPets();
-    }
-
 }

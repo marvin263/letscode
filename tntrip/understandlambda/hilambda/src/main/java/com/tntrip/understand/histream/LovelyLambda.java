@@ -153,7 +153,7 @@ public class LovelyLambda {
                                 OrderItem::getItemId,
                                 Collectors.collectingAndThen(
                                         Collectors.toList(),
-                                        e -> e.stream().max(Comparator.comparingInt(OrderItem::getItemId)).get())  //寻找合适的wishlist_id
+                                        e -> e.stream().max(Comparator.comparingInt(OrderItem::getItemId)).get())  //寻找合适的item_id
                         )))
                 .values()
                 .stream()
